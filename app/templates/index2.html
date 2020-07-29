@@ -1,0 +1,64 @@
+<!-- index2.html -->
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>에디터테스트</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <SCRIPT langauge="javascript">
+            function htmledit(excute,values){
+                if(values==null){
+                    dhtmlframe.document.execCommand(excute);
+                }
+                else{
+                    dhtmlframe.document.execCommand(excute,"",values);
+                }
+            }
+
+            // function submit(){
+            //     var myData = dhtmlframe.document.body.innerHTML
+                
+            //     alert(myData)
+            //     $.post( "/test", $("myData"));
+            // }
+            
+        </SCRIPT>
+    </head>
+    
+    <BODY>
+        <header>
+            <nav>
+              <a href="/">Home</a>
+            </nav>
+            <hr>
+        </header>
+        <form name=form>
+            <a href="javascript:htmledit('insertorderedlist');">1.2.3.</a>
+            <a href="javascript:htmledit('insertunorderedlist');">•</a>
+            <a href="javascript:htmledit('indent');">들여쓰기</a>
+            <a href="javascript:htmledit('outdent');">내어쓰기</a>
+            <a href="javascript:htmledit('bold');">강조</a>
+
+            <iframe NAME=dhtmlframe src="about:blank" style="box-sizing:border-box;border:1px solid #999;padding:2px;width:100%;height:150px;">
+            
+            </iframe>
+            
+            <!-- <button onclick=submit() type="button">변환하기</button> -->
+            <a href="javascript:submit();">변환하기</a>
+            
+            <SCRIPT LANGUAGE="JavaScript">
+                dhtmlframe.document.designMode = "On"
+
+                function submit(){
+                    var myData = { "html" : dhtmlframe.document.body.innerHTML };
+                    alert(myData.html)
+                    $.post( "/test", myData);
+                }
+
+                
+            </SCRIPT> 
+        
+        </form>
+    </BODY>
+    
+    </HTML>
