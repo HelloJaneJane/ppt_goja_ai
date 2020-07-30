@@ -266,3 +266,14 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,flask,python,visualstudiocode,windows
+
+
+
+### pptx ###
+*.tmp
+
+*.ppt
+*.pptx
+# PowerPoint temporary
+~$*.ppt*
+
