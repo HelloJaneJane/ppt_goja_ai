@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
 from app import app
+from convert import convert
 
 @app.route('/')
 def default():
@@ -9,14 +10,9 @@ def default():
 @app.route('/test', methods=['POST', 'GET'])
 def test():
     if request.method == 'POST':
-        print(request.form.to_dict()['html'])
+        inputHtmlStr = request.form.to_dict()['html']
+        convert(inputHtmlStr)
     return render_template('index2.html')
-
-# @app.route('/post', methods=['POST'])
-# def post():
-#     data = request.form['data']
-#     print(data)
-#     return data
 
 
 if __name__ == '__main__':
