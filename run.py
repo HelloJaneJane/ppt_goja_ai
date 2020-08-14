@@ -19,5 +19,24 @@ def image():
     return render_template('image_index.html')
 
 
+@app.route('/contact')
+def contact():
+    return render_template('contact_index.html')
+@app.route('/devinfo')
+def devinfo():
+    return render_template('devinfo_index.html')
+@app.route('/licinfo')
+def licinfo():
+    return render_template('licinfo_index.html')
+
+
+@app.route('/login')
+def login():
+    return render_template('login_index.html')
+@app.route('/register')
+def register():
+    return render_template('register_index.html')
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

@@ -9,11 +9,18 @@
 {% endblock %}
 
 {% block content %}
-    <div id="layout">
-        <div id="test-editormd">
-            <textarea style="display:none;"></textarea>
+    <div class="hero-wrap js-fullheight">
+        <div class="overlay"></div>
+        <div id="particles-js"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+                <div id="test-editormd">
+                    <textarea style="display:none;"></textarea>
+                </div>
+            </div>
         </div>
     </div>
+    
     <script src="{{ url_for('static', filename='node_modules/editor.md/examples/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='node_modules/editor.md/editormd.min.js') }}"></script>
     <script type="text/javascript">
@@ -21,7 +28,7 @@
 
         $(function() {
             testEditor = editormd("test-editormd", {
-                width   : "90%",
+                width   : "80%",
                 height  : 640,
                 syncScrolling : "single",
                 path    : "../static/node_modules/editor.md/lib/"

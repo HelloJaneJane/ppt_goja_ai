@@ -1,42 +1,98 @@
 <!-- index.html -->
-
 {% extends 'layout.html' %}
  
-{% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-md-8">
-        {% for post in posts %}
-        <article>
-            <hr>
-            <div class="row">
-            <div class="col">
-                <a class="h1" href="#">{{ post.title }}</a>
-                <p class="text-justify">{{ post.content }}</p>
-            </div>
-            <div class="col-md-2 d-flex flex-column">
-                <img class="rounded-circle mx-auto" src="#" data-src="holder.js/64x64" width="64px" height="64px">
-                <p class="text-muted text-center">{{ post.author.username }}</p>
-            </div>
-            </div>
-            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-        </article>
-        {% endfor %}
-        </div>
-        
-        <aside class="col-md-4 my-3">
-        <h2>사이드 바</h2>
-        <ul class="list-group">
-            <li class="list-group-item">사이드바 아이템1</li>
-            <li class="list-group-item">사이드바 아이템2</li>
-            <li class="list-group-item">사이드바 아이템3</li>
-            <li class="list-group-item">사이드바 아이템4</li>
-        </ul>
-        </aside>
-    </div>
-</div>
+{% block head %}
 {% endblock %}
 
-{% block head %}
-    <script src=https://cdnjs.cloudflare.com/ajax/libs/holder/2.9.4/holder.min.js></script>
+{% block content %}
+    <div class="hero-wrap js-fullheight">
+        <div class="overlay"></div>
+        <div id="particles-js"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
+                <div class="col-md-6 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+                    <h2 class="mb-4" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        딥러닝 기반의 <strong>PPT 자동제작</strong> 서비스
+                    </h2>
+                    <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        <h1>발표? 발펴고자!</h1>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="ftco-section testimony-section bg-light">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-5">
+            <div class="col-md-7 text-center heading-section ftco-animate">
+                <span class="subheading">저희 서비스는요..</span>
+                <h2 class="mb-4">이러이러한 서비스입니다</h2>
+                <p> 사용자 후기들?</p>
+            </div>
+            </div>
+            <div class="row ftco-animate">
+            <div class="col-md-12">
+                <div class="carousel-testimony owl-carousel ftco-owl">
+                <div class="item text-center">
+                    <div class="testimony-wrap p-4 pb-5">
+                    <div class="user-img mb-4" style="background-image: url(../static/images/person_2.jpg)">
+                        <span class="quote d-flex align-items-center justify-content-center">
+                        <i class="icon-quote-left"></i>
+                        </span>
+                    </div>
+                    <div class="text">
+                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        <p class="name">Dennis Green</p>
+                        <span class="position">Marketing Manager</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="item text-center">
+                    <div class="testimony-wrap p-4 pb-5">
+                    <div class="user-img mb-4" style="background-image: url(../static/images/person_2.jpg)">
+                        <span class="quote d-flex align-items-center justify-content-center">
+                        <i class="icon-quote-left"></i>
+                        </span>
+                    </div>
+                    <div class="text">
+                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        <p class="name">Dennis Green</p>
+                        <span class="position">Interface Designer</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="item text-center">
+                    <div class="testimony-wrap p-4 pb-5">
+                    <div class="user-img mb-4" style="background-image: url(../static/images/person_3.jpg)">
+                        <span class="quote d-flex align-items-center justify-content-center">
+                        <i class="icon-quote-left"></i>
+                        </span>
+                    </div>
+                    <div class="text">
+                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        <p class="name">Dennis Green</p>
+                        <span class="position">UI Designer</span>
+                    </div>
+                    </div>
+                </div>
+                <div class="item text-center">
+                    <div class="testimony-wrap p-4 pb-5">
+                    <div class="user-img mb-4" style="background-image: url(../static/images/person_4.jpg)">
+                        <span class="quote d-flex align-items-center justify-content-center">
+                        <i class="icon-quote-left"></i>
+                        </span>
+                    </div>
+                    <div class="text">
+                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
+                        <p class="name">Dennis Green</p>
+                        <span class="position">Web Developer</span>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

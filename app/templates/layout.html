@@ -4,83 +4,147 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="http://bootstrapk.com/favicon.ico">
-    
-        <title> 발표? 발펴고자! </title>
-        <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <!-- <style type="text/css">
-            .container{
-                max-width: 500px;
-                padding-top: 10px;
-                padding-left: 10px;
-                border:solid 5px darkblue;
-            }
-        </style> -->
 
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css"
-            integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+        <title> 발표? 발펴고자! </title>
+
+        <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,700,800" rel="stylesheet">
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/open-iconic-bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/animate.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/magnific-popup.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/aos.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/ionicons.min.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap-datepicker.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/jquery.timepicker.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/flaticon.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/icomoon.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
 
         <!-- Custom styles for this template -->
         {% block head %}{% endblock %}
-        <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"> -->
     </head>
  
     <body>
-        <!-- <header class="site-header"> -->
-            <nav class="navbar navbar-inverse" role="navigation">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" href="{{ url_for('default') }}">
-                            <img src="../static/images/home_logo.png">
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button> -->
-
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="{{ url_for('default') }}">서비스 소개</a></li>
-                        <li><a href="{{ url_for('ppt') }}">PPT 만들기</a></li>
-                        <li><a href="{{ url_for('image') }}">사진 편집하기</a></li>
-                    </ul>
-        
-                    <!-- Navbar right side -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{#{ url_for('login') }#}">Login</a></li>
-                        <li><a href="{#{ url_for('registration') }#}">Register</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help<b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">문의하기</a></li>
-                                <li><a href="#">개발자 정보</a></li>
-                                <li><a href="#">라이센스 정보</a></li>
-                            </ul>
-                        </li>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url_for('default') }}">
+                    <img src="{{ url_for('static',filename='images/home_logo.png') }}">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="oi oi-menu"></span> Menu
+                </button>
+            
+                <div class="collapse navbar-collapse" id="ftco-nav">
+                    <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active"><a href="{{ url_for('default') }}" class="nav-link">서비스 소개</a></li>
+                    <li class="nav-item"><a href="{{ url_for('ppt') }}" class="nav-link">PPT 만들기</a></li>
+                    <li class="nav-item"><a href="{{ url_for('image') }}" class="nav-link">사진 편집하기</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Help</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown04">
+                            <a class="dropdown-item" href="{{ url_for('contact') }}">문의하기</a>
+                            <a class="dropdown-item" href="{{ url_for('devinfo') }}">개발자 정보</a>
+                            <a class="dropdown-item" href="{{ url_for('licinfo') }}">라이센스 정보</a>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a href="{{ url_for('login') }}" class="nav-link">Login</a></li>
+                    <li class="nav-item"><a href="{{ url_for('register') }}" class="nav-link">Register</a></li>
+                    <!-- <li class="nav-item cta"><a href="contact.html" class="nav-link"><span>Get in touch</span></a></li> -->
                     </ul>
                 </div>
-            </nav>
-          <!-- </header> -->
-       
-          <main role="main">
-          <!-- Main content block -->
-          {% block content %}{% endblock %}
-          </main>
-       
-
-        <!-- ================================================== -->
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-                integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-                integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+            </div>
+        </nav>
         
-        <script defer src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"
-                integrity="sha384-4oV5EgaV02iISL2ban6c/RmotsABqE4yZxZLcYMAdG7FAPsyHYAPpywE9PJo+Khy" crossorigin="anonymous"></script>
-    </body>
+        <!-- Main content block -->
+        <main role="main">
+        {% block content %}{% endblock %}
+        </main>
+            
+        <!-- Footer -->
+        <footer class="ftco-footer ftco-bg-dark ftco-section">
+            <div class="container">
+            <div class="row mb-5">
+                <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">Developers</h2>
+                    <p><strong>SoftwareMaestro 11기 연수생</strong></p>
+                    <p>발표합니까, 휴먼?<br>이종호(L), 남지훈, 이제인</p>
+                </div>
+                </div>
+                <div class="col-md">
+                <div class="ftco-footer-widget mb-4 ml-5">
+                    <h2 class="ftco-heading-2">Quick Links</h2>
+                    <ul class="list-unstyled">
+                    <li><a href="{{ url_for('default') }}" class="py-2 d-block">서비스 소개</a></li>
+                    <li><a href="{{ url_for('ppt') }}" class="py-2 d-block">PPT 만들기</a></li>
+                    <li><a href="{{ url_for('image') }}" class="py-2 d-block">이미지 편집하기</a></li>
+                    <li><a href="{{ url_for('contact') }}" class="py-2 d-block">문의하기</a></li>
+                    <li><a href="{{ url_for('login') }}" class="py-2 d-block">로그인</a></li>
+                    <li><a href="{{ url_for('register') }}" class="py-2 d-block">회원가입</a></li>
+                    </ul>
+                </div>
+                </div>
+                <div class="col-md">
+                <div class="ftco-footer-widget mb-4">
+                    <h2 class="ftco-heading-2">Contacts</h2>
+                    <ul class="list-unstyled">
+                    <li><a href="mailto:jhlees17@naver.com" class="py-2 d-block">jhlees17@naver.com</a></li>
+                    <li><a href="mailto:skawlgns98@naver.com" class="py-2 d-block">skawlgns98@naver.com</a></li>
+                    <li><a href="mailto:janeyi@naver.com" class="py-2 d-block">janeyi@naver.com</a></li>
+                    </ul>
+                </div>
+                </div>
+                <div class="col-md">
+                <div class="ftco-footer-widget mb-12">
+                    <ul class="ftco-footer-social list-unstyled float-md-left float-lft">
+                    <li class="ftco-animate"><a href="https://www.youtube.com/channel/UCwK-h3ruoEbCzgr92Ebq0pA"><span class="icon-youtube-play"></span></a></li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-center">
+    
+                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                </div>
+            </div>
+            </div>
+        </footer>
+        
+        
+    
+        <!-- Loader -->
+        <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+    
+        <script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/jquery-migrate-3.0.1.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/popper.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/jquery.easing.1.3.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/jquery.waypoints.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/jquery.stellar.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/owl.carousel.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/aos.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/jquery.animateNumber.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/bootstrap-datepicker.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+        <script src="{{ url_for('static',filename='js/particles.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/particle.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/scrollax.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/google-map.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/main.js') }}"></script>
+       
+        
+        </body>
 </html>
