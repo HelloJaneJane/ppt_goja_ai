@@ -14,12 +14,18 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div id="test-editormd">
-                    <textarea style="display:none;"></textarea>
+                <div class="col-md-12">
+                    <div id="test-editormd">
+                        <textarea style="display:none;"></textarea>
+                    </div>
+                    <a href="" class="btn btn-default">변환하기</a>
                 </div>
-            </div>
+            </div> 
         </div>
+        
     </div>
+
+    
     
     <script src="{{ url_for('static', filename='node_modules/editor.md/examples/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='node_modules/editor.md/editormd.min.js') }}"></script>
