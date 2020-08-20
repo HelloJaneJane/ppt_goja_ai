@@ -1,48 +1,57 @@
 #-*- coding:utf-8 -*-
 from pptx import Presentation
-# import xml.etree.ElementTree as elemTree
 
 def convert(htmlStr):
-    prs = Presentation()#"theme.pptx" 테마설정
-    # tree = elemTree.fromstring(htmlStr)
+    prs = Presentation()
 
-    htmlList = htmlStr.split('<div><br></div>')
-    print(htmlList)
+    h1Str = (htmlStr.split('</h1>')[0]).split('</span>')[1]
+    htmlStr = htmlStr.split('</h1>')[1]
 
-    slideCnt = 0
-    for element in htmlList:
-        lines = element.split('<div>')
-        print(lines)
+    h2Str = (htmlStr.split('</h2>')[0]).split('</span>')[1]
+    htmlStr = htmlStr.split('</h2>')[1]
+
+    print("제목: "+h1Str)
+    print("부제목: "+h2Str)
+
+    h3List = htmlStr.split('<h3')
+
+    h3Titles = []
+    h3Contents = []
+
+    for h3Index, h3Elem in enumerate(h3List):
+        if h3Index==0:
+            pass
+        else:
+            h3Titles.append(((h3Elem.split('</h3>')[0]).split('</span>')[1],h3Index))
+            h3Contents.append((h3Elem.split('</h3>')[1],h3Index))
+
+    print("중제목들: ",end='')
+    print(h3Titles)
+
+    h4Titles = []
+    h4Contents = []
+
+    for h3ConElem in h3Contents:
+        h4List = h3ConElem[0].split('<h4')
+        h3Index = h3ConElem[1]
+
+        for h4Index, h4Elem in enumerate(h4List):
+            if h4Index==0:
+                pass
+            else:
+                h4Titles.append(((h4Elem.split('</h4>')[0]).split('</span>')[1],h3Index))
+                h4Contents.append(h4Elem.split('</h4>')[1])
+
     
-        # 제목슬라이드는 layout 0번
-        if slideCnt == 0:
-            slide_layout = prs.slide_layouts[0]
-            slide = prs.slides.add_slide(slide_layout)
-            title = slide.shapes.title
-            subtitle = slide.placeholders[1]
-            #첫줄은 제목 둘째줄은 부제목
-            title.text = lines[0]
-            subtitle.text = lines[1].replace('</div>','')
+    print("소제목들: ",end='')
+    print(h4Titles)
 
-        # 내용슬라이드는 layout 1번
-        else :
-            if len(lines)<=1:
-                continue
+    print("안에내용들: ",end='')
+    print(h4Contents)
 
-            slide_layout = prs.slide_layouts[1]
-            slide = prs.slides.add_slide(slide_layout)
-            shapes = slide.shapes
-            title_shape = shapes.title
-            body_shape = shapes.placeholders[1]
 
-            # [0]:빈칸 / [1]:제목 / [2~]:내용
-            title_shape.text = lines[1].replace('</div>','')
-            for i in range(2,len(lines)):
-                tf = body_shape.text_frame
-                p = tf.add_paragraph()
-                p.text = lines[i].replace('</div>','')
 
-        slideCnt = slideCnt + 1
 
-    #출력
-    prs.save('output.pptx')
+
+
+

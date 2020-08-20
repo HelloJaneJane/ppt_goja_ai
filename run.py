@@ -10,9 +10,13 @@ def default():
 @app.route('/ppt', methods=['POST', 'GET'])
 def ppt():
     if request.method == 'POST':
-        inputHtmlStr = request.form.to_dict()['html']
-        convert(inputHtmlStr)
+        mdeditorHtmlStr = request.form.to_dict()['html']
+        # print(mdeditorHtmlStr)
+        convert(mdeditorHtmlStr)
+        render_template('ppt_download_index.html')
+
     return render_template('ppt_index.html')
+
 
 @app.route('/image')
 def image():

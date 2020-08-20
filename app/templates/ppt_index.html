@@ -15,10 +15,10 @@
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
                 <div class="col-md-12">
-                    <div id="test-editormd">
-                        <textarea style="display:none;"></textarea>
+                    <div id="mdeditor">
+                        <textarea id="mdeditortextarea" style="display:none;"></textarea>
                     </div>
-                    <a href="" class="btn btn-default">변환하기</a>
+                    <a href="javascript:submit();" class="btn btn-default">변환하기</a>
                 </div>
             </div> 
         </div>
@@ -33,10 +33,11 @@
         var testEditor;
 
         $(function() {
-            testEditor = editormd("test-editormd", {
+            testEditor = editormd("mdeditor", {
                 width   : "80%",
                 height  : 640,
                 syncScrolling : "single",
+                saveHTMLToTextarea : true,
                 path    : "../static/node_modules/editor.md/lib/"
             });
             
@@ -50,5 +51,11 @@
             });
             */
         });
+
+        function submit(){
+            var mdeditorData = { "html" : testEditor.getHTML() };
+            $.post("/ppt", mdeditorData )
+        }
     </script>
+</script>    
 {% endblock %}
