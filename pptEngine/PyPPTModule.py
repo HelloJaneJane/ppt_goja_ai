@@ -35,3 +35,19 @@ def NewLine(textbox,text,font,size):#텍스트박스 객체, 내용, 폰트, 크
 #ppt를 저장한다.
 def write(prs,file_name):
     prs.save(file_name)
+
+
+class PptData:
+    def __init__(self, mainTitle, subTitle, midTitles, slideTitles):
+        self._mainTitle = mainTitle
+        self._subTitle = subTitle
+        self._midTitles = midTitles
+        self._slideTitles = slideTitles
+
+    def __print__(self):
+        print("제목: " + self._mainTitle)
+        print("부제목: " + self._subTitle)
+        print("중제목들 : ",end='')
+        print(self._midTitles)
+        print("소제목들: ",end='')
+        print(self._slideTitles)
