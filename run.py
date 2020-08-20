@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for
 
 from app import app
-from convert import convert
+from server.convert import convert
 
 @app.route('/')
 def default():
