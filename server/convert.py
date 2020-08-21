@@ -1,7 +1,7 @@
 #-*- coding:utf-8 -*-
 from pptx import Presentation
 
-from pptEngine.PyPPTModule import PptData
+from pptEngine.PyPPTModule import *
 
 def convert(htmlStr):
     prs = Presentation()
@@ -48,11 +48,15 @@ def convert(htmlStr):
     # print("소제목들: ",end='')
     # print(slideTitles)
 
-    myPptData = PptData(mainTitle, subTitle, midTitles, slideTitles)
-    myPptData.__print__()
+    myTextData = TextData(mainTitle, subTitle, midTitles, slideTitles)
+    myTextData.__print__()
 
     print("안에내용들: ",end='')
     print(h4Contents)
+
+    # myPPTData = PPTData(myTextData)
+    # myPrs = myPPTData.basePrs()
+
 
 
 
