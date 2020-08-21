@@ -54,7 +54,8 @@
 
         function submit(){
             var mdeditorData = { "html" : testEditor.getHTML() };
-            $.post("/ppt", mdeditorData )
+            $.post("/ppt", mdeditorData)
+            location.href="pptdownload"
         }
     </script>
 </script>    

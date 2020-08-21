@@ -55,35 +55,30 @@ class TextData:
         print(self._slideTitles)
 
 class PPTData:
-
     def __init__(self, textData):
         self._textData = textData
-        # initial value
-        self._topic = None
-        self._basePrs = Presentation()
 
-    # 전체 주제 getter
-    @property
-    def topic(self):
-        return self._topic
 
-    # 전체 주제 setter
-    @topic.setter
-    def topic(self):
-        # GPU 서버로 textData를 보내서 NLP 결과를 받아온다
-        result = None
-        # 결과를 토대로 topic을 선정한다
-        self._topic = result
+# 디폴트 타입
+# [String] - 한줄내용
+class SlideType_default:
+    def __init__(self, lines):
+        self._lines = lines
 
-    # # 베이스 테마 파일 getter
-    # @property
-    # def basePrs(self):
-    #     return self._basePrs
-    
-    # # 베이스 테마 파일 setter
-    # @basePrs.setter
-    # def basePrs(self):
-    #     # topic에 어울리는 테마의 피피티를 고른다
-    #     basePrs = None
-    #     self._basePrs = basePrs
+# 타임라인 타입 (일정, 과정, 단계)
+# [(String, String)] - (시간, 한줄내용)
+class SlideType_timeline:
+    def __init__(self, timeTuples):
+        self._timeTuples = timeTuples
 
+# h5 타입 (비교대조 등)
+# [(String,[String])] - (헤딩,[내용들])
+class SlideType_h5:
+    def __init__(self, h5Tuples):
+        self._h5Tuples = h5Tuples
+
+# 정의 타입 (? -> "")
+# String
+class SlideType_definition:
+	def __init__(self, defStr):
+        self._defStr = defStr
