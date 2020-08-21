@@ -37,7 +37,9 @@ def write(prs,file_name):
     prs.save(file_name)
 
 
-class PptData:
+
+
+class TextData:
     def __init__(self, mainTitle, subTitle, midTitles, slideTitles):
         self._mainTitle = mainTitle
         self._subTitle = subTitle
@@ -51,3 +53,37 @@ class PptData:
         print(self._midTitles)
         print("소제목들: ",end='')
         print(self._slideTitles)
+
+class PPTData:
+
+    def __init__(self, textData):
+        self._textData = textData
+        # initial value
+        self._topic = None
+        self._basePrs = Presentation()
+
+    # 전체 주제 getter
+    @property
+    def topic(self):
+        return self._topic
+
+    # 전체 주제 setter
+    @topic.setter
+    def topic(self):
+        # GPU 서버로 textData를 보내서 NLP 결과를 받아온다
+        result = None
+        # 결과를 토대로 topic을 선정한다
+        self._topic = result
+
+    # # 베이스 테마 파일 getter
+    # @property
+    # def basePrs(self):
+    #     return self._basePrs
+    
+    # # 베이스 테마 파일 setter
+    # @basePrs.setter
+    # def basePrs(self):
+    #     # topic에 어울리는 테마의 피피티를 고른다
+    #     basePrs = None
+    #     self._basePrs = basePrs
+
