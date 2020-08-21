@@ -12,14 +12,18 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div class="col-md-12">
-                    <a href="" class="btn btn-default">다운로드</a>
+                <div>
+                    {% set status = true %}
+                    <button class="btn btn-primary" type="button" disabled>
+                        {% if status==false %}
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        발펴고자 AI가 PPT를 생성중입니다. 잠시만 기다려주세요.
+                        {% else %}
+                        다운로드
+                        {% endif %}
+                    </button>
                 </div>
             </div> 
         </div>
-        
     </div>
-
-    
-    
 {% endblock %}

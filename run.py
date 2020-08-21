@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for
+from flask import Flask, render_template, request, url_for, redirect
 
 from app import app
 from server.convert import convert
@@ -7,15 +7,18 @@ from server.convert import convert
 def default():
     return render_template('index.html')
 
+
 @app.route('/ppt', methods=['POST', 'GET'])
 def ppt():
     if request.method == 'POST':
         mdeditorHtmlStr = request.form.to_dict()['html']
         # print(mdeditorHtmlStr)
         convert(mdeditorHtmlStr)
-        render_template('ppt_download_index.html')
-
     return render_template('ppt_index.html')
+
+@app.route('/pptdownload')
+def pptdownload():
+    return render_template('ppt_download_index.html')
 
 
 @app.route('/image')
