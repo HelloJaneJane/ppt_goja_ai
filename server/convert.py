@@ -1,7 +1,13 @@
 #-*- coding:utf-8 -*-
 from pptx import Presentation
+from json import JSONEncoder
 
 from pptEngine.PyPPTModule import *
+
+class MyEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
 
 def convert(htmlStr):
     prs = Presentation()
@@ -12,8 +18,8 @@ def convert(htmlStr):
     subTitle = (htmlStr.split('</h2>')[0]).split('</span>')[1]
     htmlStr = htmlStr.split('</h2>')[1]
 
-    print("제목: "+mainTitle)
-    print("부제목: "+subTitle)
+    # print("제목: "+mainTitle)
+    # print("부제목: "+subTitle)
 
     h3List = htmlStr.split('<h3')
 
@@ -27,8 +33,8 @@ def convert(htmlStr):
             midTitles.append((h3Elem.split('</h3>')[0]).split('</span>')[1])
             h3Contents.append((h3Elem.split('</h3>')[1],h3Index-1))
 
-    print("중제목들: ",end='')
-    print(midTitles)
+    # print("중제목들: ",end='')
+    # print(midTitles)
 
     slideTitles = []
     h4Contents = []
@@ -45,8 +51,8 @@ def convert(htmlStr):
                 h4Contents.append(h4Elem.split('</h4>')[1])
 
     
-    print("소제목들: ",end='')
-    print(slideTitles)
+    # print("소제목들: ",end='')
+    # print(slideTitles)
 
     slideContents = []
 
@@ -65,10 +71,7 @@ def convert(htmlStr):
                     h5Heading = (h5Elem.split('</h5>')[0]).split('</span>')[1]
                     h5Contents = parseStrToList(h5Elem.split('</h5>')[1])
                     h5Tuples.append((h5Heading,h5Contents))
-
-            print("h5Tuples: ",end='')
-            print(h5Tuples)
-            # slideContents.append(SlideType_h5(h5Tuples))
+            slideContents.append(SlideType_h5(h5Tuples))
 
         # elif 슬라이드타이틀에 일정/과정/단계 가 있으면 -> 타임라인 타입
         elif h4Title.find('과정')!=-1 or h4Title.find('일정')!=-1 or h4Title.find('단계')!=-1 :
@@ -76,31 +79,30 @@ def convert(htmlStr):
             timeTuples = []
             for timeContent in timeContents:
                 timeTuples.append(parseTimeStrToTuple(timeContent))
-            
-            print("timeTuples: ",end='')
-            print(timeTuples)
-            # slideContents.append(SlideType_timeline(timeTuples))
+            slideContents.append(SlideType_timeline(timeTuples))
 
         # elif 슬라이드타이틀이 ? 로끝나고 내용이 한줄이면 -> 데피니션 타입
         elif h4Title.find('?')==len(h4Title)-1 and len(parseStrToList(h4ConElem)) == 1:
             defStr = eraseTags(h4ConElem)
-
-            print("definitionString: ",end='')
-            print(defStr)
-            # slideContents.append(SlideType_definition(defStr))
+            slideContents.append(SlideType_definition(defStr))
 
         # else ->디폴트타입
         else :
             lines = parseStrToList(h4ConElem)
-            print("defaultLines: ",end='')
-            print(lines)
-            # slideContents.append(SlideType_default(lines))
-
-    # print(slideContents)
-    myTextData = TextData(mainTitle, subTitle, midTitles, slideTitles)
+            slideContents.append(SlideType(lines))
+            
+    myTextData = TextData(mainTitle, subTitle, midTitles, slideTitles, slideContents)
     # myTextData.__print__()
+    myTextDataJSON = myTextData.toJSON()
+    # print(myTextDataJSON)
 
-    # myPPTData = PPTData(myTextData)
+
+    # myTextDataJSON을 GPU 로 보낸다
+    # GPU 가 찾아낸 결과물을 받는다
+
+    # myTextData랑 결과물이랑 합쳐서 PPT Data를 만든다
+    myPPTData = PPTData(myTextData)
+    # PPT 만들기를 시작한다
 
 
 
