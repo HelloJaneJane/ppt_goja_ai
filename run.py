@@ -7,16 +7,16 @@ from server.convert import convert
 def default():
     return render_template('index.html')
 
-
 @app.route('/ppt', methods=['POST', 'GET'])
 def ppt():
     if request.method == 'POST':
         mdeditorHtmlStr = request.form.to_dict()['html']
-        # print(mdeditorHtmlStr)
-        convert(mdeditorHtmlStr)
+        convert(mdeditorHtmlStr) # 다른쓰레드로 처리 
+        return render_template('ppt_download_index.html') # 근데 컨버트 주석처리해도 이거 안되는데 왜죠...
+        
     return render_template('ppt_index.html')
 
-@app.route('/pptdownload')
+@app.route('/ppt/download')
 def pptdownload():
     return render_template('ppt_download_index.html')
 
