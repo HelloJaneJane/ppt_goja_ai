@@ -54,11 +54,11 @@ class TextData:
 
 class PPTData:
 
-    def __init__(self, textData):
+    def __init__(self, textData, slideTypes):
         self._textData = textData
         # initial value
         self._topic = None
-        self._slideTypes = None
+        self._slideTypes = slideTypes
         self._basePrs = Presentation()
 
     # 전체 주제 getter
@@ -88,9 +88,6 @@ class PPTData:
         else :
             self.basePrs = Presentation("ISW.pptx")
 
-    def setSlideType(self):
-        self._slideTypes = [1,1,1,1,1,1]
-
     def newSlide(self,slideType):
         slide = self.basePrs.slides.add_slide(prs.slide_layouts[slideType])#ppt 객체, 슬라이드마스터 번호, 제목
         slide.shapes.title.text = self._textData._mainTitle
@@ -116,14 +113,49 @@ class PPTData:
         line.text = text
 
     #ppt를 저장한다.
-    def write(prs,file_name):
-        prs.save(file_name)
+    def write(self,file_name):
+        self._basePrs.save(file_name)
 
+    def generate_slide(self,slideObj):
+        if (slideObj.slide_type == 1):#default
+            slide = self.newSlide(1)
+            text_box = self.setTextBox(slide = slide,cnt = 2)
+            for line in SlideObj._lines:
+                newLine(text_box,line,'Arial',15)
+                
     def generate(self):
         self.basePrs()
         self.titleSlide()
-        for line in 
-        edit_slide = self.newSlide(self._slideType[0])
+        for slide_ in slideTypes:
+            self.generate_slide(slide_)
         
 
 
+# 디폴트 타입
+# [String] - 한줄내용
+class SlideType:
+    
+    def __init__(self, lines):
+        self._lines = lines
+
+    def generate(self):
+
+
+
+# 타임라인 타입 (일정, 과정, 단계)
+# [(String, String)] - (시간, 한줄내용)
+class SlideType_timeline(SlideType):
+    def __init__(self, timeTuples):
+        self._timeTuples = timeTuples
+
+# h5 타입 (비교대조 등)
+# [(String,[String])] - (헤딩,[내용들])
+class SlideType_h5(SlideType):
+    def __init__(self, h5Tuples):
+        self._h5Tuples = h5Tuples
+
+# 정의 타입 (? -> "")
+# String
+class SlideType_definition(SlideType):
+    def __init__(self, defStr):
+        self._defStr = defStr
