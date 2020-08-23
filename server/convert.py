@@ -4,13 +4,14 @@ from json import JSONEncoder
 
 from pptEngine.PyPPTModule import *
 
+from server.awsModule import *
+
 class MyEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
 
 def convert(htmlStr):
-    prs = Presentation()
 
     mainTitle = (htmlStr.split('</h1>')[0]).split('</span>')[1]
     htmlStr = htmlStr.split('</h1>')[1]
@@ -94,15 +95,40 @@ def convert(htmlStr):
     myTextData = TextData(mainTitle, subTitle, midTitles, slideTitles, slideContents)
     # myTextData.__print__()
     myTextDataJSON = myTextData.toJSON()
-    # print(myTextDataJSON)
+    print(myTextDataJSON)
+    
+    # uploadJsonToS3(myTextDataJSON, 'test.json')
+    # print(downloadJsonFromS3('test.json'))
 
 
-    # myTextDataJSON을 GPU 로 보낸다
-    # GPU 가 찾아낸 결과물을 받는다
-
-    # myTextData랑 결과물이랑 합쳐서 PPT Data를 만든다
+    ## TODO
+    # 1. myTextDataJSON을 GPU 로 보낸다
+    # 2. GPU 가 찾아낸 결과물을 받는다
+    # 3. myTextData랑 결과물이랑 합쳐서 PPT Data를 만든다
     myPPTData = PPTData(myTextData)
-    # PPT 만들기를 시작한다
+    # 4. myPPTData를 엔진한테 보내서 PPT 만들기를 시작한다
+    # 5. 엔진에서 만들어진 PPT 파일을 받아온다
+    prs = Presentation()
+    
+
+    # 테스트용 피피티 걍 야매로 제목이랑 부제목만 넣어서 해봄
+    slide = prs.slides.add_slide(prs.slide_layouts[0])
+    slide.shapes.title.text = mainTitle
+    slide.shapes.placeholders[1].text = subTitle
+    prs.save('test.pptx')
+
+    # 만든 피피티 파일을 s3로 업로드
+    uploadFileToS3('test.pptx', 'outputPPT/test.pptx')
+
+    # 파일 다운로드할 수 있는 s3 링크 받아오기
+    url = getUrlFromS3('outputPPT/test.pptx')
+    print(url)
+
+    # 링크를 클라이언트로 전송 -> 피피티 다운로드 버튼에 연결
+    
+
+    # downloadFileFromS3('outputPPT/test.pptx','testFromS3.pptx')
+
 
 
 
