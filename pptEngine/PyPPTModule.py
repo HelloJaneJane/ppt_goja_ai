@@ -61,25 +61,33 @@ class PPTData:
 
 # 디폴트 타입
 # [String] - 한줄내용
-class SlideType_default:
+class SlideType:
     def __init__(self, lines):
         self._lines = lines
+    def generate(self):
+        print('generated')
 
 # 타임라인 타입 (일정, 과정, 단계)
 # [(String, String)] - (시간, 한줄내용)
-class SlideType_timeline:
+class SlideType_timeline(SlideType):
     def __init__(self, timeTuples):
         self._timeTuples = timeTuples
 
+
 # h5 타입 (비교대조 등)
 # [(String,[String])] - (헤딩,[내용들])
-class SlideType_h5:
+class SlideType_h5(SlideType):
     def __init__(self, h5Tuples):
         self._h5Tuples = h5Tuples
 
 
 # 정의 타입 (? -> "")
 # String
-class SlideType_definition:
+class SlideType_definition(SlideType):
     def __init__(self, defStr):
         self._defStr = defStr
+# def slide_test():
+#     slides = [SlideType('default'),SlideType_h5([('SWM',['1','2','3']),('SWM',['1','2','3'])])]
+# 
+#     for Sample_sld in slides:
+#         Sample_sld.generate()
