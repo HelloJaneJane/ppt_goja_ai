@@ -12,8 +12,8 @@ def convert(htmlStr):
     subTitle = (htmlStr.split('</h2>')[0]).split('</span>')[1]
     htmlStr = htmlStr.split('</h2>')[1]
 
-    # print("제목: "+mainTitle)
-    # print("부제목: "+subTitle)
+    print("제목: "+mainTitle)
+    print("부제목: "+subTitle)
 
     h3List = htmlStr.split('<h3')
 
@@ -27,8 +27,8 @@ def convert(htmlStr):
             midTitles.append((h3Elem.split('</h3>')[0]).split('</span>')[1])
             h3Contents.append((h3Elem.split('</h3>')[1],h3Index-1))
 
-    # print("중제목들: ",end='')
-    # print(midTitles)
+    print("중제목들: ",end='')
+    print(midTitles)
 
     slideTitles = []
     h4Contents = []
@@ -45,22 +45,104 @@ def convert(htmlStr):
                 h4Contents.append(h4Elem.split('</h4>')[1])
 
     
-    # print("소제목들: ",end='')
-    # print(slideTitles)
+    print("소제목들: ",end='')
+    print(slideTitles)
 
+    slideContents = []
+
+    for h4Index, h4ConElem in enumerate(h4Contents):
+        h4ConElem.replace('\n','')
+        h4Title = slideTitles[h4Index][0]
+        
+        # if 컨텐츠h5가 있으면 -> h5타입
+        if '<h5' in h4ConElem:
+            h5List = h4ConElem.split('<h5')
+            h5Tuples = []
+            for h5Index, h5Elem in enumerate(h5List):
+                if h5Index==0:
+                    pass
+                else:
+                    h5Heading = (h5Elem.split('</h5>')[0]).split('</span>')[1]
+                    h5Contents = parseStrToList(h5Elem.split('</h5>')[1])
+                    h5Tuples.append((h5Heading,h5Contents))
+
+            print("h5Tuples: ",end='')
+            print(h5Tuples)
+            # slideContents.append(SlideType_h5(h5Tuples))
+
+        # elif 슬라이드타이틀에 일정/과정/단계 가 있으면 -> 타임라인 타입
+        elif h4Title.find('과정')!=-1 or h4Title.find('일정')!=-1 or h4Title.find('단계')!=-1 :
+            timeContents = parseStrToList(h4ConElem)
+            timeTuples = []
+            for timeContent in timeContents:
+                timeTuples.append(parseTimeStrToTuple(timeContent))
+            
+            print("timeTuples: ",end='')
+            print(timeTuples)
+            # slideContents.append(SlideType_timeline(timeTuples))
+
+        # elif 슬라이드타이틀이 ? 로끝나고 내용이 한줄이면 -> 데피니션 타입
+        elif h4Title.find('?')==len(h4Title)-1 and len(parseStrToList(h4ConElem)) == 1:
+            defStr = eraseTags(h4ConElem)
+
+            print("definitionString: ",end='')
+            print(defStr)
+            # slideContents.append(SlideType_definition(defStr))
+
+        # else ->디폴트타입
+        else :
+            lines = parseStrToList(h4ConElem)
+            print("defaultLines: ",end='')
+            print(lines)
+            # slideContents.append(SlideType_default(lines))
+
+    # print(slideContents)
     myTextData = TextData(mainTitle, subTitle, midTitles, slideTitles)
-    myTextData.__print__()
-
-    print("안에내용들: ",end='')
-    print(h4Contents)
+    # myTextData.__print__()
 
     # myPPTData = PPTData(myTextData)
-    # myPrs = myPPTData.basePrs()
 
 
 
+def eraseTags(rawStr):
+    while rawStr.find('<p>')!=-1:
+        rawStr=rawStr.replace('<p>','')
+        rawStr=rawStr.replace('</p>','')
+    while rawStr.find('\n')!=-1:
+        rawStr=rawStr.replace('\n','')
+        rawStr=rawStr.replace('</p>','')
+    return rawStr
 
+def parseStrToList(rawStr):
+    # <p> 있는 그냥 텍스트
+    if rawStr.find('<p>')!=-1:
+        rawStr=eraseTags(rawStr)
+        # 한줄
+        if rawStr.find('<br>')!=-1:
+            return [rawStr]
+        # 여러줄
+        else:
+            return rawStr.split('<br>')
+    # <li> 있는 텍스트
+    else:
+        # 불렛
+        if rawStr.find('<ul>')!=-1:
+            rawStr=rawStr.replace('<ul>\n<li>','')
+            rawStr=rawStr.replace('</li></ul>\n','')
+        # 넘버링
+        elif rawStr.find('<ol>')!=-1:
+            rawStr=rawStr.replace('<ol>\n<li>','')
+            rawStr=rawStr.replace('</li></ol>\n','')
 
+        rawStr=eraseTags(rawStr)
+        return rawStr.split('</li><li>')
 
-
-
+def parseTimeStrToTuple(rawStr):
+    # 시간 : 한줄내용
+    if rawStr.find(' : ')!=-1:
+        time = rawStr.split(' : ')[0]
+        line = rawStr.split(' : ')[1]
+        return (time,line)
+    # 내용만
+    else:
+        return (None, rawStr)

@@ -77,8 +77,9 @@ class SlideType_h5:
     def __init__(self, h5Tuples):
         self._h5Tuples = h5Tuples
 
+
 # 정의 타입 (? -> "")
 # String
 class SlideType_definition:
-	def __init__(self, defStr):
+    def __init__(self, defStr):
         self._defStr = defStr
