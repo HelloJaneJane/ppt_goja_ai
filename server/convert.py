@@ -1,10 +1,17 @@
 #-*- coding:utf-8 -*-
 from pptx import Presentation
+from json import JSONEncoder
 
 from pptEngine.PyPPTModule import *
 
+from server.awsModule import *
+
+class MyEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
+
 def convert(htmlStr):
-    prs = Presentation()
 
     mainTitle = (htmlStr.split('</h1>')[0]).split('</span>')[1]
     htmlStr = htmlStr.split('</h1>')[1]
@@ -12,8 +19,8 @@ def convert(htmlStr):
     subTitle = (htmlStr.split('</h2>')[0]).split('</span>')[1]
     htmlStr = htmlStr.split('</h2>')[1]
 
-    print("제목: "+mainTitle)
-    print("부제목: "+subTitle)
+    # print("제목: "+mainTitle)
+    # print("부제목: "+subTitle)
 
     h3List = htmlStr.split('<h3')
 
@@ -27,8 +34,8 @@ def convert(htmlStr):
             midTitles.append((h3Elem.split('</h3>')[0]).split('</span>')[1])
             h3Contents.append((h3Elem.split('</h3>')[1],h3Index-1))
 
-    print("중제목들: ",end='')
-    print(midTitles)
+    # print("중제목들: ",end='')
+    # print(midTitles)
 
     slideTitles = []
     h4Contents = []
@@ -45,8 +52,8 @@ def convert(htmlStr):
                 h4Contents.append(h4Elem.split('</h4>')[1])
 
     
-    print("소제목들: ",end='')
-    print(slideTitles)
+    # print("소제목들: ",end='')
+    # print(slideTitles)
 
     slideContents = []
 
@@ -65,10 +72,7 @@ def convert(htmlStr):
                     h5Heading = (h5Elem.split('</h5>')[0]).split('</span>')[1]
                     h5Contents = parseStrToList(h5Elem.split('</h5>')[1])
                     h5Tuples.append((h5Heading,h5Contents))
-
-            print("h5Tuples: ",end='')
-            print(h5Tuples)
-            # slideContents.append(SlideType_h5(h5Tuples))
+            slideContents.append(SlideType_h5(h5Tuples))
 
         # elif 슬라이드타이틀에 일정/과정/단계 가 있으면 -> 타임라인 타입
         elif h4Title.find('과정')!=-1 or h4Title.find('일정')!=-1 or h4Title.find('단계')!=-1 :
@@ -76,31 +80,55 @@ def convert(htmlStr):
             timeTuples = []
             for timeContent in timeContents:
                 timeTuples.append(parseTimeStrToTuple(timeContent))
-            
-            print("timeTuples: ",end='')
-            print(timeTuples)
-            # slideContents.append(SlideType_timeline(timeTuples))
+            slideContents.append(SlideType_timeline(timeTuples))
 
         # elif 슬라이드타이틀이 ? 로끝나고 내용이 한줄이면 -> 데피니션 타입
         elif h4Title.find('?')==len(h4Title)-1 and len(parseStrToList(h4ConElem)) == 1:
             defStr = eraseTags(h4ConElem)
-
-            print("definitionString: ",end='')
-            print(defStr)
-            # slideContents.append(SlideType_definition(defStr))
+            slideContents.append(SlideType_definition(defStr))
 
         # else ->디폴트타입
         else :
             lines = parseStrToList(h4ConElem)
-            print("defaultLines: ",end='')
-            print(lines)
-            # slideContents.append(SlideType_default(lines))
-
-    # print(slideContents)
-    myTextData = TextData(mainTitle, subTitle, midTitles, slideTitles)
+            slideContents.append(SlideType(lines))
+            
+    myTextData = TextData(mainTitle, subTitle, midTitles, slideTitles, slideContents)
     # myTextData.__print__()
+    myTextDataJSON = myTextData.toJSON()
+    print(myTextDataJSON)
+    
+    # uploadJsonToS3(myTextDataJSON, 'test.json')
+    # print(downloadJsonFromS3('test.json'))
 
-    # myPPTData = PPTData(myTextData)
+
+    ## TODO
+    # 1. myTextDataJSON을 GPU 로 보낸다
+    # 2. GPU 가 찾아낸 결과물을 받는다
+    # 3. myTextData랑 결과물이랑 합쳐서 PPT Data를 만든다
+    myPPTData = PPTData(myTextData)
+    # 4. myPPTData를 엔진한테 보내서 PPT 만들기를 시작한다
+    # 5. 엔진에서 만들어진 PPT 파일을 받아온다
+    prs = Presentation()
+    
+
+    # 테스트용 피피티 걍 야매로 제목이랑 부제목만 넣어서 해봄
+    slide = prs.slides.add_slide(prs.slide_layouts[0])
+    slide.shapes.title.text = mainTitle
+    slide.shapes.placeholders[1].text = subTitle
+    prs.save('test.pptx')
+
+    # 만든 피피티 파일을 s3로 업로드
+    uploadFileToS3('test.pptx', 'outputPPT/test.pptx')
+
+    # 파일 다운로드할 수 있는 s3 링크 받아오기
+    url = getUrlFromS3('outputPPT/test.pptx')
+    print(url)
+
+    # 링크를 클라이언트로 전송 -> 피피티 다운로드 버튼에 연결
+    
+
+    # downloadFileFromS3('outputPPT/test.pptx','testFromS3.pptx')
+
 
 
 

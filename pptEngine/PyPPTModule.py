@@ -1,21 +1,29 @@
 #-*- coding:utf-8 -*-
 from pptx import Presentation
 from pptx.util import Pt
+import json
 
 class TextData:
-    def __init__(self, mainTitle, subTitle, midTitles, slideTitles):
+    def __init__(self, mainTitle, subTitle, midTitles, slideTitles, slideContents):
         self._mainTitle = mainTitle
         self._subTitle = subTitle
         self._midTitles = midTitles
         self._slideTitles = slideTitles
+        self._slideContents = slideContents
 
     def __print__(self):
+        print("---TextData Print---")
         print("제목: " + self._mainTitle)
         print("부제목: " + self._subTitle)
         print("중제목들 : ", end='')
         print(self._midTitles)
-        print("소제목들: ", end='')
+        print("슬라이드소제목들: ",end='')
         print(self._slideTitles)
+        print("슬라이드내용들: ",end='')
+        print(self._slideContents)
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii = False, sort_keys=True, indent=4)
 
 
 class PPTData:
