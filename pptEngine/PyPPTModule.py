@@ -3,6 +3,8 @@ from pptx import Presentation
 from pptx.util import Pt
 import json
 
+from server.awsModule import *
+
 class TextData:
     def __init__(self, mainTitle, subTitle, midTitles, slideTitles, slideContents):
         self._mainTitle = mainTitle
@@ -58,6 +60,7 @@ class PPTData:
     def basePrs(self):
         #     # topic에 어울리는 테마의 피피티를 고른다
         if self._topic == "ISW":
+            downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
             self._basePrs = Presentation("ISW.pptx")
         else:
             self._basePrs = Presentation("ISW.pptx")
@@ -93,13 +96,13 @@ class PPTData:
     def generate_slide(self, slideObj):
         if (isinstance(slideObj,SlideType_timeline)):  # timeline
             slide = self.newSlide(0)#timeline
-            text_box = self.setTextBox(slide, 1, '.\DOSSaemmul.ttf')
+            text_box = self.setTextBox(slide, 1, 'pptEngine/static/DOSSaemmul.ttf')
             line_cnt=1
             for tuples in slideObj.timeTuples:
-                text_box = self.setTextBox(slide, line_cnt,'.\DOSSaemmul.ttf')
+                text_box = self.setTextBox(slide, line_cnt,'pptEngine/static/DOSSaemmul.ttf')
                 self.newLine(text_box, tuples[0], 'Arial', 10)
                 line_cnt = line_cnt + 1
-                text_box = self.setTextBox(slide,line_cnt,'.\DOSSaemmul.ttf')
+                text_box = self.setTextBox(slide,line_cnt,'pptEngine/static/DOSSaemmul.ttf')
                 self.newLine(text_box, tuples[1], 'DOSSaemmul', 13)
                 line_cnt = line_cnt + 1
             return slide
@@ -108,7 +111,7 @@ class PPTData:
             slide = self.newSlide(1)#h5
             textbox_cnt=1
             for tuples in slideObj._h5Tuples:
-                text_box = self.setTextBox(slide,textbox_cnt,'.\DOSSaemmul.ttf')
+                text_box = self.setTextBox(slide,textbox_cnt,'pptEngine/static/DOSSaemmul.ttf')
                 self.newLine(text_box,tuples[0],'DOSSaemmul',15)
                 for line in tuples[1]:
                     self.newLine(text_box,line,'Arial',12)
@@ -117,7 +120,7 @@ class PPTData:
 
         else:
             slide = self.newSlide(2)
-            text_box = self.setTextBox(slide,1,'.\DOSSaemmul.ttf')
+            text_box = self.setTextBox(slide,1,'pptEngine/static/DOSSaemmul.ttf')
             for line in slideObj._lines:
                 self.newLine(text_box,line,'DOSSaemmul',13)
             return slide
