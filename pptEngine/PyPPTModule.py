@@ -30,11 +30,11 @@ class TextData:
 
 class PPTData:
 
-    def __init__(self, textData, slideTypes):
+    def __init__(self, textData):
         self._textData = textData
         # initial value
         self._topic = None
-        self._slideTypes = slideTypes
+        self._slideTypes = textData._slideContents
         self._basePrs = Presentation()
 
     # 전체 주제 getter

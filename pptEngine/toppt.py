@@ -3,7 +3,6 @@ from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.util import Pt
-from PyPPTModule2 import *
 from PyPPTModule import *
 import wikipediaapi
 import wikipedia
@@ -29,10 +28,10 @@ def layout():
     write(prs,'output.pptx')
 
 def test2():
-    sample_text = TextData('메인 타이투를','서부 타이투를',['미드타이틀1','미드타이틀2'],['슬라이드타이틀1','슬라이드타이틀2','슬라이드타이틀3','슬라이드타이틀4'])
     slides = [SlideType(['default']), SlideType_h5([('SWM', ['1', '2', '3']), ('BOB', ['1', '2', '3'])])]
+    sample_text = TextData('메인 타이틀','서부 타이틀',['미드타이틀1','미드타이틀2'],['슬라이드타이틀1','슬라이드타이틀2','슬라이드타이틀3','슬라이드타이틀4'],slides)
 
-    sample = PPTData(sample_text,slides)
+    sample = PPTData(sample_text)
     #sample.basePrs()
 
     #sample.titleSlide()
