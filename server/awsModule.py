@@ -6,11 +6,13 @@ bucketName = 'ppt-maker-bucket'
 
 # 파일이 현재 위치한 로컬 경로 -> 업로드하려는 위치의 s3 경로
 def uploadFileToS3(myPath, s3Path):
+    print("aws upload file")
     s3 = boto3.client('s3')
     s3.upload_file(myPath, bucketName, s3Path)
 
 # 파일이 현재 위치한 s3 경로 -> 다운로드하려는 위치의 로컬 경로
 def downloadFileFromS3(s3Path, myPath):
+    print("aws download file")
     s3 = boto3.resource('s3')
     try:
         s3.Bucket(bucketName).download_file(s3Path, myPath)
