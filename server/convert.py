@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 from pptx import Presentation
 from json import JSONEncoder
+import os
 
 from pptEngine.PyPPTModule import *
 
@@ -105,7 +106,7 @@ def convert(htmlStr):
     # 1. myTextDataJSON을 GPU 로 보낸다
     # 2. GPU 가 찾아낸 결과물을 받는다
     # 3. myTextData랑 결과물이랑 합쳐서 PPT Data를 만든다
-    myPPTData = PPTData(myTextData)
+    # myPPTData = PPTData(myTextData)
     # 4. myPPTData를 엔진한테 보내서 PPT 만들기를 시작한다
     # 5. 엔진에서 만들어진 PPT 파일을 받아온다
     prs = Presentation()
@@ -117,8 +118,9 @@ def convert(htmlStr):
     slide.shapes.placeholders[1].text = subTitle
     prs.save('test.pptx')
 
-    # 만든 피피티 파일을 s3로 업로드
+    # 만든 피피티 파일을 s3로 업로드 (+서버 안에선 파일 지우기)
     uploadFileToS3('test.pptx', 'outputPPT/test.pptx')
+    os.remove('test.pptx')
 
     # 파일 다운로드할 수 있는 s3 링크 받아오기
     url = getUrlFromS3('outputPPT/test.pptx')
