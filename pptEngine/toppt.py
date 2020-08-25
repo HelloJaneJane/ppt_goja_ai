@@ -3,7 +3,8 @@ from pptx import Presentation
 from pptx.dml.color import RGBColor
 from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.util import Pt
-from PyPPTModule import *
+from PyPPTModule2 import *
+#from PyPPTModule import *
 import wikipediaapi
 import wikipedia
 import wptools
@@ -28,12 +29,15 @@ def layout():
     write(prs,'output.pptx')
 
 def test2():
-    slides = [SlideType(['default']), SlideType_h5([('SWM', ['1', '2', '3']), ('BOB', ['1', '2', '3'])])]
-    sample_text = TextData('메인타이틀','서부 타이투를',['미드타이틀1','미드타이틀2'],[('슬라이드타이틀1',0),('슬라이드타이틀2',1)],slides)
+    slides = [SlideType_definition('창의도전형 SW인재 육성으로 SW산업의 미래를 선도하는 정부 지원 사업!')
+        , SlideType(['5951명 지원 856명의 연수생 배출 현재 11기 150명의 연수생이 소프트웨어 산업의 리더를 꿈꾸며 역량을 키우고 있습니다.'])
+        , SlideType_timeline([('4월','합격자발표'),('5월','교육준비 및 발대식'),('6-11월','본과정'),('12월','최종평가 및 인증자 선발')])
+        , SlideType_h5([('BoB', ['국가 지원 사업', '소프트웨어 맴버십 활동', '개인활동 위주의 활동', '보안리더를 양성']), ('SWMaestro', ['국가 지원 사업', '소프트웨어 맴버십 활동', '팀 단위의 프로젝트 활동', '한국의 스티브잡스를 양성'])])]
+    sample_text = TextData('SW Maestro 오리엔테이션','세상을 움직이는 최고급 SW 인재양성의 메카', ['소프트웨어 마에스트로 란', '소프트웨어 대외활동 비교'], [('SW Maestro?', 0), ('경쟁률 추이', 0), ('프로그램 일정', 0), ('BoB VS SWMaestro', 1)],slides)
 
     sample = PPTData(sample_text)
     #sample.basePrs()
-    #slide_master = sample._basePrs.slide_masters
+    #slide_master = sample._basePrs.slide_masters(
     #slide_master[2].shape.add_text
     #sample.titleSlide()
     sample.generate()
@@ -60,8 +64,11 @@ def wiki_test():
 
 
 def tmp():
-    slides = [SlideType(['default']), SlideType_h5([('SWM', ['1', '2', '3']), ('BOB', ['1', '2', '3'])])]
-    sample_text = TextData('메인타이틀','서부 타이투를',['미드타이틀1','미드타이틀2'],[('슬라이드타이틀1',0),('슬라이드타이틀2',1)],slides)
+    slides = [SlideType_definition('창의도전형 SW인재 육성으로 SW산업의 미래를 선도하는 정부 지원 사업!')
+        , SlideType(['5951명 지원 856명의 연수생 배출 현재 11기 150명의 연수생이 소프트웨어 산업의 리더를 꿈꾸며 역량을 키우고 있습니다.'])
+        , SlideType_timeline([('4월','합격자발표'),('5월','교육준비 및 발대식'),('6-11월','본과정'),('12월','최종평가 및 인증자 선발')])
+        , SlideType_h5([('BoB', ['국가 지원 사업', '소프트웨어 맴버십 활동', '개인활동 위주의 활동', '보안리더를 양성']), ('SWMaestro', ['국가 지원 사업', '소프트웨어 맴버십 활동', '팀 단위의 프로젝트 활동', '한국의 스티브잡스를 양성'])])]
+    sample_text = TextData('SW Maestro 오리엔테이션','세상을 움직이는 최고급 SW 인재양성의 메카', ['소프트웨어 마에스트로 란', '소프트웨어 대외활동 비교'], [('SW Maestro?', 0), ('경쟁률 추이', 0), ('프로그램 일정', 0), ('BoB VS SWMaestro', 1)],slides)
 
     sample = PPTData(sample_text)
     sample._basePrs = Presentation('ISW.pptx')

@@ -62,6 +62,7 @@ class PPTData:
     def basePrs(self):
         #     # topic에 어울리는 테마의 피피티를 고른다
         if self._topic == "ISW":
+#            downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
             self._basePrs = Presentation("ISW.pptx")
         else:
             downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
@@ -88,6 +89,13 @@ class PPTData:
         return text_box
 
     # 텍스트박스 객체에 새로운 텍스트를 추가한다. (줄단위)
+
+    def firstLine(self, textbox, text, font, size):
+        #textbox.font.name = font
+        #textbox.font.size = Pt(size)
+        textbox.text = text
+        textbox.alignment = PP_ALIGN.LEFT
+
     def newLine(self, textbox, text, font, size):  # 텍스트박스 객체, 내용, 폰트, 크기
         line = textbox.add_paragraph()
         line.font.name = font
@@ -113,14 +121,15 @@ class PPTData:
     def index(self):
         slide = self.newSlide(1)
         text_box = self.setTextBox(slide,0,'pptEngine/static/SangSangTitleM.ttf')
-        self.newLine(text_box,'Contents','SangSangTitleM',32)
+        self.firstLine(text_box,'Contents','SangSangTitleM',32)
         text_box = self.setTextBox(slide, 11, 'pptEngine/static/a타이틀고딕3.ttf')
-        pre_idx=-1
+        pre_idx=0
+        self.firstLine(text_box,self._textData._midTitles[0],'a타이틀고딕3',24)
         for sld_title in self._textData._slideTitles:
             if(sld_title[1]>pre_idx):
                 pre_idx=sld_title[1]
                 self.newLine(text_box,self._textData._midTitles[pre_idx],'a타이틀고딕3',24)
-            self.newLine(text_box, sld_title[0], 'a타이틀고딕3', 24)
+            self.newLine_beauty(text_box, '- '+sld_title[0],'a타이틀고딕3', 18,False,[0xD0,0xFF,0x80],False)
 
     # ppt를 저장한다.
     def write(self, file_name):
@@ -135,13 +144,12 @@ class PPTData:
             slide = self.newSlide(5)#timeline 5th
             self.input_title(slide,title)
 
-            text_box = self.setTextBox(slide, 1, 'pptEngine/static/DOSSaemmul.ttf')
             line_cnt=13
-            for tuples in slideObj.timeTuples:
+            for tuples in slideObj._timeTuples:
                 text_box = self.setTextBox(slide, line_cnt,'pptEngine/static/DOSSaemmul.ttf')
-                self.newLine(text_box, tuples[0], 'Arial', 10)
+                self.firstLine(text_box, tuples[0], 'Arial', 10)
                 text_box = self.setTextBox(slide,line_cnt+4,'pptEngine/static/DOSSaemmul.ttf')
-                self.newLine(text_box, tuples[1], 'DOSSaemmul', 13)
+                self.firstLine(text_box, tuples[1], 'DOSSaemmul', 13)
                 line_cnt = line_cnt + 1
             return slide
 
@@ -151,7 +159,7 @@ class PPTData:
             textbox_cnt= 1
             for tuples in slideObj._h5Tuples:
                 text_box = self.setTextBox(slide,textbox_cnt,'pptEngine/static/a타이틀고딕3.ttf')
-                self.newLine_beauty(text_box,tuples[0],'a타이틀고딕3',28,True,[0xFF,0x00,0x00],True)
+                self.newLine_beauty(text_box,tuples[0],'a타이틀고딕3',28,True,[0xCC,0xFF,0x33],True)
                 for line in tuples[1]:
                     self.newLine(text_box,line,'a타이틀고딕3',20)
                 textbox_cnt = textbox_cnt+1
@@ -162,14 +170,14 @@ class PPTData:
 
             text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
             line =slideObj._defStr
-            self.newLine(text_box,line,'a타이틀고딕3',24)
+            self.firstLine(text_box,line,'a타이틀고딕3',24)
 
         else:
             slide = self.newSlide(4)
             self.input_title(slide, title)
             text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
             line =slideObj._lines[0]
-            self.newLine(text_box,line,'a타이틀고딕3',24)
+            self.firstLine(text_box,line,'a타이틀고딕3',24)
             return slide
 
     def generate(self):
