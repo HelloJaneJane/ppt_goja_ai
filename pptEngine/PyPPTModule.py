@@ -39,7 +39,7 @@ def write(prs,file_name):
 
 
 
-class TextData:
+class TextData:  #
     def __init__(self, mainTitle, subTitle, midTitles, slideTitles):
         self._mainTitle = mainTitle
         self._subTitle = subTitle
@@ -49,9 +49,9 @@ class TextData:
     def __print__(self):
         print("제목: " + self._mainTitle)
         print("부제목: " + self._subTitle)
-        print("중제목들 : ",end='')
+        print("중제목들 : ", end='')
         print(self._midTitles)
-        print("소제목들: ",end='')
+        print("소제목들: ", end = '')
         print(self._slideTitles)
 
 class PPTData:
@@ -80,5 +80,5 @@ class SlideType_h5:
 # 정의 타입 (? -> "")
 # String
 class SlideType_definition:
-	def __init__(self, defStr):
+    def __init__(self, defStr):
         self._defStr = defStr
