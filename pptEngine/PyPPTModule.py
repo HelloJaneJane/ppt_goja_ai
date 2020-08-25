@@ -2,6 +2,8 @@
 from pptx import Presentation
 from pptx.util import Pt
 import json
+from pptx.dml.color import RGBColor
+from pptx.enum.text import PP_ALIGN
 
 from server.awsModule import *
 
@@ -73,9 +75,11 @@ class PPTData:
 
     # 제목 슬라이드를 만드는 함수
     def titleSlide(self):  # NewSlide, 제목, 부제목
-        slide = self.newSlide(1)
-        slide.shapes.placeholders[1].text = self._textData._mainTitle
+        slide = self.newSlide(0)#2에 제목 넣자
+        slide.shapes.placeholders[0].text = self._textData._mainTitle
+        slide.shapes.placeholders[10].text = self._textData._subTitle
         return slide
+
 
     # 슬라이드 객체의 특정 텍스트박스에 대한 설정
     def setTextBox(self, slide, cnt, fontAdr):  # 슬라이드 객체, 텍스트박스 번호, 폰트주소
@@ -89,54 +93,105 @@ class PPTData:
         line.font.name = font
         line.font.size = Pt(size)
         line.text = text
+        line.alignment = PP_ALIGN.LEFT
+
+    def newLine_beauty(self,textbox,text,font,size,bold,rgb,center):
+        line = textbox.add_paragraph()
+        line.font.name = font
+        line.font.size = Pt(size)
+        line.text = text
+        line.font.color.rgb = RGBColor(rgb[0],rgb[1],rgb[2])
+        line.font.bold = bold
+        if(center):
+            line.alignment = PP_ALIGN.CENTER
+
+    def transitionSlide(self,idx):
+        slide = self.newSlide(2)
+        text_box = self.setTextBox(slide,0,'pptEngine/static/SangSangTitleM.ttf')
+        self.newLine(text_box,self._textData._midTitles[idx],'SangSangTitleM',44)
+
+    def index(self):
+        slide = self.newSlide(1)
+        text_box = self.setTextBox(slide,0,'pptEngine/static/SangSangTitleM.ttf')
+        self.newLine(text_box,'Contents','SangSangTitleM',32)
+        text_box = self.setTextBox(slide, 11, 'pptEngine/static/a타이틀고딕3.ttf')
+        pre_idx=-1
+        for sld_title in self._textData._slideTitles:
+            if(sld_title[1]>pre_idx):
+                pre_idx=sld_title[1]
+                self.newLine(text_box,self._textData._midTitles[pre_idx],'a타이틀고딕3',24)
+            self.newLine(text_box, sld_title[0], 'a타이틀고딕3', 24)
 
     # ppt를 저장한다.
     def write(self, file_name):
         self._basePrs.save(file_name)
 
-    def generate_slide(self, slideObj):
-        print("generate_slide -> ",end='')
+    def input_title(self,slide, title):
+        text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
+        self.newLine(text_box, title, 'SangSangTitleM', 32)
+
+    def generate_slide(self, title, slideObj):
         if (isinstance(slideObj,SlideType_timeline)):  # timeline
-            print("timeline")
-            slide = self.newSlide(0)#timeline
+            slide = self.newSlide(5)#timeline 5th
+            self.input_title(slide,title)
+
             text_box = self.setTextBox(slide, 1, 'pptEngine/static/DOSSaemmul.ttf')
-            line_cnt=1
-            for tuples in slideObj._timeTuples:
-                print(tuples)
+            line_cnt=13
+            for tuples in slideObj.timeTuples:
                 text_box = self.setTextBox(slide, line_cnt,'pptEngine/static/DOSSaemmul.ttf')
                 self.newLine(text_box, tuples[0], 'Arial', 10)
-                line_cnt = line_cnt + 1
-                text_box = self.setTextBox(slide,line_cnt,'pptEngine/static/DOSSaemmul.ttf')
+                text_box = self.setTextBox(slide,line_cnt+4,'pptEngine/static/DOSSaemmul.ttf')
                 self.newLine(text_box, tuples[1], 'DOSSaemmul', 13)
                 line_cnt = line_cnt + 1
             return slide
 
         elif (isinstance(slideObj,SlideType_h5)):
-            print("h5")
-            slide = self.newSlide(1)#h5
-            textbox_cnt=1
+            slide = self.newSlide(6)#h5
+            self.input_title(slide, title)
+            textbox_cnt= 1
             for tuples in slideObj._h5Tuples:
-                text_box = self.setTextBox(slide,textbox_cnt,'pptEngine/static/DOSSaemmul.ttf')
-                self.newLine(text_box,tuples[0],'DOSSaemmul',15)
+                text_box = self.setTextBox(slide,textbox_cnt,'pptEngine/static/a타이틀고딕3.ttf')
+                self.newLine_beauty(text_box,tuples[0],'a타이틀고딕3',28,True,[0xFF,0x00,0x00],True)
                 for line in tuples[1]:
-                    self.newLine(text_box,line,'Arial',12)
+                    self.newLine(text_box,line,'a타이틀고딕3',20)
                 textbox_cnt = textbox_cnt+1
 
+        elif (isinstance(slideObj,SlideType_definition)):
+            slide = self.newSlide(3)
+            self.input_title(slide, title)
+
+            text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
+            line =slideObj._defStr
+            self.newLine(text_box,line,'a타이틀고딕3',24)
+
         else:
-            print("default")
-            slide = self.newSlide(2)
-            text_box = self.setTextBox(slide,1,'pptEngine/static/DOSSaemmul.ttf')
-            # for line in slideObj._lines:
-            #     self.newLine(text_box,line,'DOSSaemmul',13)
+            slide = self.newSlide(4)
+            self.input_title(slide, title)
+            text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
+            line =slideObj._lines[0]
+            self.newLine(text_box,line,'a타이틀고딕3',24)
             return slide
 
     def generate(self):
         self.basePrs()
         self.titleSlide()
+        self.index()
+        slide_idx = -1
+        mid_slide = -1
         for slide_ in self._slideTypes:
-            print("slide_ = ",end='')
-            print(slide_)
-            self.generate_slide(slide_)
+            slide_idx = slide_idx + 1
+            if(self._textData._slideTitles[slide_idx][1]>mid_slide):
+                mid_slide = mid_slide + 1
+                self.transitionSlide(mid_slide)
+
+            self.generate_slide(self._textData._slideTitles[slide_idx][0],slide_)
+
+    def idx_check(self,idx):
+        slide = self.newSlide(idx)
+        for shape in slide.shapes:
+            if shape.is_placeholder:
+                phf = shape.placeholder_format
+                print('%d,%s'%(phf.idx,phf.type))
 
 
 # 디폴트 타입

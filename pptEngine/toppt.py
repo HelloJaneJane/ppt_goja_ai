@@ -29,11 +29,12 @@ def layout():
 
 def test2():
     slides = [SlideType(['default']), SlideType_h5([('SWM', ['1', '2', '3']), ('BOB', ['1', '2', '3'])])]
-    sample_text = TextData('메인 타이틀','서부 타이틀',['미드타이틀1','미드타이틀2'],['슬라이드타이틀1','슬라이드타이틀2','슬라이드타이틀3','슬라이드타이틀4'],slides)
+    sample_text = TextData('메인타이틀','서부 타이투를',['미드타이틀1','미드타이틀2'],[('슬라이드타이틀1',0),('슬라이드타이틀2',1)],slides)
 
     sample = PPTData(sample_text)
     #sample.basePrs()
-
+    #slide_master = sample._basePrs.slide_masters
+    #slide_master[2].shape.add_text
     #sample.titleSlide()
     sample.generate()
     sample.write('first_sample.pptx')
@@ -56,7 +57,21 @@ def wiki_test():
     kakao = wptools.page('kakao').get_query()
     kakao_img = kakao.pageimage
     print(kakao_img)
+
+
+def tmp():
+    slides = [SlideType(['default']), SlideType_h5([('SWM', ['1', '2', '3']), ('BOB', ['1', '2', '3'])])]
+    sample_text = TextData('메인타이틀','서부 타이투를',['미드타이틀1','미드타이틀2'],[('슬라이드타이틀1',0),('슬라이드타이틀2',1)],slides)
+
+    sample = PPTData(sample_text)
+    sample._basePrs = Presentation('ISW.pptx')
+    for i in range(0,10):
+        sample.idx_check(i)
+        print('-----')
+
+
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=5000)
     test2()
+    #tmp()
     #wiki_test()
