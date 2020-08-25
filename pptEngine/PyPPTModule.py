@@ -32,10 +32,10 @@ class TextData:
 
 class PPTData:
 
-    def __init__(self, textData):
+    def __init__(self, textData, topic):
         self._textData = textData
         # initial value
-        self._topic = None
+        self._topic = topic
         self._slideTypes = textData._slideContents
         self._basePrs = Presentation()
 
@@ -62,8 +62,8 @@ class PPTData:
     def basePrs(self):
         #     # topic에 어울리는 테마의 피피티를 고른다
         if self._topic == "ISW":
-#            downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
-            self._basePrs = Presentation("ISW.pptx")
+            downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
+            self._basePrs = Presentation("pptEngine/ISW.pptx")
         else:
             downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
             self._basePrs = Presentation("pptEngine/ISW.pptx")
