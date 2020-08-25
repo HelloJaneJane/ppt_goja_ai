@@ -61,7 +61,13 @@ typora-root-url: ../human
 
 ### 2. 이미지 후처리 기능
 
-* (설명글 + 그림)
+* 1. Background Removal
+![img_31](./image/2_기능설명_1.PNG)
+* 2. Super Resolution
+![img_31](./image/2_기능설명_2.PNG)
+* 3. Image to Pictogram
+![img_31](./image/2_기능설명_3.PNG)
+
 
 ### 3. PPT 파일 생성 기능
 
@@ -72,7 +78,7 @@ python-pptx 라이브러리를 이용하여 삽입
 
 ### 4. 키워드 및 주제 추출 기능
 
-* (설명글 + 그림)
+* koBERT를 이용해 개체명 인식 -> Keywords 추출 -> Topic 선정
 
 ### 5. PPT 미리보기 및 파일 다운로드 기능
 
@@ -88,7 +94,9 @@ python-pptx 라이브러리를 이용하여 삽입
 
 ### 2. 컴퓨터비전을 통한 이미지 후처리
 
-* (설명글 + 캡쳐사진 + 코드설명)
+* Segmentation Model Performance Comparison
+![img_31](./image/2_개발성과_1.PNG)
+![img_31](./image/2_개발성과_2.PNG)
 
 ### 3. PPT 파일 생성
 
@@ -104,7 +112,12 @@ python-pptx 라이브러리를 이용하여 삽입
 
 ### 4. 자연어처리를 통한 주제 추출
 
-* (설명글 + 캡쳐사진 + 코드설명)
+* 텍스트 데이터 json → Keywords, Topic 추출
+![img_31](./image/4_개발성과_1.PNG)
+* Keywords는 TTA Standard (개체명 태그 세트 및 태깅 말뭉치)를 레퍼런스로 삼아
+topic이 될 수 있는 90가지의 Class로 재분류
+![img_31](./image/4_개발성과_2.PNG)
+
 
 ### 5. PPT 파일 다운로드
 
@@ -120,7 +133,10 @@ python-pptx 라이브러리를 이용하여 삽입
 
 ### 2. 이미지 후처리 기능
 
-* (남은거에대한설명 + 그걸위해서지금해놓은게뭔지)
+* 1. Segmentation model 선정 후 Pointrend 알고리즘 적용
+* 2. RCAN model 적용한 결과 확인
+* 3. Iconify: converting photographs into icons 논문 구현
+* 4. 위의 기능들 Web에서 구현
 
 ### 3. PPT 파일 생성 기능
 * PPT 생성을 위한 대부분의 기능들
@@ -138,7 +154,10 @@ python-pptx 라이브러리를 이용하여 삽입
 
 ### 4. 키워드 및 주제 추출 기능
 
-* (남은거에대한설명 + 그걸위해서지금해놓은게뭔지)
+* 현재는 BERT(Bidirectional Encoder Representations from Transformers) 의
+한국어 finetuning 버전인 koBERT를 이용하여 개체명 인식(keywords 추출)하고
+가장 빈도수가 높은 Keyword를 Topic으로 선정하였는데,
+추후에는 직접 text 분류기를 구축하여 Topic을 선정할 예정.
 
 ### 5. PPT 미리보기 및 파일 다운로드 기능
 
