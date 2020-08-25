@@ -12,17 +12,16 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div>
-                    {% set status = true %}
-                    <button class="btn btn-primary" type="button" disabled>
-                        {% if status==false %}
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        발펴고자 AI가 PPT를 생성중입니다. 잠시만 기다려주세요.
-                        {% else %}
-                        다운로드
-                        {% endif %}
-                    </button>
-                </div>
+                <div class="col-md-6 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+                    <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        발펴고자 AI가 PPT를 생성 중입니다. 잠시만 기다려주세요. </p>
+                        <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
+                        (PPT가 완성되면 다운로드 버튼이 활성화됩니다.)
+                    </p>
+                </div>   
+                <!-- <button id="download_btn" type="button" class="btn btn-default btn-lg" disabled="disabled">다운로드</button> -->
+                <!-- <p>{{downloadUrl}}</p> -->
+                <a id="download_btn" href="" class="btn btn-primary btn-lg disabled" role="button">다운로드</a>
             </div> 
         </div>
     </div>
