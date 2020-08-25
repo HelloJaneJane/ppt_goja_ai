@@ -43,7 +43,7 @@ typora-root-url: ../human
 
 ### 시스템 구성도 및 적용 기술
 
-<img src="/sysArchImage.png" style="zoom:67%;" />
+<img src="image/sysArchImage.png" style="zoom:67%;" />
 
 * **Web Front**:  HTML, CSS, JavaScript, Bootstrap
 * **Server**:  python Flask, AWS, HTTP, ajax
@@ -57,7 +57,22 @@ typora-root-url: ../human
 
 ### 1. 마크다운 에디팅 기능
 
-* (설명글 + 그림)
+* 사용자가 **웹**에서 마크다운 형식으로 **텍스트, 이미지** 입력 → HTML값 추출하여 서버로 전송 → 입력된 **구조**에 맞게 PPT 생성
+  * PPT로 만들고 싶은 컨텐츠를 입력할 때 어떤 내용이 한 슬라이드로 묶이는지, 어떤 단어를 강조할지 등 사용자가 원하는 구조가 있을 것임
+  * 따라서 마크다운 형식으로 구조 정보를 입력할 수 있는 기능 제공
+* 사용자에게 입력 규칙을 설명해주고, 그에 따라 작성하면 결과물에서 슬라이드가 어떻게 묶일지 뷰어를 통해 보여줌
+  * 입력 규칙
+    * h1: PPT 전체 제목
+    * h2: 부제목
+    * h4: 각 슬라이드 위에 배치되는 제목
+    * 나머지: 슬라이드 속 내용
+    * 엔터를 쳐줘야 슬라이드가 끊어진다. ...등
+  * 예시
+    * <img src="image/2-1_editor1.png" style="zoom: 40%;" alignt="left" />	
+    * 예시 입력 마지막 부분을 보면 엔터를 치지 않아서 ‘내용3슬라이드제목’에 탭이 들어있고, 다음 슬라이드로 안 넘어가고 점선이 내용2와 묶여 있다.
+    * 이렇게 뷰어를 통해 사용자는 자신의 의도가 제대로 반영되는지 확인한다.
+* 버튼 GUI
+  * <img src="image/2-1_editor2.png" style="zoom: 40%;" align="left" />
 
 ### 2. 이미지 후처리 기능
 
@@ -78,8 +93,7 @@ typora-root-url: ../human
 
 ![img_31](./image/3_기능설명.PNG)
 
-* 추출한 텍스트와 후처리된 이미지를
-python-pptx 라이브러리를 이용하여 삽입
+* 추출한 텍스트와 후처리된 이미지를 python-pptx 라이브러리를 이용하여 삽입
 
 ### 4. 키워드 및 주제 추출 기능
 
@@ -89,15 +103,58 @@ python-pptx 라이브러리를 이용하여 삽입
 
 ### 5. PPT 미리보기 및 파일 다운로드 기능
 
-* (설명글 + 그림)
+* 만들어진 PPT 결과물들을 보여주어 사용자가 원하는 슬라이드를 선택
+  * <img src="image/2-5_preview.png" style="zoom: 40%;" align="left" />
+* 완성된 PPT 파일을 AWS S3를 통해 사용자가 다운로드 받음
+  * 최종 결과물이 PPT 파일 형식이기 때문에 사용자의 자유로운 수정/활용이 가능
 
 
 
 ## 현재까지의 개발 성과 및 코드 설명
 
+[시연영상]: https://youtu.be/XjGO-3xnG0g	"시연영상"
+
 ### 1. 웹사이트에서의 마크다운 에디팅
 
-* (설명글 + 캡쳐사진 + 코드설명)
+* AWS EC2에서 Flask로 웹서버 구현
+
+  * 반응형 웹으로 제작
+  * <img src="image/4-1_web.png" style="zoom: 30%;" align="left" />
+
+* PPT 만들기 메뉴에 마크다운 에디터를 내장. 사용자는 PPT로 만들고자 하는 텍스트를 입력함.
+
+  * 서비스의 **규칙에 따른 슬라이드 구조**가 사용자의 의도와 맞는지 확인시키기 위해 마크다운 뷰어가 필요
+  * 따라서 **에디터와 뷰어가 함께 있는** editor.md 오픈소스 사용
+  * <img src="image/4-1_editor.png" style="zoom: 60%;" align="left" />
+
+* 변환하기 버튼을 누르면 에디터의 HTML을 추출하여 ajax를 통해 서버로 전송함
+
+  ```javascript
+  // ppt_index.html
+  // 변환하기 버튼 javascript
+  function submit(){
+      $.ajax({
+          type : 'POST',
+          url : "/ppt",
+          data: mdeditorData,
+          ....
+  ```
+
+  ```python
+  # run.py
+  @app.route('/ppt', methods=['POST', 'GET'])
+  def ppt():
+      # 변환하기 버튼을 누르면 데이터 받아옴
+      if request.method == 'POST’:
+          # ppt_index.html에서 ajax로 보낸 에디터 내부 html
+          mdeditorHtmlStr = request.form.to_dict()['html’]
+          # 엔진으로 넘기기
+          downloadUrl = pptEngine.convert(mdeditorHtmlStr)
+          return downloadUrl
+      return render_template('ppt_index.html')
+  ```
+
+* 서버는 텍스트 파싱을 통해 적절한 슬라이드 구조로 텍스트 데이터 json 생성, 이를 통해 PPT Engine이 PPT를 만들 수 있게 함
 
 ### 2. 컴퓨터비전을 통한 이미지 후처리
 
@@ -125,15 +182,86 @@ topic이 될 수 있는 90가지의 Class로 재분류
 
 ### 5. PPT 파일 다운로드
 
-* (설명글 + 캡쳐사진 + 코드설명)
+* 예시 output
 
+  * <img src="image/4-5_output.png" style="zoom: 60%;" align="left" />
+
+  * 입력 데이터를 딥러닝 서버에서 분석 → ISW(IT Software)로 분류, 관련 템플릿 자동 선정
+
+  * 내용에 맞춰 슬라이드 자동 구성
+
+    * 슬라이드 소제목들로 목차가 자동으로 생성
+    * 적절한 위치에 간지(중간 제목 슬라이드) 자동 생성
+    * 'SW Maestro?'의 제목을 토대로 **정의 형식** 채택
+    * ‘일정'이라는 텍스트에 의해 **시간의 흐름**에 맞춰 구성
+    * BoB 와 SWMaestro로 슬라이드 소제목이 분류되어 **비교/대조 형식**이 적용
+
+  * 생성된 PPT 파일이 업로드된 AWS S3 링크를 response로 전달. success일 때 링크로 바로 연결되어 자동으로 파일이 다운로드 됨.
+
+    ```javascript
+    // ppt_index.html
+    // 변환하기 버튼 javascript
+    function submit(){
+        $.ajax({
+            ...
+            success: function(result){
+                location.href = result
+            },
+            error: function(xtr, status, error){
+                alert(xtr+":"+status+":"+error);
+            }
+        });
+    }
+    ```
+
+  * Python용 AWS SDK인 Boto3을 이용하여 생성된 PPT 파일을 AWS S3에 업로드, 파일의 다운로드 링크를 제공 받음
+
+    ```python
+    # convert.py
+    def convert(htmlStr):
+        ...
+        ...
+        uploadFileToS3(outputName, ‘outputPPT/’+outputName)
+        url = getUrlFromS3(‘outputPPT/’+outputName)
+        return url
+    
+    ```
+
+    ```python
+    # awsModule.py
+    import boto3
+    import botocore
+    bucketName = 'ppt-maker-bucket’
+    
+    # 파일이 현재 위치한 로컬 경로 -> 업로드하려는 위치의 s3 경로
+    def uploadFileToS3(myPath, s3Path):
+        s3 = boto3.client('s3')
+        s3.upload_file(myPath, bucketName, s3Path)
+    
+    # 파일이 현재 위치한 s3 경로 -> 다운로드하려는 위치의 로컬 경로
+    def downloadFileFromS3(s3Path, myPath):
+        s3 = boto3.resource('s3')
+        s3.Bucket(bucketName).download_file(s3Path, myPath)
+        
+    def getUrlFromS3(s3Path):
+        s3 = boto3.client('s3')
+        location = s3.get_bucket_location(Bucket=bucketName)['LocationConstraint']
+        url = "https://s3-%s.amazonaws.com/%s/%s“ % (location, bucketName, s3Path)
+        return url
+    
+    ```
+
+    
 
 
 ## 앞으로의 개발 계획 및 목표
 
 ### 1. 마크다운 에디팅 기능
 
-* (남은거에대한설명 + 그걸위해서지금해놓은게뭔지)
+* PPT 만들기 화면 상단에서 사용자에게 입력 규칙을 설명하긴 하지만, UI/UX 측면에서 좋은 디자인은 아니다.
+  * 이를 보완하기 위해 **에디터 내부 버튼들을 서비스에 알맞게 커스텀** 할 예정이다.
+  * 예시: h1대신 제목, h2대신 부제목 등의 네이밍이 버튼에 적히도록
+* 뷰어에서 **한 슬라이드로 묶이는 부분에 점선을 표시**하여 생성될 PPT의 구조를 사용자에게 직관적으로 보여줄 수 있도록 하려 한다.
 
 ### 2. 이미지 후처리 기능
 
@@ -165,7 +293,10 @@ topic이 될 수 있는 90가지의 Class로 재분류
 
 ### 5. PPT 미리보기 및 파일 다운로드 기능
 
-* (남은거에대한설명 + 그걸위해서지금해놓은게뭔지)
+* 웹에서 입력한 데이터가 PPT로 바로 생성될 수 있는 단계까지 만들어진 pptx 템플릿 데이터는 현재까지는 그렇게 많지 않다.
+  * 하지만 **분석해 놓은 슬라이드 데이터**가 많기 때문에 템플릿 데이터를 만드는 일은 시간만 더 들이면 충분히 가능하다.
+* 하나의 인풋 데이터에 대해 다양한 레이아웃과 디자인을 **적용한 여러 결과물들을 이미지로 저장**하여 웹에 띄워주는 기능을 추가할 예정이다.
+  * ppt에 내장되어 있는 슬라이드를 png/jpg로 내보내기 기능을 이용할 것이다.
 
 
 
