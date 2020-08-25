@@ -90,7 +90,7 @@ python-pptx 라이브러리를 이용하여 삽입
 * (설명글 + 캡쳐사진 + 코드설명)
 
 ### 3. PPT 파일 생성
-<img src="/image/객체구조도.png" style="zoom:67%;" />
+<img src="./image/객체구조도.PNG" style="zoom:67%;" />
 * Python 코드로 파워포인트를 생성하기 위한 기능들의 모듈화.
 
 * PPT 파일, 슬라이드, 텍스트 프레임, 단락 등이 객체화.
