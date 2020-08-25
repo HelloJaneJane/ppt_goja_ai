@@ -54,8 +54,21 @@
 
         function submit(){
             var mdeditorData = { "html" : testEditor.getHTML() };
-            $.post("/ppt", mdeditorData)
-            location.href="ppt/download"
+            // $.post("/ppt", mdeditorData)
+            // location.href="ppt/download"
+
+            $.ajax({
+                type : 'POST',
+                url : "/ppt",
+                data: mdeditorData,
+                success: function(result){
+                    // alert("result="+result);
+                    location.href = result
+                },
+                error: function(xtr, status, error){
+                    alert(xtr+":"+status+":"+error);
+                }
+            });
         }
     </script>
 </script>    
