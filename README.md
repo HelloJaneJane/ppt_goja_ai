@@ -79,6 +79,8 @@ python-pptx 라이브러리를 이용하여 삽입
 ### 4. 키워드 및 주제 추출 기능
 
 * koBERT를 이용해 개체명 인식 -> Keywords 추출 -> Topic 선정
+![img_31](./image/4_기능설명_1.PNG)
+
 
 ### 5. PPT 미리보기 및 파일 다운로드 기능
 
@@ -96,7 +98,6 @@ python-pptx 라이브러리를 이용하여 삽입
 
 * Segmentation Model Performance Comparison
 ![img_31](./image/2_개발성과_1.PNG)
-![img_31](./image/2_개발성과_2.PNG)
 
 ### 3. PPT 파일 생성
 
@@ -113,11 +114,9 @@ python-pptx 라이브러리를 이용하여 삽입
 ### 4. 자연어처리를 통한 주제 추출
 
 * 텍스트 데이터 json → Keywords, Topic 추출
-![img_31](./image/4_개발성과_1.PNG)
 * Keywords는 TTA Standard (개체명 태그 세트 및 태깅 말뭉치)를 레퍼런스로 삼아
 topic이 될 수 있는 90가지의 Class로 재분류
-![img_31](./image/4_개발성과_2.PNG)
-
+![img_31](./image/4_개발성과_1.PNG)
 
 ### 5. PPT 파일 다운로드
 
