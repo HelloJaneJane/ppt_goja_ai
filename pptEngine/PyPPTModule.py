@@ -1,64 +1,42 @@
 #-*- coding:utf-8 -*-
 from pptx import Presentation
 from pptx.util import Pt
+import json
+from pptx.dml.color import RGBColor
+from pptx.enum.text import PP_ALIGN
 
-def Start(input):
-    prs = Presentation("base.pptx")
-    f= open(input, encoding='utf-8')
-    return prs, f
-
-#ppt 객체에 새로운 슬라이드를 추가한다.
-def NewSlide(prs,slideType,title):
-    slide = prs.slides.add_slide(prs.slide_layouts[slideType])#ppt 객체, 슬라이드마스터 번호, 제목
-    slide.shapes.title.text = title
-    return slide
-
-#제목 슬라이드를 만드는 함수
-def TitleSlide(prs,slideType,title,sub_title):#NewSlide, 제목, 부제목
-    slide = NewSlide(prs,slideType,title)
-    slide.shapes.placeholders[1].text = sub_title
-    return slide
-
-#슬라이드 객체의 특정 텍스트박스에 대한 설정
-def SetTextBox(slide,cnt,fontAdr):#슬라이드 객체, 텍스트박스 번호, 폰트주소
-    text_box = slide.shapes.placeholders[cnt].text_frame
-    text_box.fit_text(font_file=fontAdr)
-    return text_box
-
-#텍스트박스 객체에 새로운 텍스트를 추가한다. (줄단위)
-def NewLine(textbox,text,font,size):#텍스트박스 객체, 내용, 폰트, 크기
-    line = textbox.add_paragraph()
-    line.font.name = font
-    line.font.size = Pt(size)
-    line.text = text
-
-#ppt를 저장한다.
-def write(prs,file_name):
-    prs.save(file_name)
-
+from server.awsModule import *
 
 class TextData:
-    def __init__(self, mainTitle, subTitle, midTitles, slideTitles):
+    def __init__(self, mainTitle, subTitle, midTitles, slideTitles, slideContents):
         self._mainTitle = mainTitle
         self._subTitle = subTitle
         self._midTitles = midTitles
         self._slideTitles = slideTitles
+        self._slideContents = slideContents
 
     def __print__(self):
+        print("---TextData Print---")
         print("제목: " + self._mainTitle)
         print("부제목: " + self._subTitle)
-        print("중제목들 : ",end='')
+        print("중제목들 : ", end='')
         print(self._midTitles)
-        print("소제목들: ",end='')
+        print("슬라이드소제목들: ",end='')
         print(self._slideTitles)
+        print("슬라이드내용들: ",end='')
+        print(self._slideContents)
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii = False, sort_keys=True, indent=4)
+
 
 class PPTData:
 
-    def __init__(self, textData, slideTypes):
+    def __init__(self, textData):
         self._textData = textData
         # initial value
         self._topic = None
-        self._slideTypes = slideTypes
+        self._slideTypes = textData._slideContents
         self._basePrs = Presentation()
 
     # 전체 주제 getter
@@ -67,7 +45,7 @@ class PPTData:
         return self._topic
 
     # 전체 주제 setter
-    @topic.setter
+    #@topic.setter
     def topic(self):
         # GPU 서버로 textData를 보내서 NLP 결과를 받아온다
         result = None
@@ -76,71 +54,154 @@ class PPTData:
 
     # # 베이스 테마 파일 getter
     # @property
-    def basePrs(self):
+    def basePrs_(self):
         return self._basePrs
-    
+
     # # 베이스 테마 파일 setter
     # @basePrs.setter
     def basePrs(self):
-    #     # topic에 어울리는 테마의 피피티를 고른다
-        if self._topic=="ISW":
+        #     # topic에 어울리는 테마의 피피티를 고른다
+        if self._topic == "ISW":
+            downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
             self._basePrs = Presentation("ISW.pptx")
-        else :
-            self.basePrs = Presentation("ISW.pptx")
+        else:
+            self._basePrs = Presentation("ISW.pptx")
 
-    def newSlide(self,slideType):
-        slide = self.basePrs.slides.add_slide(prs.slide_layouts[slideType])#ppt 객체, 슬라이드마스터 번호, 제목
-        slide.shapes.title.text = self._textData._mainTitle
+    def newSlide(self, slideType):
+        slide = self._basePrs.slides.add_slide(self._basePrs.slide_layouts[slideType])  # ppt 객체, 슬라이드마스터 번호, 제목
+        #slide.shapes.title.text = self._textData._mainTitle
         return slide
 
-    #제목 슬라이드를 만드는 함수
-    def titleSlide(self):#NewSlide, 제목, 부제목
-        slide = newSlide(1)
-        slide.shapes.placeholders[1].text = self._textData._mainTitle
+    # 제목 슬라이드를 만드는 함수
+    def titleSlide(self):  # NewSlide, 제목, 부제목
+        slide = self.newSlide(0)#2에 제목 넣자
+        slide.shapes.placeholders[0].text = self._textData._mainTitle
+        slide.shapes.placeholders[10].text = self._textData._subTitle
         return slide
 
-    #슬라이드 객체의 특정 텍스트박스에 대한 설정
-    def setTextBox(self,slide,cnt,fontAdr):#슬라이드 객체, 텍스트박스 번호, 폰트주소
+
+    # 슬라이드 객체의 특정 텍스트박스에 대한 설정
+    def setTextBox(self, slide, cnt, fontAdr):  # 슬라이드 객체, 텍스트박스 번호, 폰트주소
         text_box = slide.shapes.placeholders[cnt].text_frame
+        p = slide.shapes.add_textbox(1,1,1,1)
         text_box.fit_text(font_file=fontAdr)
         return text_box
 
-    #텍스트박스 객체에 새로운 텍스트를 추가한다. (줄단위)
-    def newLine(textbox,text,font,size):#텍스트박스 객체, 내용, 폰트, 크기
+    # 텍스트박스 객체에 새로운 텍스트를 추가한다. (줄단위)
+    def newLine(self, textbox, text, font, size):  # 텍스트박스 객체, 내용, 폰트, 크기
         line = textbox.add_paragraph()
         line.font.name = font
         line.font.size = Pt(size)
         line.text = text
+        line.alignment = PP_ALIGN.LEFT
 
-    #ppt를 저장한다.
-    def write(self,file_name):
+    def newLine_beauty(self,textbox,text,font,size,bold,rgb,center):
+        line = textbox.add_paragraph()
+        line.font.name = font
+        line.font.size = Pt(size)
+        line.text = text
+        line.font.color.rgb = RGBColor(rgb[0],rgb[1],rgb[2])
+        line.font.bold = bold
+        if(center):
+            line.alignment = PP_ALIGN.CENTER
+
+    def transitionSlide(self,idx):
+        slide = self.newSlide(2)
+        text_box = self.setTextBox(slide,0,'pptEngine/static/SangSangTitleM.ttf')
+        self.newLine(text_box,self._textData._midTitles[idx],'SangSangTitleM',44)
+
+    def index(self):
+        slide = self.newSlide(1)
+        text_box = self.setTextBox(slide,0,'pptEngine/static/SangSangTitleM.ttf')
+        self.newLine(text_box,'Contents','SangSangTitleM',32)
+        text_box = self.setTextBox(slide, 11, 'pptEngine/static/a타이틀고딕3.ttf')
+        pre_idx=-1
+        for sld_title in self._textData._slideTitles:
+            if(sld_title[1]>pre_idx):
+                pre_idx=sld_title[1]
+                self.newLine(text_box,self._textData._midTitles[pre_idx],'a타이틀고딕3',24)
+            self.newLine(text_box, sld_title[0], 'a타이틀고딕3', 24)
+
+    # ppt를 저장한다.
+    def write(self, file_name):
         self._basePrs.save(file_name)
 
-    def generate_slide(self,slideObj):
-        if (slideObj.slide_type == 1):#default
-            slide = self.newSlide(1)
-            text_box = self.setTextBox(slide = slide,cnt = 2)
-            for line in SlideObj._lines:
-                newLine(text_box,line,'Arial',15)
-                
+    def input_title(self,slide, title):
+        text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
+        self.newLine(text_box, title, 'SangSangTitleM', 32)
+
+    def generate_slide(self, title, slideObj):
+        if (isinstance(slideObj,SlideType_timeline)):  # timeline
+            slide = self.newSlide(5)#timeline 5th
+            self.input_title(slide,title)
+
+            text_box = self.setTextBox(slide, 1, 'pptEngine/static/DOSSaemmul.ttf')
+            line_cnt=13
+            for tuples in slideObj.timeTuples:
+                text_box = self.setTextBox(slide, line_cnt,'pptEngine/static/DOSSaemmul.ttf')
+                self.newLine(text_box, tuples[0], 'Arial', 10)
+                text_box = self.setTextBox(slide,line_cnt+4,'pptEngine/static/DOSSaemmul.ttf')
+                self.newLine(text_box, tuples[1], 'DOSSaemmul', 13)
+                line_cnt = line_cnt + 1
+            return slide
+
+        elif (isinstance(slideObj,SlideType_h5)):
+            slide = self.newSlide(6)#h5
+            self.input_title(slide, title)
+            textbox_cnt= 1
+            for tuples in slideObj._h5Tuples:
+                text_box = self.setTextBox(slide,textbox_cnt,'pptEngine/static/a타이틀고딕3.ttf')
+                self.newLine_beauty(text_box,tuples[0],'a타이틀고딕3',28,True,[0xFF,0x00,0x00],True)
+                for line in tuples[1]:
+                    self.newLine(text_box,line,'a타이틀고딕3',20)
+                textbox_cnt = textbox_cnt+1
+
+        elif (isinstance(slideObj,SlideType_definition)):
+            slide = self.newSlide(3)
+            self.input_title(slide, title)
+
+            text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
+            line =slideObj._defStr
+            self.newLine(text_box,line,'a타이틀고딕3',24)
+
+        else:
+            slide = self.newSlide(4)
+            self.input_title(slide, title)
+            text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
+            line =slideObj._lines[0]
+            self.newLine(text_box,line,'a타이틀고딕3',24)
+            return slide
+
     def generate(self):
         self.basePrs()
         self.titleSlide()
-        for slide_ in slideTypes:
-            self.generate_slide(slide_)
-        
+        self.index()
+        slide_idx = -1
+        mid_slide = -1
+        for slide_ in self._slideTypes:
+            slide_idx = slide_idx + 1
+            if(self._textData._slideTitles[slide_idx][1]>mid_slide):
+                mid_slide = mid_slide + 1
+                self.transitionSlide(mid_slide)
+
+            self.generate_slide(self._textData._slideTitles[slide_idx][0],slide_)
+
+    def idx_check(self,idx):
+        slide = self.newSlide(idx)
+        for shape in slide.shapes:
+            if shape.is_placeholder:
+                phf = shape.placeholder_format
+                print('%d,%s'%(phf.idx,phf.type))
 
 
 # 디폴트 타입
 # [String] - 한줄내용
 class SlideType:
-    
     def __init__(self, lines):
         self._lines = lines
-
     def generate(self):
 
-
+        print('generated')
 
 # 타임라인 타입 (일정, 과정, 단계)
 # [(String, String)] - (시간, 한줄내용)
@@ -148,14 +209,23 @@ class SlideType_timeline(SlideType):
     def __init__(self, timeTuples):
         self._timeTuples = timeTuples
 
+
 # h5 타입 (비교대조 등)
 # [(String,[String])] - (헤딩,[내용들])
 class SlideType_h5(SlideType):
     def __init__(self, h5Tuples):
         self._h5Tuples = h5Tuples
+        self._lines = h5Tuples[0][0]
+
 
 # 정의 타입 (? -> "")
 # String
 class SlideType_definition(SlideType):
     def __init__(self, defStr):
         self._defStr = defStr
+
+# def slide_test():
+#     slides = [SlideType('default'),SlideType_h5([('SWM',['1','2','3']),('SWM',['1','2','3'])])]
+#
+#     for Sample_sld in slides:
+#         Sample_sld.generate()

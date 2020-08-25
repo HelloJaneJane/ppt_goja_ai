@@ -4,6 +4,9 @@ from pptx.dml.color import RGBColor
 from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.util import Pt
 from PyPPTModule import *
+import wikipediaapi
+import wikipedia
+import wptools
 def layout():
     #입력값으로 시작
     prs,f=Start('input.txt')
@@ -24,6 +27,51 @@ def layout():
     #저장
     write(prs,'output.pptx')
 
+def test2():
+    slides = [SlideType(['default']), SlideType_h5([('SWM', ['1', '2', '3']), ('BOB', ['1', '2', '3'])])]
+    sample_text = TextData('메인타이틀','서부 타이투를',['미드타이틀1','미드타이틀2'],[('슬라이드타이틀1',0),('슬라이드타이틀2',1)],slides)
+
+    sample = PPTData(sample_text)
+    #sample.basePrs()
+    #slide_master = sample._basePrs.slide_masters
+    #slide_master[2].shape.add_text
+    #sample.titleSlide()
+    sample.generate()
+    sample.write('first_sample.pptx')
+
+def slide_test():
+    slides = [SlideType(['default']),SlideType_h5([('SWM',['1','2','3']),('SWM',['1','2','3'])])]
+
+    for Sample_sld in slides:
+        Sample_sld.generate()
+def wiki_test():
+    #wiki = wikipediaapi.Wikipedia('ko')
+    #page_py = wiki.page
+    #page_py = wiki.page('파이썬')
+    #wikipage = wikipedia.page('kakao')
+    #print(wikipage.images[0])
+    #print(page_py.images[0])
+    #print("Page - Exists: %s" % page_py.exists())
+    #print("Page - Summary: %s" % page_py.summary[0:100])
+    kr = wptools.page(lang='ko', action='kakao').get_query()
+    kakao = wptools.page('kakao').get_query()
+    kakao_img = kakao.pageimage
+    print(kakao_img)
+
+
+def tmp():
+    slides = [SlideType(['default']), SlideType_h5([('SWM', ['1', '2', '3']), ('BOB', ['1', '2', '3'])])]
+    sample_text = TextData('메인타이틀','서부 타이투를',['미드타이틀1','미드타이틀2'],[('슬라이드타이틀1',0),('슬라이드타이틀2',1)],slides)
+
+    sample = PPTData(sample_text)
+    sample._basePrs = Presentation('ISW.pptx')
+    for i in range(0,10):
+        sample.idx_check(i)
+        print('-----')
+
+
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=5000)
-    layout()
+    test2()
+    #tmp()
+    #wiki_test()
