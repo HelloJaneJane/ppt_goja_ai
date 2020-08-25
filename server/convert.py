@@ -99,8 +99,6 @@ def convert(htmlStr):
     myTextDataJSON = myTextData.toJSON()
     # print(myTextDataJSON)
     
-    # uploadJsonToS3(myTextDataJSON, 'test.json')
-    # print(downloadJsonFromS3('test.json'))
     userName = 'test'
     timeStamp = time.strftime('%y%m%d_%H%M')
     outputName = userName+'_'+timeStamp+'.pptx'
@@ -112,18 +110,9 @@ def convert(htmlStr):
     # 3. myTextData랑 결과물이랑 합쳐서 PPT Data를 만든다
     myPPTData = PPTData(myTextData)
     # 4. myPPTData를 엔진한테 보내서 PPT 만들기를 시작한다
-    # myPPTData.generate()
+    myPPTData.generate()
     # 5. 엔진에서 만들어진 PPT 파일을 받아온다
-    # myPPTData.write(outputName)
-
-    
-
-    # # 테스트용 피피티 걍 야매로 제목이랑 부제목만 넣어서 해봄
-    prs = Presentation()
-    slide = prs.slides.add_slide(prs.slide_layouts[0])
-    slide.shapes.title.text = mainTitle
-    slide.shapes.placeholders[1].text = subTitle
-    prs.save(outputName)
+    myPPTData.write(outputName)
 
     # 만든 피피티 파일을 s3로 업로드 (+서버 안에선 파일 지우기)
     uploadFileToS3(outputName, 'outputPPT/'+outputName)
@@ -134,9 +123,7 @@ def convert(htmlStr):
     # print(url)
 
     # 링크를 클라이언트로 전송 -> 피피티 다운로드 버튼에 연결
-    
 
-    # downloadFileFromS3('outputPPT/test.pptx','testFromS3.pptx')
     return url
 
 
