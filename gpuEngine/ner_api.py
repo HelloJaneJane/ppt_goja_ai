@@ -17,7 +17,7 @@ def get_topic(json_data):
     # text = "소프트웨어 마에스트로와 BOB는 과학기술정보통신부에서 주관하는 대한민국의 대표적인 소프트웨어 인재 양성 프로젝트이다."
     # input: text
 
-    text = json2str(json_data)
+    text = json2str(json.loads(json_data))
     requestJson = {  # API 호출
         "access_key": accessKey,
         "argument": {

@@ -5,6 +5,7 @@ import os
 import time
 
 from pptEngine.PyPPTModule import *
+from gpuEngine.ner_api import *
 
 from server.awsModule import *
 
@@ -102,16 +103,13 @@ def convert(htmlStr):
     userName = 'test'
     timeStamp = time.strftime('%y%m%d_%H%M')
     outputName = userName+'_'+timeStamp+'.pptx'
-
-
-    ## TODO
-    # 1. myTextDataJSON을 GPU 로 보낸다
-    # 2. GPU 가 찾아낸 결과물을 받는다
-    # 3. myTextData랑 결과물이랑 합쳐서 PPT Data를 만든다
-    myPPTData = PPTData(myTextData)
-    # 4. myPPTData를 엔진한테 보내서 PPT 만들기를 시작한다
+    
+    # topic 추출
+    myTopic = get_topic(myTextDataJSON)
+    
+    # ppt 생성
+    myPPTData = PPTData(myTextData, myTopic)
     myPPTData.generate()
-    # 5. 엔진에서 만들어진 PPT 파일을 받아온다
     myPPTData.write(outputName)
 
     # 만든 피피티 파일을 s3로 업로드 (+서버 안에선 파일 지우기)
