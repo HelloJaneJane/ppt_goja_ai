@@ -62,10 +62,15 @@ typora-root-url: ../human
 ### 2. 이미지 후처리 기능
 
 * 1. Background Removal
+
 ![img_31](./image/2_기능설명_1.PNG)
+
 * 2. Super Resolution
+
 ![img_31](./image/2_기능설명_2.PNG)
+
 * 3. Image to Pictogram
+
 ![img_31](./image/2_기능설명_3.PNG)
 
 
