@@ -65,11 +65,10 @@ typora-root-url: ../human
 
 ### 3. PPT 파일 생성 기능
 
-<img src="/human/image/3_기능설명.PNG" style="zoom:67%;" />
+![img_31](./image/3_기능설명.PNG)
 
 * 추출한 텍스트와 후처리된 이미지를
 python-pptx 라이브러리를 이용하여 삽입
-
 
 ### 4. 키워드 및 주제 추출 기능
 
@@ -93,7 +92,7 @@ python-pptx 라이브러리를 이용하여 삽입
 
 ### 3. PPT 파일 생성
 
-<img src="/image/객체구조도.PNG" style="zoom:67%;" />
+![img_31](./image/객체 구조도.PNG)
 
 * Python 코드로 파워포인트를 생성하기 위한 기능들의 모듈화.
 
@@ -101,7 +100,7 @@ python-pptx 라이브러리를 이용하여 삽입
 
 * 크기나 모양 등을 조절할 수 있기 때문에 간단히 파워포인트를 구성할 수 있음.
 
-<img src="/image/3_코드2.png" style="zoom:67%;" />
+![img_31](./image/3_코드2.PNG)
 
 ### 4. 자연어처리를 통한 주제 추출
 
@@ -135,7 +134,7 @@ python-pptx 라이브러리를 이용하여 삽입
 2. 개행 규칙 개선
 3. 템플릿 다양화
 
-<img src="/image/3_계획.png" style="zoom:67%;" />
+![img_31](./image/3_계획.PNG)
 
 ### 4. 키워드 및 주제 추출 기능
 
