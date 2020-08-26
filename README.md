@@ -10,18 +10,18 @@ typora-root-url: ../human
 
 ### 프로젝트 요약
 
-* 사용자가 입력한 텍스트와 이미지에 적합하게 AI가 완성된 PPT를 생성한 후 제공하는 서비스
+- 사용자가 입력한 텍스트와 이미지에 적합하게 AI가 완성된 PPT를 생성한 후 제공하는 서비스
 
-* Flask 기반 웹사이트에서 사용자가 텍스트와 이미지를 입력하면, 딥러닝 기술 (자연어처리와 컴퓨터비전)을 통해 내용을 분석하여 맥락과 어울리도록 PPT 자료를 구성, 사용자가 완성된 파일을 다운로드 받을 수 있도록 한다.
+- Flask 기반 웹사이트에서 사용자가 텍스트와 이미지를 입력하면, 딥러닝 기술 (자연어처리와 컴퓨터비전)을 통해 내용을 분석하여 맥락과 어울리도록 PPT 자료를 구성, 사용자가 완성된 파일을 다운로드 받을 수 있도록 한다.
 
 ### 기획 의도
 
-* 고품질 PPT의 빠른 작성을 위해 **단순 반복 작업을 대신 해줄 인공지능 기술**이 필요함.
+- 고품질 PPT의 빠른 작성을 위해 **단순 반복 작업을 대신 해줄 인공지능 기술**이 필요함.
 
-* 텍스트와 이미지 입력만으로 완성된 PPT를 생성하는 서비스 기획
-  * 딥러닝과 python 라이브러리를 통해 맥락을 이해하고 단순, 반복 작업을 컴퓨터가 수행하도록 함.
-  * 자연어처리, 영상처리, 이미지 크롤링 등의 기술을 접목한 품질 높은 PPT 문서 생성
-
+- 텍스트와 이미지 입력만으로 완성된 PPT를 생성하는 서비스 기획
+    - 딥러닝과 python 라이브러리를 통해 맥락을 이해하고 단순, 반복 작업을 컴퓨터가 수행하도록 함.
+    - 자연어처리, 영상처리, 이미지 크롤링 등의 기술을 접목한 품질 높은 PPT 문서 생성
+    
 - 기존 PPT 관련 서비스들은 PPT 템플릿, 이미지, 다이어그램 등의 디자인적 요소들을 제공하여 사용자를 보조해주는 기능으로 그쳤으나, 본 서비스는 **보조를 넘어 편집의 자동화를 목적으로** 하여, 사용자가 만들고자 하는 자료를 입력만 하면 **딥러닝 기**술을 통해 이 내용을 분석하여 맥락과 어울리도록 **완성된 PPT 자료를 제공**함.
 - 결정적으로, 기존 서비스는 각 슬라이드에서 사용자가 선택하는 한계로 결국 문서를 사용자가 직접 작성해야 하나, 본 서비스는 **사용자의 에디터 입력만으로 완성된 PPT 문서를 생성**하여 제공하므로 PPT의 작성과 제공에 있어 차별이 뚜렷하게 존재함.
 
@@ -50,7 +50,6 @@ typora-root-url: ../human
 * **NLP**:  keyword extraction, named entity recognizing, text classification / KoBERT, CRF
 * **CV**:  background removal, super resolution, image to pictogram / MaskRCNN, PointRend, Iconify
 * **PPT**:  python-pptx
-
 
 
 ## 주요기능 및 수행 방법
@@ -131,27 +130,27 @@ typora-root-url: ../human
 
   ```javascript
   // ppt_index.html
-  // 변환하기 버튼 javascript
-  function submit(){
+  // 변환하기 버튼 javascript
+  function submit(){
       $.ajax({
-          type : 'POST',
-          url : "/ppt",
-          data: mdeditorData,
-          ....
+          type : 'POST',
+          url : "/ppt",
+          data: mdeditorData,
+          // ....
   ```
 
   ```python
-  # run.py
-  @app.route('/ppt', methods=['POST', 'GET'])
-  def ppt():
-      # 변환하기 버튼을 누르면 데이터 받아옴
-      if request.method == 'POST’:
-          # ppt_index.html에서 ajax로 보낸 에디터 내부 html
-          mdeditorHtmlStr = request.form.to_dict()['html’]
-          # 엔진으로 넘기기
-          downloadUrl = pptEngine.convert(mdeditorHtmlStr)
-          return downloadUrl
-      return render_template('ppt_index.html')
+  #run.py
+  @app.route('/ppt', methods=['POST', 'GET'])
+  def ppt():
+      # 변환하기 버튼을 누르면 데이터 받아옴
+      if request.method == 'POST’:
+          # ppt_index.html에서 ajax로 보낸 에디터 내부 html
+          mdeditorHtmlStr = request.form.to_dict()['html’]
+          # 엔진으로 넘기기
+          downloadUrl = pptEngine.convert(mdeditorHtmlStr)
+          return downloadUrl
+      return render_template('ppt_index.html')
   ```
 
 * 서버는 텍스트 파싱을 통해 적절한 슬라이드 구조로 텍스트 데이터 json 생성, 이를 통해 PPT Engine이 PPT를 만들 수 있게 함
@@ -182,72 +181,67 @@ topic이 될 수 있는 90가지의 Class로 재분류
 
 ### 5. PPT 파일 다운로드
 
-* 예시 output
 
-  * <img src="image/4-5_output.png" style="zoom: 60%;" align="left" />
+* 예시 output 
 
-  * 입력 데이터를 딥러닝 서버에서 분석 → ISW(IT Software)로 분류, 관련 템플릿 자동 선정
+    * <img src="image/4-5_output.png" style="zoom: 60%;" align="left" />
+    
+    * 입력 데이터를 딥러닝 서버에서 분석 → ISW(IT Software)로 분류, 관련 템플릿 자동 선정
+    * 내용에 맞춰 슬라이드 자동 구성
+        * 슬라이드 소제목들로 목차가 자동으로 생성
+        * 적절한 위치에 간지(중간 제목 슬라이드) 자동 생성
+        * 'SW Maestro?'의 제목을 토대로 **정의 형식** 채택
+        * ‘일정'이라는 텍스트에 의해 **시간의 흐름**에 맞춰 구성
+        * BoB 와 SWMaestro로 슬라이드 소제목이 분류되어 **비교/대조 형식**이 적용
 
-  * 내용에 맞춰 슬라이드 자동 구성
-
-    * 슬라이드 소제목들로 목차가 자동으로 생성
-    * 적절한 위치에 간지(중간 제목 슬라이드) 자동 생성
-    * 'SW Maestro?'의 제목을 토대로 **정의 형식** 채택
-    * ‘일정'이라는 텍스트에 의해 **시간의 흐름**에 맞춰 구성
-    * BoB 와 SWMaestro로 슬라이드 소제목이 분류되어 **비교/대조 형식**이 적용
-
-  * 생성된 PPT 파일이 업로드된 AWS S3 링크를 response로 전달. success일 때 링크로 바로 연결되어 자동으로 파일이 다운로드 됨.
+* 생성된 PPT 파일이 업로드된 AWS S3 링크를 response로 전달. success일 때 링크로 바로 연결되어 자동으로 파일이 다운로드 됨.
 
     ```javascript
     // ppt_index.html
-    // 변환하기 버튼 javascript
-    function submit(){
+    // 변환하기 버튼 javascript
+    function submit(){
         $.ajax({
-            ...
-            success: function(result){
-                location.href = result
-            },
-            error: function(xtr, status, error){
+            // ...
+            success: function(result){
+                location.href = result
+            },
+            error: function(xtr, status, error){
                 alert(xtr+":"+status+":"+error);
-            }
+            }
         });
     }
     ```
-
-  * Python용 AWS SDK인 Boto3을 이용하여 생성된 PPT 파일을 AWS S3에 업로드, 파일의 다운로드 링크를 제공 받음
+    * Python용 AWS SDK인 Boto3을 이용하여 생성된 PPT 파일을 AWS S3에 업로드, 파일의 다운로드 링크를 제공 받음
 
     ```python
-    # convert.py
-    def convert(htmlStr):
-        ...
-        ...
+    # convert.py
+    def convert(htmlStr):
+        #...
+        #...
         uploadFileToS3(outputName, ‘outputPPT/’+outputName)
         url = getUrlFromS3(‘outputPPT/’+outputName)
-        return url
+        return url
     
     ```
-
     ```python
-    # awsModule.py
-    import boto3
-    import botocore
-    bucketName = 'ppt-maker-bucket’
-    
-    # 파일이 현재 위치한 로컬 경로 -> 업로드하려는 위치의 s3 경로
-    def uploadFileToS3(myPath, s3Path):
-        s3 = boto3.client('s3')
-        s3.upload_file(myPath, bucketName, s3Path)
-    
-    # 파일이 현재 위치한 s3 경로 -> 다운로드하려는 위치의 로컬 경로
-    def downloadFileFromS3(s3Path, myPath):
-        s3 = boto3.resource('s3')
-        s3.Bucket(bucketName).download_file(s3Path, myPath)
-        
-    def getUrlFromS3(s3Path):
-        s3 = boto3.client('s3')
-        location = s3.get_bucket_location(Bucket=bucketName)['LocationConstraint']
-        url = "https://s3-%s.amazonaws.com/%s/%s“ % (location, bucketName, s3Path)
-        return url
+    # awsModule.py
+    import boto3
+    import botocore
+    bucketName = 'ppt-maker-bucket’
+    # 파일이 현재 위치한 로컬 경로 -> 업로드하려는 위치의 s3 경로
+    def uploadFileToS3(myPath, s3Path):
+        s3 = boto3.client('s3')
+        s3.upload_file(myPath, bucketName, s3Path)
+    # 파일이 현재 위치한 s3 경로 -> 다운로드하려는 위치의 로컬 경로
+    def downloadFileFromS3(s3Path, myPath):
+        s3 = boto3.resource('s3')
+        s3.Bucket(bucketName).download_file(s3Path, myPath)
+        
+    def getUrlFromS3(s3Path):
+        s3 = boto3.client('s3')
+        location = s3.get_bucket_location(Bucket=bucketName)['LocationConstraint']
+        url = "https://s3-%s.amazonaws.com/%s/%s“ % (location, bucketName, s3Path)
+        return url
     
     ```
 
