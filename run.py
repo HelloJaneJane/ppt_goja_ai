@@ -22,11 +22,17 @@ def ppt():
 # def pptdownload():
 #     return render_template('ppt_download_index.html')
 
+@app.route('/image1', methods=['POST', 'GET'])
+def image1():
+    
 
-@app.route('/image')
-def image():
-    return render_template('image_index.html')
-
+    return render_template('img_backRmv_index.html')
+@app.route('/image2')
+def image2():
+    return render_template('img_supResol_index.html')
+@app.route('/image3')
+def image3():
+    return render_template('img_iconify_index.html')
 
 @app.route('/contact')
 def contact():
