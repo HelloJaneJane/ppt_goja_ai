@@ -4,25 +4,9 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-<script src="https://sdk.amazonaws.com/js/aws-sdk-2.754.0.min.js"></script>
-<script type="text/javascript">
-    var bucketName = 'ppt-maker-bucket';
-    var bucketRegion = 'ap-northeast-2';
-    var IdentityPoolId = 'ap-northeast-2:16956c04-2bc2-4733-8859-5805b9206ac8';
-
-    AWS.config.update({
-        region: bucketRegion,
-        credentials: new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: IdentityPoolId
-        })
-    });
-
-    var s3 = new AWS.S3({
-        apiVersion: '2006-03-01',
-        params: {Bucket: bucketName}
-    });
-</script>
-{% endblock %}
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.754.0.min.js"></script>
+    <script src="../static/js/aws-sdk.js"></script>
+ {% endblock %}
 
 {% block content %}
     <div class="hero-wrap js-fullheight">
@@ -53,7 +37,7 @@
                 var upload = new AWS.S3.ManagedUpload({
                     params: {
                         Bucket: 'ppt-maker-bucket',
-                        Key: 'inputImage/'+fileSelector.files[0].name,
+                        Key: 'inputImage/backgroundRemoval'+fileSelector.files[0].name,
                         Body: fileSelector.files[0],
                         ACL: "public-read"
                     }
