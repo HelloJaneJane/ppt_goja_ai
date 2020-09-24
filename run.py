@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, session
 
 from app import app
 from server.convert import convert
+from server.gpu_api import *
 
 @app.route('/')
 def default():
@@ -24,9 +25,14 @@ def ppt():
 
 @app.route('/image1', methods=['POST', 'GET'])
 def image1():
-    
+    if request.method == 'POST':
+        inputName = request.form.to_dict()['fileName']
+        downloadUrl = backRmvAPI(inputName)
+        print(downloadUrl)
+        return downloadUrl
 
     return render_template('img_backRmv_index.html')
+    
 @app.route('/image2')
 def image2():
     return render_template('img_supResol_index.html')

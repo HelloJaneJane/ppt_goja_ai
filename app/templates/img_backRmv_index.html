@@ -47,17 +47,17 @@
 
                 promise.then(
                     function(data) {
-                        var testUrl = "http://101.101.172.15:6789/json"
+                        // var testUrl = "http://101.101.172.15:6789/json"
                         var testData = { fileName: fileSelector.files[0].name }
 
                         alert("선택된 파일 이름은 "+fileSelector.files[0].name+"이고 이거 s3에 잘 올라갔음ㅇㅇ이제지피유한테 이 파일이름전송하면 걔가 후처리하고 완성본 s3에 올려주면 내가 그거 다운로드 받을거야");
                         $.ajax({
                             type : 'POST',
-                            url : testUrl,
+                            url : '/image1',
                             data: testData,
                             success: function(result){
                                 alert("result="+result);
-                                // location.href = result
+                                location.href = result
                             },
                             error: function(xtr, status, error){
                                 alert(xtr+":"+status+":"+error);
