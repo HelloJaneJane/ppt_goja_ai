@@ -36,7 +36,7 @@ def backrmv():
 @app.route("/supresol",methods=['POST'])
 def supresol():
     inputName = request.form.to_dict()['fileName']
-    outputName = 'supresol_'+inputName
+    outputName = 'supResol_'+inputName
 
     # 원래 사진 파일 s3에서 다운로드
     downloadFileFromS3('inputImage/superResolution/'+inputName,outputName)

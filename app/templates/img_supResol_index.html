@@ -51,7 +51,7 @@
                 var upload = new AWS.S3.ManagedUpload({
                     params: {
                         Bucket: 'ppt-maker-bucket',
-                        Key: 'inputImage/superResolution/'+fileSelector.files[0].name,
+                        Key: 'inputImage/superResolution/'+fileName,
                         Body: fileSelector.files[0],
                         ACL: "public-read"
                     }
