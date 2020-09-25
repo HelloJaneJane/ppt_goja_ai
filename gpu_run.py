@@ -20,10 +20,10 @@ def json():
 def backrmv():
     inputName = request.form.to_dict()['fileName']
     print("파일이름은"+inputName)
-    outputName = 'testoutput'+inputName
-    downloadFileFromS3('inputImage/backgroundRemoval'+inputName,outputName)
+    outputName = 'backRmv_'+inputName
+    downloadFileFromS3('inputImage/backgroundRemoval/'+inputName,outputName)
     # 후처리
-    uploadFileToS3(outputName, 'outputImage/backgroundRemoval'+outputName)
+    uploadFileToS3(outputName, 'outputImage/backgroundRemoval/'+outputName)
     url = getUrlFromS3('outputImage/backgroundRemoval'+outputName)
     print("파일다운로드경로는"+url)
     return url
