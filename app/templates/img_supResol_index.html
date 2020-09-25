@@ -6,7 +6,8 @@
 {% block head %}
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.754.0.min.js"></script>
     <script src="../static/js/aws-sdk.js"></script>
- {% endblock %}
+    <script src="../static/js/time-custom.js"></script>
+{% endblock %}
 
 {% block content %}
     <div class="hero-wrap js-fullheight">
@@ -34,10 +35,23 @@
                 alert("배경을 지우고 싶은 사진 파일을 먼저 선택해주세요.")
             }
             else{
+                // 저장되는 파일 이름 형식: userName_yymmdd_hhmm.jpg
+                var userName = 'test'
+
+                var d = new Date()
+                var timeStamp = d.yymmdd()+'_'+d.hhmm()
+
+                var inputName = fileSelector.files[0].name
+                var len = inputName.length
+                var dot = inputName.lastIndexOf('.')
+                var inputExtension = inputName.substring(dot, len).toLowerCase()
+
+                var fileName = userName+'_'+timeStamp+inputExtension
+
                 var upload = new AWS.S3.ManagedUpload({
                     params: {
                         Bucket: 'ppt-maker-bucket',
-                        Key: 'inputImage/superResolution'+fileSelector.files[0].name,
+                        Key: 'inputImage/superResolution/'+fileSelector.files[0].name,
                         Body: fileSelector.files[0],
                         ACL: "public-read"
                     }
@@ -46,10 +60,27 @@
                 var promise = upload.promise();
 
                 promise.then(
-                    function(data) {
-                        alert("선택된 파일 이름은 "+fileSelector.files[0].name+"이고 이거 s3에 잘 올라갔음ㅇㅇ이제지피유한테 이 파일이름전송하면 걔가 후처리하고 완성본 s3에 올려주면 내가 그거 다운로드 받을거야");
+                    function (data) {
+                    
+                        var jsonData = {
+                            fileName: fileName
+                        }
+
+                        alert("input: " + fileSelector.files[0].name + " / file: "+fileName);
+                        $.ajax({
+                            type: 'POST',
+                            url: '/image2',
+                            data: jsonData,
+                            success: function (result) {
+                                // alert("result=" + result);
+                                location.href = result
+                            },
+                            error: function (xtr, status, error) {
+                                alert(xtr + ":" + status + ":" + error);
+                            }
+                        });
                     },
-                    function(err) {
+                    function (err) {
                         return alert(err);
                     }
                 );
