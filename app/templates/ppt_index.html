@@ -76,8 +76,17 @@
                 url : "/ppt",
                 data: mdeditorData,
                 success: function(result){
-                    // alert("result="+result);
-                    location.href = result
+                    // 유저가 입력을 잘못해서 파싱 실패한 걸 알려주는 에러메시지
+                    if (result.status == 'error') {
+                        alert(result.message)
+                    }
+                    // 완성된 피피티 다운로드 링크
+                    else if (result.status == 'success'){
+                        location.href = result.url
+                    }
+                    else {
+                        console.log(result.status)
+                    }
                 },
                 error: function(xtr, status, error){
                     alert(xtr+":"+status+":"+error);
