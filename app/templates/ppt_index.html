@@ -3,9 +3,8 @@
 {% extends 'layout.html' %}
 
 {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/editor.md/examples/css/style.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/editor.md/css/editormd.css') }}" />
-    <link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom_modules/editormd/css/style.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='custom_modules/editormd/css/custom_editormd.css') }}" />
 {% endblock %}
 
 {% block content %}
@@ -15,34 +14,20 @@
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
                 <div class="col-md-10 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                    <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-                        PPT로 만들고 싶은 컨텐츠를 입력한 후 '변환하기' 버튼을 누르면 발펴고자 AI가 만든 PPT 파일이 다운로드 됩니다.<br>
-                        하단 왼쪽 에디터에 다음 규칙에 따라 텍스트를 입력하고, 오른쪽 뷰어 화면을 통해 당신이 원하는 구조가 맞는지 확인해주세요.<br><br>
-                        - [h1]은 제목, [h2]은 부제목으로, 첫 번째 슬라이드로 만들어집니다. 입력하지 않으면 AI가 죽어요!<br>
-                        - [h3]은 중제목, [h4]은 슬라이드 소제목입니다. 얘네도 입력하지 않으면 AI가 죽어요!<br>
-                        - h4 제목 밑에 내용들은 한 슬라이드로 들어갑니다. 불렛이나 넘버링 기호를 넣으셔도, 그냥 줄글을 입력해도 돼요.<br>
-                        - 이 부분에서 슬라이드를 끊고 싶다! 새로운 h4를 넣고 싶다! 할땐 엔터를 입력해서 한 줄을 띄어주세요.
-                    </p>
+                    <div id="mdeditor">
+                        <textarea id="mdeditortextarea" style="display:none;"></textarea>
+                    </div>
+                    <a href="javascript:submit();" class="btn btn-default">변환하기</a>
                 </div>
             </div> 
         </div>
     </div>
 
-    <section class="ftco-section">
-        <div class="container">
-            <div class="row no-gutters align-items-center justify-content-center">
-                <div id="mdeditor">
-                    <textarea id="mdeditortextarea" style="display:none;"></textarea>
-                </div>
-                <a href="javascript:submit();" class="btn btn-default">변환하기</a>
-            </div>
-        </div>
-    </section>
 
     
     
     <script src="{{ url_for('static', filename='node_modules/editor.md/examples/js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='node_modules/editor.md/editormd.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='custom_modules/editormd/custom_editormd.js') }}"></script>
     <script type="text/javascript">
         var testEditor;
 
@@ -50,20 +35,14 @@
             testEditor = editormd("mdeditor", {
                 width   : "100%",
                 height  : 640,
-                syncScrolling : "single",
-                saveHTMLToTextarea : true,
-                path    : "../static/node_modules/editor.md/lib/"
+                // syncScrolling : "single",
+                // saveHTMLToTextarea : true,
+                path    : "../static/custom_modules/editormd/lib/",
+                // toolbarIcons: "custom"
+                // toolbarIcons: function(){
+                //     return editormd.toolbarModes[custom]
+                // }
             });
-            
-            /*
-            // or
-            testEditor = editormd({
-                id      : "test-editormd",
-                width   : "90%",
-                height  : 640,
-                path    : "../lib/"
-            });
-            */
         });
 
         function submit(){
