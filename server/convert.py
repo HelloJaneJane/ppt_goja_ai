@@ -19,7 +19,7 @@ def convert(htmlStr):
     errMsgs = []
     
     # [1] 제목 (mainTitle)
-    if '<h1>' in htmlStr:
+    if '<h1' in htmlStr:
         mainTitle = (htmlStr.split('</h1>')[0]).split('</span>')[1]
         htmlStr = htmlStr.split('</h1>')[1]
     else:
@@ -28,7 +28,7 @@ def convert(htmlStr):
     # print("제목: "+mainTitle)
 
     # [2] 부제목 (subTitle)
-    if '<h2>' in htmlStr:
+    if '<h2' in htmlStr:
         subTitle = (htmlStr.split('</h2>')[0]).split('</span>')[1]
         htmlStr = htmlStr.split('</h2>')[1]
     else:
@@ -188,26 +188,26 @@ def getSlideType(h4Title, h4ConElem):
 
 
     if headerCnt == 1 or headerCnt >= 5:
-        return SlideType_head-default(h5Tuples)
+        return slideType_head_default(h5Tuples)
     else:
         titleNouns = getNouns(h4Title)
         isTimeLine = checkTimeLine(titleNouns)
         if 2<=headerCnt and headerCnt<=4:
             if isTimeLine:
-                return SlideType_head-timeLine(h5Tuples)
+                return slideType_head_timeLine(h5Tuples)
             else:
-                return SlideType_head-multiLine(h5Tuples)
+                return slideType_head_multiLine(h5Tuples)
         else:
             ## TODO: '입력이 짧다 == 글자수가 20이하다' 로 했는데 남지훈이 고쳐야 함
             if h4ConElem.count('<ul>') == 0 and len(h4ConElem)>20:            
-                return SlideType_default(lines)
+                return slideType_default(lines)
             elif h4ConElem.count('<ul>')<=1:
-                return SlideType_singleLine(lines[0])
+                return slideType_singleLine(lines[0])
             else:
                 if isTimeLine:
-                    return SlideType_timeLine(lines)
+                    return slideType_timeLine(lines)
                 else:
-                    return SlideType_multiLine(lines)
+                    return slideType_multiLine(lines)
 
         
 
