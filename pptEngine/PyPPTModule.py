@@ -237,3 +237,32 @@ class SlideType_definition(SlideType):
 #
 #     for Sample_sld in slides:
 #         Sample_sld.generate()
+
+class slideType_definition(SlideType):
+    def __init__(self, defStr):
+        self._defStr = defStr
+
+class slideType_head_default(SlideType):
+    def __init__(self, h5Tuples):
+        self._h5Tuples = h5Tuples
+        self._lines = h5Tuples[0][0]
+class slideType_head_timeLine(SlideType):
+    def __init__(self, h5Tuples):
+        self._h5Tuples = h5Tuples
+        self._lines = h5Tuples[0][0]
+class slideType_head_multiLine(SlideType):
+    def __init__(self, h5Tuples):
+        self._h5Tuples = h5Tuples
+        self._lines = h5Tuples[0][0]
+class slideType_default(SlideType):
+    def __init__(self, lines):
+        self._lines = lines
+class slideType_singleLine(SlideType):#definition
+    def __init__(self, lines):
+        self._lines = lines
+class slideType_timeLine(SlideType):
+    def __init__(self, lines):
+        self._lines = lines
+class slideType_multiLine(SlideType):
+    def __init__(self, lines):
+        self._lines = lines
