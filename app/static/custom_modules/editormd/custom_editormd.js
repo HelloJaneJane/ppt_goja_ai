@@ -126,7 +126,7 @@
         onscroll             : function() {},
         onpreviewscroll      : function() {},
         
-        imageUpload          : true,
+        imageUpload          : false,
         imageFormats         : ["jpg", "jpeg", "png"],
         imageUploadURL       : "",
         crossDomainUpload    : false,
@@ -232,7 +232,7 @@
                 hr               : "hr",
                 link             : "link",
                 "reference-link" : "ref-link",
-                image            : "이미지",
+                image            : "이미지 첨부",
                 code             : "code",
                 "preformatted-text" : "预格式文本 / 代码块（缩进风格）",
                 "code-block"     : "代码块（多语言风格）",
@@ -252,6 +252,7 @@
                 info             : "info" + editormd.title
             },
             buttons : {
+                upload : "Upload",
                 enter  : "Enter",
                 cancel : "Cancel",
                 close  : "Close"
@@ -274,14 +275,9 @@
                     urlEmpty : "错误：请填写引用链接的URL地址。"
                 },
                 image : {
-                    title    : "이미지",
-                    url      : "URL",
-                    link     : "Link",
-                    alt      : "Alt",
-                    uploadButton     : "Upload",
-                    imageURLEmpty    : "image URL Empty",
-                    uploadFileEmpty  : "upload File Empty",
-                    formatNotAllowed : "format not allowed"
+                    title    : "이미지 첨부",
+                    url      : "이미지 url",
+                    urlEmpty : "첨부할 이미지의 url을 입력해주세요."
                 },
                 preformattedText : {
                     title             : "添加预格式文本或代码块", 
@@ -3086,7 +3082,7 @@
         },
 
         image : function() {
-            this.executePlugin("imageDialog", "image-dialog/custom_image-dialog");
+            this.executePlugin("customImageDialog","my-dialog/custom_image-dialog");
         },
         
         code : function() {
