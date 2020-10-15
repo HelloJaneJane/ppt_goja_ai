@@ -1,7 +1,9 @@
+// custom_editormd.js
+
 /*
  * Editor.md
  *
- * @file        editormd.amd.js 
+ * @file        editormd.js 
  * @version     v1.5.0 
  * @description Open source online markdown editor.
  * @license     MIT License
@@ -22,68 +24,7 @@
 	{
         if (define.amd) // for Require.js
         {
-            var cmModePath  = "codemirror/mode/";
-            var cmAddonPath = "codemirror/addon/";
-
-            var codeMirrorModules = [
-                "jquery", "marked", "prettify",
-                "katex", "raphael", "underscore", "flowchart",  "jqueryflowchart",  "sequenceDiagram",
-
-                "codemirror/lib/codemirror",
-                cmModePath + "css/css",
-                cmModePath + "sass/sass",
-                cmModePath + "shell/shell",
-                cmModePath + "sql/sql",
-                cmModePath + "clike/clike",
-                cmModePath + "php/php",
-                cmModePath + "xml/xml",
-                cmModePath + "markdown/markdown",
-                cmModePath + "javascript/javascript",
-                cmModePath + "htmlmixed/htmlmixed",
-                cmModePath + "gfm/gfm",
-                cmModePath + "http/http",
-                cmModePath + "go/go",
-                cmModePath + "dart/dart",
-                cmModePath + "coffeescript/coffeescript",
-                cmModePath + "nginx/nginx",
-                cmModePath + "python/python",
-                cmModePath + "perl/perl",
-                cmModePath + "lua/lua",
-                cmModePath + "r/r", 
-                cmModePath + "ruby/ruby", 
-                cmModePath + "rst/rst",
-                cmModePath + "smartymixed/smartymixed",
-                cmModePath + "vb/vb",
-                cmModePath + "vbscript/vbscript",
-                cmModePath + "velocity/velocity",
-                cmModePath + "xquery/xquery",
-                cmModePath + "yaml/yaml",
-                cmModePath + "erlang/erlang",
-                cmModePath + "jade/jade",
-
-                cmAddonPath + "edit/trailingspace", 
-                cmAddonPath + "dialog/dialog", 
-                cmAddonPath + "search/searchcursor", 
-                cmAddonPath + "search/search", 
-                cmAddonPath + "scroll/annotatescrollbar", 
-                cmAddonPath + "search/matchesonscrollbar", 
-                cmAddonPath + "display/placeholder", 
-                cmAddonPath + "edit/closetag", 
-                cmAddonPath + "fold/foldcode",
-                cmAddonPath + "fold/foldgutter",
-                cmAddonPath + "fold/indent-fold",
-                cmAddonPath + "fold/brace-fold",
-                cmAddonPath + "fold/xml-fold", 
-                cmAddonPath + "fold/markdown-fold",
-                cmAddonPath + "fold/comment-fold", 
-                cmAddonPath + "mode/overlay", 
-                cmAddonPath + "selection/active-line", 
-                cmAddonPath + "edit/closebrackets", 
-                cmAddonPath + "display/fullscreen",
-                cmAddonPath + "search/match-highlighter"
-            ];
-
-            define(codeMirrorModules, factory);
+            /* Require.js define replace */
         } 
         else 
         {
@@ -97,16 +38,7 @@
     
 }(function() {    
 
-    if (typeof define == "function" && define.amd) {
-       $          = arguments[0];
-       marked     = arguments[1];
-       prettify   = arguments[2];
-       katex      = arguments[3];
-       Raphael    = arguments[4];
-       _          = arguments[5];
-       flowchart  = arguments[6];
-       CodeMirror = arguments[9];
-   }
+    /* Require.js assignment replace */
     
     "use strict";
     
@@ -134,29 +66,7 @@
     editormd.classPrefix  = "editormd-";
     
     editormd.toolbarModes = {
-        full : [
-            "undo", "redo", "|", 
-            "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|", 
-            "h1", "h2", "h3", "h4", "h5", "h6", "|", 
-            "list-ul", "list-ol", "hr", "|",
-            "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
-            "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
-            "help", "info"
-        ],
-        simple : [
-            "undo", "redo", "|", 
-            "bold", "del", "italic", "quote", "uppercase", "lowercase", "|", 
-            "h1", "h2", "h3", "h4", "h5", "h6", "|", 
-            "list-ul", "list-ol", "hr", "|",
-            "watch", "preview", "fullscreen", "|",
-            "help", "info"
-        ],
-        mini : [
-            "undo", "redo", "|",
-            "watch", "preview", "|",
-            "help", "info"
-        ],
-        custom : [ "help", "|", "h1", "h2", "h3", "h4", "h5", "list-ul", "|", "bold", "image", "|", "watch", "preview", "fullscreen" ]
+        custom : [ "help", "|", "h1", "h2", "h3", "h4", "h5", "list-ul", "|", "bold", "image", "|", "watch", "preview"]
     };
     
     editormd.defaults     = {
@@ -175,14 +85,14 @@
         delay                : 300,            // Delay parse markdown to html, Uint : ms
         autoLoadModules      : true,           // Automatic load dependent module files
         watch                : true,
-        placeholder          : "Enjoy Markdown! coding now...",
+        placeholder          : "PPT로 만들고 싶은 내용을 규칙에 따라 입력한 후 '변환하기' 버튼을 눌러주세요!\n입력 규칙은 왼쪽 물음표 버튼을 통해 확인할 수 있습니다.",
         gotoLine             : true,
         codeFold             : false,
         autoHeight           : false,
 		autoFocus            : true,
         autoCloseTags        : true,
         searchReplace        : true,
-        syncScrolling        : true,           // true | false | "single", default true
+        syncScrolling        : "single",           // true | false | "single", default true
         readOnly             : false,
         tabSize              : 4,
 		indentUnit           : 4,
@@ -201,7 +111,7 @@
         dialogMaskBgColor    : "#fff",
         dialogMaskOpacity    : 0.1,
         fontSize             : "13px",
-        saveHTMLToTextarea   : false,
+        saveHTMLToTextarea   : true,
         disabledKeyMaps      : [],
         
         onload               : function() {},
@@ -217,7 +127,7 @@
         onpreviewscroll      : function() {},
         
         imageUpload          : false,
-        imageFormats         : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageFormats         : ["jpg", "jpeg", "png"],
         imageUploadURL       : "",
         crossDomainUpload    : false,
         uploadCallbackURL    : "",
@@ -230,8 +140,8 @@
         tocStartLevel        : 1,              // Said from H1 to create ToC
         htmlDecode           : false,          // Open the HTML tag identification 
         pageBreak            : true,           // Enable parse page break [========]
-        atLink               : true,           // for @link
-        emailLink            : true,           // for email address auto link
+        atLink               : false,           // for @link
+        emailLink            : false,           // for email address auto link
         taskList             : false,          // Enable Github Flavored Markdown task lists
         emoji                : false,          // :emoji: , Support Github emoji, Twitter Emoji (Twemoji);
                                                // Support FontAwesome icon emoji :fa-xxx: > Using fontAwesome icon web fonts;
@@ -298,32 +208,32 @@
         toolbarIconTexts     : {},
         
         lang : {
-            name        : "zh-cn",
-            description : "开源在线Markdown编辑器<br/>Open source online Markdown editor.",
-            tocTitle    : "目录",
+            name        : "ko",
+            description : "PPT로 만들고 싶은 컨텐츠를 입력할 수 있는 마크다운 에디터입니다. 마크다운 에디터 오픈소스 editor.md를 발펴고자 서비스에 맞춰 커스텀했습니다.",
+            tocTitle    : "tableOfContentsTitle",
             toolbar     : {
-                undo             : "撤销（Ctrl+Z）",
-                redo             : "重做（Ctrl+Y）",
-                bold             : "粗体",
-                del              : "删除线",
-                italic           : "斜体",
-                quote            : "引用",
-                ucwords          : "将每个单词首字母转成大写",
-                uppercase        : "将所选转换成大写",
-                lowercase        : "将所选转换成小写",
-                h1               : "标题1",
-                h2               : "标题2",
-                h3               : "标题3",
-                h4               : "标题4",
-                h5               : "标题5",
-                h6               : "标题6",
-                "list-ul"        : "无序列表",
-                "list-ol"        : "有序列表",
-                hr               : "横线",
-                link             : "链接",
-                "reference-link" : "引用链接",
-                image            : "添加图片",
-                code             : "行内代码",
+                undo             : "undo（Ctrl+Z）",
+                redo             : "redo （Ctrl+Y）",
+                bold             : "굵게",
+                del              : "del",
+                italic           : "italic",
+                quote            : "quote",
+                ucwords          : "ucwords",
+                uppercase        : "uppercase",
+                lowercase        : "lowercase",
+                h1               : "제목 (h1)",
+                h2               : "부제목 (h2)",
+                h3               : "중제목 (h3)",
+                h4               : "슬라이드 소제목 (h4)",
+                h5               : "h5",
+                h6               : "h6",
+                "list-ul"        : "ul",
+                "list-ol"        : "ol",
+                hr               : "hr",
+                link             : "link",
+                "reference-link" : "ref-link",
+                image            : "이미지 첨부",
+                code             : "code",
                 "preformatted-text" : "预格式文本 / 代码块（缩进风格）",
                 "code-block"     : "代码块（多语言风格）",
                 table            : "添加表格",
@@ -332,19 +242,20 @@
                 "html-entities"  : "HTML实体字符",
                 pagebreak        : "插入分页符",
                 "goto-line"      : "跳转到行",
-                watch            : "关闭实时预览",
-                unwatch          : "开启实时预览",
-                preview          : "全窗口预览HTML（按 Shift + ESC还原）",
-                fullscreen       : "全屏（按ESC还原）",
-                clear            : "清空",
-                search           : "搜索",
-                help             : "使用帮助",
-                info             : "关于" + editormd.title
+                watch            : "watch",
+                unwatch          : "unwatch",
+                preview          : "preview",
+                fullscreen       : "fullscreen",
+                clear            : "clear",
+                search           : "search",
+                help             : "에디터 입력 세부사항 설명",
+                info             : "info" + editormd.title
             },
             buttons : {
-                enter  : "确定",
-                cancel : "取消",
-                close  : "关闭"
+                upload : "Upload",
+                enter  : "Enter",
+                cancel : "Cancel",
+                close  : "Close"
             },
             dialog : {
                 link : {
@@ -364,14 +275,9 @@
                     urlEmpty : "错误：请填写引用链接的URL地址。"
                 },
                 image : {
-                    title    : "添加图片",
-                    url      : "图片地址",
-                    link     : "图片链接",
-                    alt      : "图片描述",
-                    uploadButton     : "本地上传",
-                    imageURLEmpty    : "错误：图片地址不能为空。",
-                    uploadFileEmpty  : "错误：上传的图片不能为空。",
-                    formatNotAllowed : "错误：只允许上传图片文件，允许上传的图片文件格式有："
+                    title    : "이미지 첨부",
+                    url      : "이미지 url",
+                    urlEmpty : "첨부할 이미지의 url을 입력해주세요."
                 },
                 preformattedText : {
                     title             : "添加预格式文本或代码块", 
@@ -389,7 +295,7 @@
                     title : "HTML 实体字符"
                 },
                 help : {
-                    title : "使用帮助"
+                    title : "에디터 입력 규칙"
                 }
             }
         }
@@ -1210,7 +1116,7 @@
             
             var toolbarMenu = toolbar.find("." + this.classPrefix + "menu"), menu = "";
             var pullRight   = false;
-            
+
             for (var i = 0, len = icons.length; i < len; i++)
             {
                 var name = icons[i];
@@ -2770,6 +2676,7 @@
             var settings = this.settings;
             
             path = settings.pluginPath + path;
+            console.log("executePlugin(): name="+name+"/ path="+path)
             
             if (typeof define === "function") 
             {            
@@ -3175,7 +3082,7 @@
         },
 
         image : function() {
-            this.executePlugin("imageDialog", "image-dialog/image-dialog");
+            this.executePlugin("customImageDialog","my-dialog/custom_image-dialog");
         },
         
         code : function() {
@@ -3245,7 +3152,7 @@
         },
 
         help : function() {
-            this.executePlugin("helpDialog", "help-dialog/help-dialog");
+            this.executePlugin("helpDialog", "help-dialog/custom_help-dialog");
         },
 
         info : function() {
