@@ -22,6 +22,7 @@ def backrmv():
 
     # background removal 하기
     ############
+    print("test")
 
     # 후처리된 사진 파일 s3에 업로드 (+서버에선 파일 지움)
     uploadFileToS3(outputName, 'outputImage/backgroundRemoval/'+outputName)
