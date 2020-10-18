@@ -76,6 +76,19 @@ def tmp():
         sample.idx_check(i)
         print('-----')
 
+def image_test():
+    prs = Presentation("image_test_.pptx")
+    slide = prs.slides.add_slide(prs.slide_layouts[0])
+    image_placeholder = slide.placeholders[14]
+    print(image_placeholder.name)
+    for shape in slide.shapes:
+        if shape.is_placeholder:
+            phf = shape.placeholder_format
+            print('%d,%s' % (phf.idx, phf.type))
+    image_placeholder.insert_picture('https://cdn.pixabay.com/photo/2020/06/30/23/21/cat-5357876_150.jpg')
+    prs.save()
+#https://python-pptx.readthedocs.io/en/latest/dev/analysis/placeholders/slide-placeholders/picture-placeholder.html?highlight=placeholder
+
 
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', port=5000)
