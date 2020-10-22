@@ -4,7 +4,6 @@ from app import app
 from server.convert import convert
 from server.gpu_api import *
 
-
 app.config['JSON_AS_ASCII'] = False
 
 @app.route('/')
