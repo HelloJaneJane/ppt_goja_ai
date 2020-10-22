@@ -277,3 +277,6 @@ $RECYCLE.BIN/
 # PowerPoint temporary
 ~$*.ppt*
 
+
+# 제 모듈 폴더를 깃이 맘대로 지워버려요 왜죠
+!app/static/custom_modules/editormd/*
