@@ -139,8 +139,90 @@ class PPTData:
         text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
         self.newLine(text_box, title, 'SangSangTitleM', 32)
 
+
+    def timeMultiLine(self,slide,title,headers,bodies):
+        self.input_title(slide,title)
+        line_cnt = 13
+        for header in headers:
+            text_box = self.setTextBox(slide, line_cnt,'pptEngine/static/DOSSaemmul.ttf')
+            self.firstLine(text_box,header,'Arial',10)
+            line_cnt = line_cnt+2
+        line_cnt = 14
+        for body in bodies:
+            text_box = self.setTextBox(slide, line_cnt, 'pptEngine/static/DOSSaemmul.ttf')
+            self.firstLine(text_box, body, 'Arial', 10)
+            line_cnt = line_cnt + 2
+        return slide
+
+    def defaultLine(self,title,contents):
+        slide = self.newSlide(3)
+        self.input_title(slide, title)
+        text_box = self.setTextBox(slide, 1, 'pptEngine/static/a타이틀고딕3.ttf')
+        for line in contents:
+            self. newLine(text_box,line,'a타이틀고딕3',20)
+        return slide
+
+    def singleLine(self,title,lines):
+        slide = self.newSlide(4)
+        self.input_title(slide, title)
+        text_box = self.setTextBox(slide, 13, 'pptEngine/static/a타이틀고딕3.ttf')
+        line = lines[0]
+        self.firstLine(text_box, line, 'a타이틀고딕3', 24)
+        return slide
+
     def generate_slide(self, title, slideObj):
-        if (isinstance(slideObj,SlideType_timeLine)):  # timeline
+        if (isinstance(slideObj,slideType_head_default)):
+            contents=[]
+            for tuple in slideObj._h5Tuples:
+                contents.append(tuple[0])
+                contents.append(tuple[1])
+            return self.defaultLine(title,contents)
+        elif (isinstance(slideObj, slideType_head_timeLine)):
+            headers=[]
+            bodies=[]
+            for tuple in slideObj._h5Tuples:
+                headers.append(tuple[0])
+                bodies.append(tuple[1])
+            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
+            return self.timeMultiLine(slide,title,headers,bodies)
+        elif (isinstance(slideObj, slideType_head_multiLine)):
+            headers = []
+            bodies = []
+            for tuple in slideObj._h5Tuples:
+                headers.append(tuple[0])
+                bodies.append(tuple[1])
+                print(len(bodies))
+            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
+            return self.timeMultiLine(slide, title, headers, bodies)
+        elif (isinstance(slideObj, slideType_head_timeLine)):
+            headers = []
+            bodies = []
+            for tuple in slideObj._h5Tuples:
+                headers.append(tuple[0])
+                bodies.append(tuple[1])
+            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
+            return self.timeMultiLine(slide, title, headers, bodies)
+        elif (isinstance(slideObj,slideType_default)):
+            return self.defaultLine(title,slideObj._lines)
+        elif (isinstance(slideObj,slideType_singleLine)):
+            return self.singleLine(title,slideObj._lines)
+        elif (isinstance(slideObj, slideType_multiLine)):
+            headers = []
+            bodies = []
+            for line in slideObj._lines:
+                bodies.append(line)
+            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
+            return self.timeMultiLine(slide, title, headers, bodies)
+        elif (isinstance(slideObj, slideType_timeLine)):
+            headers = []
+            bodies = []
+            for line in slideObj._lines:
+                bodies.append(line)
+            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
+            return self.timeMultiLine(slide, title, headers, bodies)
+
+        #old functions
+        elif (isinstance(slideObj,SlideType_timeline)):  # timeline
             slide = self.newSlide(5)#timeline 5th
             self.input_title(slide,title)
 
@@ -164,7 +246,7 @@ class PPTData:
                     self.newLine(text_box,line,'a타이틀고딕3',20)
                 textbox_cnt = textbox_cnt+1
 
-        elif (isinstance(slideObj,SlideType_singleLine)):
+        elif (isinstance(slideObj,slideType_definition)):
             slide = self.newSlide(3)
             self.input_title(slide, title)
 
@@ -201,6 +283,21 @@ class PPTData:
                 phf = shape.placeholder_format
                 print('%d,%s'%(phf.idx,phf.type))
 
+
+def wrap_image(keywords):
+    API_KEY = '9550200-7709f1b4e4c3d4b4c800b8188'
+    #gmail_KEY
+    image = Image(API_KEY)
+    ims = image.search(q=keywords,
+                       lang='es',
+                       image_type='photo',
+                       orientation='horizontal',
+                       category='animals',
+                       safesearch='true',
+                       order='latest',
+                       page=2,
+                       per_page=3)
+    print(ims)
 
 # 디폴트 타입
 # [String] - 한줄내용
