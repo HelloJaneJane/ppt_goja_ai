@@ -140,7 +140,7 @@ class PPTData:
         self.newLine(text_box, title, 'SangSangTitleM', 32)
 
     def generate_slide(self, title, slideObj):
-        if (isinstance(slideObj,SlideType_timeline)):  # timeline
+        if (isinstance(slideObj,SlideType_timeLine)):  # timeline
             slide = self.newSlide(5)#timeline 5th
             self.input_title(slide,title)
 
@@ -153,7 +153,7 @@ class PPTData:
                 line_cnt = line_cnt + 1
             return slide
 
-        elif (isinstance(slideObj,SlideType_h5)):
+        elif (isinstance(slideObj,SlideType_head_multiLine)):
             slide = self.newSlide(6)#h5
             self.input_title(slide, title)
             textbox_cnt= 1
@@ -164,7 +164,7 @@ class PPTData:
                     self.newLine(text_box,line,'a타이틀고딕3',20)
                 textbox_cnt = textbox_cnt+1
 
-        elif (isinstance(slideObj,SlideType_definition)):
+        elif (isinstance(slideObj,SlideType_singleLine)):
             slide = self.newSlide(3)
             self.input_title(slide, title)
 
@@ -211,58 +211,105 @@ class SlideType:
 
         print('generated')
 
-# 타임라인 타입 (일정, 과정, 단계)
-# [(String, String)] - (시간, 한줄내용)
-class SlideType_timeline(SlideType):
-    def __init__(self, timeTuples):
-        self._timeTuples = timeTuples
+# # 타임라인 타입 (일정, 과정, 단계)
+# # [(String, String)] - (시간, 한줄내용)
+# class SlideType_timeline(SlideType):
+#     def __init__(self, timeTuples):
+#         self._timeTuples = timeTuples
 
 
-# h5 타입 (비교대조 등)
-# [(String,[String])] - (헤딩,[내용들])
-class SlideType_h5(SlideType):
-    def __init__(self, h5Tuples):
-        self._h5Tuples = h5Tuples
-        self._lines = h5Tuples[0][0]
+# # h5 타입 (비교대조 등)
+# # [(String,[String])] - (헤딩,[내용들])
+# class SlideType_h5(SlideType):
+#     def __init__(self, h5Tuples):
+#         self._h5Tuples = h5Tuples
+#         self._lines = h5Tuples[0][0]
 
 
-# 정의 타입 (? -> "")
-# String
-class SlideType_definition(SlideType):
-    def __init__(self, defStr):
-        self._defStr = defStr
+# # 정의 타입 (? -> "")
+# # String
+# class SlideType_definition(SlideType):
+#     def __init__(self, defStr):
+#         self._defStr = defStr
 
-# def slide_test():
-#     slides = [SlideType('default'),SlideType_h5([('SWM',['1','2','3']),('SWM',['1','2','3'])])]
-#
-#     for Sample_sld in slides:
-#         Sample_sld.generate()
+# # def slide_test():
+# #     slides = [SlideType('default'),SlideType_h5([('SWM',['1','2','3']),('SWM',['1','2','3'])])]
+# #
+# #     for Sample_sld in slides:
+# #         Sample_sld.generate()
 
-class slideType_definition(SlideType):
-    def __init__(self, defStr):
-        self._defStr = defStr
+# class slideType_definition(SlideType):
+#     def __init__(self, defStr):
+#         self._defStr = defStr
 
-class slideType_head_default(SlideType):
-    def __init__(self, h5Tuples):
-        self._h5Tuples = h5Tuples
-        self._lines = h5Tuples[0][0]
-class slideType_head_timeLine(SlideType):
-    def __init__(self, h5Tuples):
-        self._h5Tuples = h5Tuples
-        self._lines = h5Tuples[0][0]
-class slideType_head_multiLine(SlideType):
-    def __init__(self, h5Tuples):
-        self._h5Tuples = h5Tuples
-        self._lines = h5Tuples[0][0]
-class slideType_default(SlideType):
-    def __init__(self, lines):
-        self._lines = lines
-class slideType_singleLine(SlideType):#definition
-    def __init__(self, lines):
-        self._lines = lines
-class slideType_timeLine(SlideType):
-    def __init__(self, lines):
-        self._lines = lines
-class slideType_multiLine(SlideType):
-    def __init__(self, lines):
-        self._lines = lines
+# class slideType_head_default(SlideType):
+#     def __init__(self, h5Tuples):
+#         self._h5Tuples = h5Tuples
+#         self._lines = h5Tuples[0][0]
+# class slideType_head_timeLine(SlideType):
+#     def __init__(self, h5Tuples):
+#         self._h5Tuples = h5Tuples
+#         self._lines = h5Tuples[0][0]
+# class slideType_head_multiLine(SlideType):
+#     def __init__(self, h5Tuples):
+#         self._h5Tuples = h5Tuples
+#         self._lines = h5Tuples[0][0]
+# class slideType_default(SlideType):
+#     def __init__(self, lines):
+#         self._lines = lines
+# class slideType_singleLine(SlideType):#definition
+#     def __init__(self, lines):
+#         self._lines = lines
+# class slideType_timeLine(SlideType):
+#     def __init__(self, lines):
+#         self._lines = lines
+# class slideType_multiLine(SlideType):
+#     def __init__(self, lines):
+#         self._lines = lines
+
+
+
+class SlideType_title (SlideType):
+    def __init__(self, titleTuple, imageLinks):
+        self._titleTuple = titleTuple
+        self._imageLinks = imageLinks
+
+class SlideType_midTitle (SlideType):
+    def __init__(self, midTitle, imageLinks):
+        self._midTitle = midTitle
+        self._imageLinks = imageLinks
+
+class SlideType_singleLine (SlideType):
+    def __init__(self, text, imageLinks):
+        self._text = text
+        self._imageLinks = imageLinks
+
+class SlideType_multiLine (SlideType):
+    def __init__(self, textList, imageLinks):
+        self._textList = textList
+        self._imageLinks = imageLinks
+
+class SlideType_timeLine (SlideType):
+    def __init__(self, textList, imageLinks):
+        self._textList = textList
+        self._imageLinks = imageLinks
+
+class SlideType_default (SlideType):
+    def __init__(self, contentsList, imageLinks):
+        self._contentsList = contentsList
+        self._imageLinks = imageLinks
+
+class SlideType_head_timeLine (SlideType):
+    def __init__(self, headTuples, imageLinks):
+        self._headTuples = headTuples
+        self._imageLinks = imageLinks
+
+class SlideType_head_multiLine (SlideType):
+    def __init__(self, headTuples, imageLinks):
+        self._headTuples = headTuples
+        self._imageLinks = imageLinks
+
+class SlideType_head_default (SlideType):
+    def __init__(self, headTuples, imageLinks):
+        self._headTuples = headTuples
+        self._imageLinks = imageLinks
