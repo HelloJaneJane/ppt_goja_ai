@@ -171,96 +171,89 @@ class PPTData:
         return slide
 
     def generate_slide(self, title, slideObj):
-        if (isinstance(slideObj,slideType_head_default)):
+        if (isinstance(slideObj,SlideType_head_default)):
             contents=[]
-            for tuple in slideObj._h5Tuples:
+            for tuple in slideObj._headTuples:
                 contents.append(tuple[0])
                 contents.append(tuple[1])
-            return self.defaultLine(title,contents)
-        elif (isinstance(slideObj, slideType_head_timeLine)):
+            if slideObj._imageLinks :
+                return self.defaultLine(title,contents)
+            # if slideObj._imageLinks : #TODO
+        elif (isinstance(slideObj, SlideType_head_timeLine)):
             headers=[]
             bodies=[]
-            for tuple in slideObj._h5Tuples:
+            for tuple in slideObj._headTuples:
                 headers.append(tuple[0])
                 bodies.append(tuple[1])
-            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
-            return self.timeMultiLine(slide,title,headers,bodies)
-        elif (isinstance(slideObj, slideType_head_multiLine)):
+            if slideObj._imageLinks :
+                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
+                return self.timeMultiLine(slide,title,headers,bodies)
+            # if slideObj._imageLinks : #TODO
+        elif (isinstance(slideObj, SlideType_head_multiLine)):
             headers = []
             bodies = []
-            for tuple in slideObj._h5Tuples:
+            for tuple in slideObj._headTuples:
                 headers.append(tuple[0])
                 bodies.append(tuple[1])
                 print(len(bodies))
-            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
-            return self.timeMultiLine(slide, title, headers, bodies)
-        elif (isinstance(slideObj, slideType_head_timeLine)):
+            if slideObj._imageLinks:
+                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
+                return self.timeMultiLine(slide, title, headers, bodies)
+            # if slideObj._imageLinks : #TODO
+        elif (isinstance(slideObj, SlideType_head_timeLine)):
             headers = []
             bodies = []
-            for tuple in slideObj._h5Tuples:
+            for tuple in slideObj._headTuples:
                 headers.append(tuple[0])
                 bodies.append(tuple[1])
-            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
-            return self.timeMultiLine(slide, title, headers, bodies)
-        elif (isinstance(slideObj,slideType_default)):
-            return self.defaultLine(title,slideObj._lines)
-        elif (isinstance(slideObj,slideType_singleLine)):
-            return self.singleLine(title,slideObj._lines)
-        elif (isinstance(slideObj, slideType_multiLine)):
+            if slideObj._imageLinks:
+                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
+                return self.timeMultiLine(slide, title, headers, bodies)
+            # if slideObj._imageLinks : #TODO
+        elif (isinstance(slideObj,SlideType_default)):
+            if not slideObj._imageLinks :
+                return self.defaultLine(title,slideObj._contentsList)
+                # if slideObj._imageLinks : #TODO
+        elif (isinstance(slideObj,SlideType_singleLine)):
+            if not slideObj._imageLinks :
+                return self.singleLine(title,slideObj._text)
+                # if slideObj._imageLinks : #TODO
+        elif (isinstance(slideObj, SlideType_multiLine)):
             headers = []
             bodies = []
-            for line in slideObj._lines:
+            for line in slideObj._textList:
                 bodies.append(line)
-            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
-            return self.timeMultiLine(slide, title, headers, bodies)
-        elif (isinstance(slideObj, slideType_timeLine)):
+            if not slideObj._imageLinks :
+                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
+                return self.timeMultiLine(slide, title, headers, bodies)
+            #if slideObj._imageLinks : #TODO
+
+        elif (isinstance(slideObj, SlideType_timeLine)):
             headers = []
             bodies = []
-            for line in slideObj._lines:
+            for line in slideObj._textList:
                 bodies.append(line)
-            slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
-            return self.timeMultiLine(slide, title, headers, bodies)
+            if not slideObj._imageLinks:
+                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
+                return self.timeMultiLine(slide, title, headers, bodies)
+        # if slideObj._imageLinks : #TODO
 
-        #old functions
-        elif (isinstance(slideObj,SlideType_timeline)):  # timeline
-            slide = self.newSlide(5)#timeline 5th
-            self.input_title(slide,title)
+        elif (isinstance(slideObj, SlideType_title)):
+            slide = self.newSlide(0)
+            title = slideObj._titleTuple[0]
+            subTitle = slideObj._titletuple[1]
+            text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
+            self.newLine(text_box, title, 'SangSangTitleM', 32)
+            text_box = self.setTextBox(slide, 1, 'pptEngine/static/SangSangTitleM.ttf')
+            self.newLine(text_box, subTitle, 'SangSangTitleM', 32)
+            #if slideObj._imageLinks: TODO
 
-            line_cnt=13
-            for tuples in slideObj._timeTuples:
-                text_box = self.setTextBox(slide, line_cnt,'pptEngine/static/DOSSaemmul.ttf')
-                self.firstLine(text_box, tuples[0], 'Arial', 10)
-                text_box = self.setTextBox(slide,line_cnt+4,'pptEngine/static/DOSSaemmul.ttf')
-                self.firstLine(text_box, tuples[1], 'DOSSaemmul', 13)
-                line_cnt = line_cnt + 1
-            return slide
-
-        elif (isinstance(slideObj,SlideType_head_multiLine)):
-            slide = self.newSlide(6)#h5
-            self.input_title(slide, title)
-            textbox_cnt= 1
-            for tuples in slideObj._h5Tuples:
-                text_box = self.setTextBox(slide,textbox_cnt,'pptEngine/static/a타이틀고딕3.ttf')
-                self.newLine_beauty(text_box,tuples[0],'a타이틀고딕3',28,True,[0xCC,0xFF,0x33],True)
-                for line in tuples[1]:
-                    self.newLine(text_box,line,'a타이틀고딕3',20)
-                textbox_cnt = textbox_cnt+1
-
-        elif (isinstance(slideObj,slideType_definition)):
-            slide = self.newSlide(3)
-            self.input_title(slide, title)
-
-            text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
-            line =slideObj._defStr
-            self.firstLine(text_box,line,'a타이틀고딕3',24)
-
-        else:
-            slide = self.newSlide(4)
-            self.input_title(slide, title)
-            text_box = self.setTextBox(slide,1,'pptEngine/static/a타이틀고딕3.ttf')
-            line =slideObj._lines[0]
-            self.firstLine(text_box,line,'a타이틀고딕3',24)
-            return slide
+        elif (isinstance(slideObj,SlideType_midTitle)):
+            slide = self.newSlide(1)#간지(?)
+            midTitle = slideObj._midTitle
+            text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
+            self.newLine(text_box, midTitle, 'SangSangTitleM', 32)
+            #if slideObj._imageLinks: TODO
 
     def generate(self):
         self.basePrs()
