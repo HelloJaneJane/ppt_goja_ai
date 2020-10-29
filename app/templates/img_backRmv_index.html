@@ -7,6 +7,14 @@
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.754.0.min.js"></script>
     <script src="../static/js/aws-sdk.js"></script>
     <script src="../static/js/time-custom.js"></script>
+    <script src="../static/js/opencv.min.js"></script>
+    <style>
+        .max-small {
+            width: auto; height: auto;
+            max-width: 400px;
+            max-height: 500px;
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -15,20 +23,41 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div class="col-md-12 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                    <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-                        사용자가 입력한 이미지를 딥러닝 처리 (background removal) 해서 다운 받을 수 있게 해줌
-                    </p>
+                <div class="col-md-5 ftco-animate text-center">
+                    <p>배경을 지우고 싶은 이미지 파일을 입력하세요.</p>
+                    <input class="btn btn-primary" id="file-selector" type="file" accepting=".jpg, .jpeg, .p">
+                    <img id="imageSrc" class='max-small'/>
                 </div>
-                <div class="col-md-8">
-                    <input id="file-selector" type="file" accept=".jpg, .jpeg, .png">
+                <div class="col-md-2 ftco-animate text-center">
+                    <p>버튼을 누르면 발펴고자 AI가 딥러닝처리를 시작합니다.</p>
+                    <a href="javascript:submit();" class="btn btn-primary">후처리하기</a>
                 </div>
-                <a href="javascript:submit();" class="btn btn-primary">후처리하기</a>
+                <div class="col-md-5 ftco-animate text-center">
+                    <canvas id="canvasOutput" class='max-small'></canvas>
+                    <p>토글바로어떻게어떻게조정하세여</p>
+                    <a href="javascript:download()" class="btn btn-primary">다운로드받기</a>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script type="text/javascript">
+        let srcImgElement = document.getElementById('imageSrc');
+        let inputElement = document.getElementById('file-selector');
+
+        var srcImg = new Image()
+        var alphaImg = new Image()
+
+        // 파일 인풋이 들어오면 이미지 보여주기
+        inputElement.addEventListener('change', (e) => {
+            srcImgElement.src = URL.createObjectURL(e.target.files[0]);},    
+            // srcImgElement.src = "https://ppt-maker-bucket.s3.ap-northeast-2.amazonaws.com/testSrcImage.jpg";
+            // srcImgElement.setAttribute('crossOrigin','')},
+        false)
+
+        
+        // S3에 원본 업로드 -> GPU한테 링크 전송 -> 알파이미지 링크 받아옴
         function submit() {
             var fileSelector = document.getElementById('file-selector');
             if (fileSelector.files[0] == null) {
@@ -61,7 +90,10 @@
 
                 promise.then(
                     function (data) {
-                    
+
+                        srcImg.src = "https://ppt-maker-bucket.s3.ap-northeast-2.amazonaws.com/inputImage/backgroundRemoval/"+fileName
+                        srcImg.setAttribute('crossOrigin','')
+
                         var jsonData = {
                             fileName: fileName
                         }
@@ -72,8 +104,9 @@
                             url: '/image1',
                             data: jsonData,
                             success: function (result) {
-                                // alert("result=" + result);
-                                location.href = result
+                                alphaImg.src = result
+                                alphaImg.setAttribute('crossOrigin','')
+                                // location.href = result
                             },
                             error: function (xtr, status, error) {
                                 alert(xtr + ":" + status + ":" + error);
@@ -86,5 +119,107 @@
                 );
             }
         }
+
+        // 알파 이미지 받아오면
+        alphaImg.onload = function(){
+            
+            // console.log('srcImg width: ' + srcImg.cols + '\n' +
+            //             'srcImg height: ' + srcImg.rows + '\n' +
+            //             'srcImg size: ' + srcImg.size().width + '*' + srcImg.size().height + '\n' +
+            //             'srcImg depth: ' + srcImg.depth() + '\n' +
+            //             'srcImg channels ' + srcImg.channels() + '\n' +
+            //             'srcImg type: ' + srcImg.type() + '\n'
+            //             );
+
+            var srcReadImg = cv.imread(srcImg, cv.IMREAD_UNCHANGED)
+            var srcMatVec = new cv.MatVector()
+            cv.split(srcReadImg, srcMatVec)
+            var redMat = srcMatVec.get(0)
+            var greenMat = srcMatVec.get(1)
+            var blueMat = srcMatVec.get(2)
+
+            var alphaReadImg = cv.imread(alphaImg, cv.IMREAD_UNCHANGED)
+            var alphaMat = new cv.Mat()
+            cv.cvtColor(alphaReadImg, alphaMat, cv.COLOR_BGR2GRAY)
+
+            var mergedMat = new cv.Mat()
+            var mergedMatVec = new cv.MatVector()
+            mergedMatVec.push_back(redMat)
+            mergedMatVec.push_back(greenMat)
+            mergedMatVec.push_back(blueMat)
+            mergedMatVec.push_back(alphaMat)
+            cv.merge(mergedMatVec, mergedMat)
+               
+            console.log('mergedMat width: ' + mergedMat.cols + '\n' +
+                        'mergedMat height: ' + mergedMat.rows + '\n' +
+                        'mergedMat size: ' + mergedMat.size().width + '*' + mergedMat.size().height + '\n' +
+                        'mergedMat depth: ' + mergedMat.depth() + '\n' +
+                        'mergedMat channels ' + mergedMat.channels() + '\n' +
+                        'mergedMat type: ' + mergedMat.type() + '\n'
+                        );
+
+            cv.imshow('canvasOutput',mergedMat)
+        }
+
+                
+        //         console.log('alphaImg width: ' + alphaImg.cols + '\n' +
+        //             'alphaImg height: ' + alphaImg.rows + '\n' +
+        //             'alphaImg size: ' + alphaImg.size().width + '*' + alphaImg.size().height + '\n' +
+        //             'alphaImg depth: ' + alphaImg.depth() + '\n' +
+        //             'alphaImg channels ' + alphaImg.channels() + '\n' +
+        //             'alphaImg type: ' + alphaImg.type() + '\n');
+                
+                
+        //         console.log('alphaMat width: ' + alphaMat.cols + '\n' +
+        //             'alphaMat height: ' + alphaMat.rows + '\n' +
+        //             'alphaMat size: ' + alphaMat.size().width + '*' + alphaMat.size().height + '\n' +
+        //             'alphaMat depth: ' + alphaMat.depth() + '\n' +
+        //             'alphaMat channels ' + alphaMat.channels() + '\n' +
+        //             'alphaMat type: ' + alphaMat.type() + '\n');
+
+                 
+
+                
+
+        //         console.log('redMat width: ' + redMat.cols + '\n' +
+        //             'redMat height: ' + redMat.rows + '\n' +
+        //             'redMat size: ' + redMat.size().width + '*' + redMat.size().height + '\n' +
+        //             'redMat depth: ' + redMat.depth() + '\n' +
+        //             'redMat channels ' + redMat.channels() + '\n' +
+        //             'redMat type: ' + redMat.type() + '\n');
+                
+        //         console.log('alphaMat width: ' + alphaMat.cols + '\n' +
+        //             'alphaMat height: ' + alphaMat.rows + '\n' +
+        //             'alphaMat size: ' + alphaMat.size().width + '*' + alphaMat.size().height + '\n' +
+        //             'alphaMat depth: ' + alphaMat.depth() + '\n' +
+        //             'alphaMat channels ' + alphaMat.channels() + '\n' +
+        //             'alphaMat type: ' + alphaMat.type() + '\n');
+
+
+
+        // threshold값 조절해가면서 rgb랑 alpha 이미지 블렌딩
+        function blendCtrl(threshold) {
+
+             // #threshold 설정
+
+            // gray_thr = np.zeros((gray.shape[0], gray.shape[1], len(thr)))
+            // rgba_thr = np.zeros((rgba.shape[0], rgba.shape[1], rgba.shape[2], len(thr)))
+            // print(gray_thr.shape) #[?,?,thr개수]
+            // print(rgba_thr.shape) #[?,?,4,thr개수]
+
+            // #thr에 따른 결과 이미지 저장
+            // for i in range(len(thr)):
+            //     rgba_thr[:, :, :, i] = rgba
+            //     ret, gray_thr[:,:,i] = cv2.threshold(rgba[:,:,3], thr[i], 255, cv2.THRESH_BINARY)
+            //     rgba_thr[:, :, 3, i] = gray_thr[:,:,i]
+            //     cv2.imwrite('./thr_'+str(thr)+'_'+input_img_a, rgba_thr)
+
+        }
+        
+        function download() {
+
+        }
+
+
     </script>
 {% endblock %}

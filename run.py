@@ -30,6 +30,7 @@ def image1():
         inputName = request.form.to_dict()['fileName']
         downloadUrl = backRmvAPI(inputName)
         print(downloadUrl)
+        
         return downloadUrl
 
     return render_template('img_backRmv_index.html')
