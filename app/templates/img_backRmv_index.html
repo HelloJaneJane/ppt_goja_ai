@@ -7,6 +7,32 @@
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.754.0.min.js"></script>
     <script src="../static/js/aws-sdk.js"></script>
     <script src="../static/js/time-custom.js"></script>
+    <script src="../static/js/opencv.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/bootstrap-slider.min.js" integrity="sha512-f0VlzJbcEB6KiW8ZVtL+5HWPDyW1+nJEjguZ5IVnSQkvZbwBt2RfCBY0CBO1PsMAqxxrG4Di6TfsCPP3ZRwKpA==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/11.0.2/css/bootstrap-slider.min.css" integrity="sha512-3q8fi8M0VS+X/3n64Ndpp6Bit7oXSiyCnzmlx6IDBLGlY5euFySyJ46RUlqIVs0DPCGOypqP8IRk/EyPvU28mQ==" crossorigin="anonymous" />
+    
+    <style>
+        .max-small {
+            width: auto; height: auto;
+            max-width: 400px;
+            max-height: 500px;
+        }
+        .arrow {
+            border: solid #ee76ad;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            }
+        .right {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+        }
+    </style>
 {% endblock %}
 
 {% block content %}
@@ -15,20 +41,109 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div class="col-md-12 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                    <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-                        사용자가 입력한 이미지를 딥러닝 처리 (background removal) 해서 다운 받을 수 있게 해줌
-                    </p>
+                <div class="col-md-5 ftco-animate text-center">
+                    <p>배경을 지우고 싶은 이미지 파일을 입력하세요.</p>
+                    <input class="btn btn-primary" id="file-selector" type="file" accepting=".jpg, .jpeg, .png">
+                    <img id="imageSrc" class='max-small'/>
                 </div>
-                <div class="col-md-8">
-                    <input id="file-selector" type="file" accept=".jpg, .jpeg, .png">
+                <div class="col-md-2 ftco-animate text-center">
+                    <p>버튼을 누르면 발펴고자 AI가 딥러닝처리를 시작합니다.</p>
+                    <button type="button" onclick="submit();" class="btn btn-primary">START <i class="arrow right"></i></button>
+                    <!-- <a href="javascript:submit();" class="btn btn btn-arrow-right btn-primary">START</a> -->
                 </div>
-                <a href="javascript:submit();" class="btn btn-primary">후처리하기</a>
+                <div class="col-md-5 ftco-animate text-center">
+                    <canvas id="canvasOutput" class='max-small'></canvas>
+                    <div>
+                        <input id="slider" data-slider-id='ex1Slider' type="number" data-slider-min="0" data-slider-max="254" data-slider-step="10" data-slider-value="120" data-slider-enabled="false"/>
+                        <input id="slider-input" type="number" placeholder="120" min="0" max="254" onkeypress="onlyNumber();" disabled="true" />
+                    </div>
+                    <p>토글바로어떻게어떻게조정하세여</p>
+                    <a href="javascript:download()" class="btn btn-primary">DOWNLOAD</a>
+                    <canvas id="downloadOutput" style="display:none"></canvas>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script type="text/javascript">
+
+    /////// 슬라이더
+
+        // key 누를때 숫자만 가능하도록
+        function onlyNumber(){
+            if((event.keyCode<48)||(event.keyCode>57)) event.returnValue=false;
+        }
+
+        var slider = new Slider("#slider")
+
+        $("#slider").on("slide", function(slideEvt) {
+            if(!$('#slider-input').val()){
+                $("#slider-input").attr('placeholder',slideEvt.value);
+            }
+            else{
+                $('#slider-input').val(slideEvt.value)
+            }
+            thrCtrl(slideEvt.value)
+        });
+
+        $('#slider-input').change(function(){
+            slider.setValue(this.value)
+            thrCtrl(this.value)
+        })
+
+        $('#slider-input').keyup(function(){
+            slider.setValue(this.value)
+            thrCtrl(this.value)
+        })
+
+
+    ////////// 이미지
+
+        // 원본
+        let inputElement = document.getElementById('file-selector');
+        var srcImg = new Image()
+        var alphaImg = new Image()
+
+        // 이미지 미리보기
+        let srcThumbnail = document.getElementById('imageSrc');
+        let alphaThumbnail = new Image()
+        var redThumbMat, greenThumbMat, blueThumbMat, alphaThumbMat
+
+        function resize(element){
+            let maxWidth = 400
+            let maxHeight = 500
+            var ratio = 0
+            var width = element.width
+            var height = element.height
+
+            if(width>maxWidth){
+                ratio = maxWidth/width
+                element.width = maxWidth
+                element.height = height*ratio
+                height = height*ratio
+            }
+        
+            var width = element.width
+            var height = element.height
+
+            if(height>maxHeight){
+                ratio = maxHeight/height
+                element.width = width*ratio
+                element.height = height*ratio
+                width = width*ratio
+            }
+        }
+
+
+
+        // 파일 인풋이 들어오면 이미지 보여주기
+        inputElement.addEventListener('change', (e) => {
+            srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
+        },false)
+
+        
+        // S3에 원본 업로드 -> GPU한테 링크 전송 -> 알파이미지 링크 받아옴
         function submit() {
             var fileSelector = document.getElementById('file-selector');
             if (fileSelector.files[0] == null) {
@@ -61,19 +176,27 @@
 
                 promise.then(
                     function (data) {
-                    
+
+                        srcImg.src = "https://ppt-maker-bucket.s3.ap-northeast-2.amazonaws.com/inputImage/backgroundRemoval/"+fileName
+                        srcImg.setAttribute('crossOrigin','')
+
                         var jsonData = {
                             fileName: fileName
                         }
 
-                        alert("input: " + fileSelector.files[0].name + " / file: "+fileName);
+                        // alert("input: " + fileSelector.files[0].name + " / file: "+fileName);
                         $.ajax({
                             type: 'POST',
                             url: '/image1',
                             data: jsonData,
                             success: function (result) {
-                                // alert("result=" + result);
-                                location.href = result
+                                alphaImg.src = result
+                                alphaImg.setAttribute('crossOrigin','')
+
+                                alphaThumbnail.src = result
+                                alphaThumbnail.setAttribute('crossOrigin','')
+                                
+                                // location.href = result
                             },
                             error: function (xtr, status, error) {
                                 alert(xtr + ":" + status + ":" + error);
@@ -86,5 +209,142 @@
                 );
             }
         }
+
+        // 알파 이미지 받아오면
+        alphaThumbnail.onload = function(){
+            resize(alphaThumbnail)
+            
+            // console.log('srcThumbnail width: ' + srcThumbnail.cols + '\n' +
+            //             'srcThumbnail height: ' + srcThumbnail.rows + '\n' +
+            //             'srcThumbnail size: ' + srcThumbnail.size().width + '*' + srcThumbnail.size().height + '\n' +
+            //             'srcThumbnail depth: ' + srcThumbnail.depth() + '\n' +
+            //             'srcThumbnail channels ' + srcThumbnail.channels() + '\n' +
+            //             'srcThumbnail type: ' + srcThumbnail.type() + '\n'
+            //             );
+
+            var srcReadImg = cv.imread(srcThumbnail, cv.IMREAD_UNCHANGED)
+            var srcMatVec = new cv.MatVector()
+
+            cv.split(srcReadImg, srcMatVec)
+            redThumbMat = srcMatVec.get(0)
+            greenThumbMat = srcMatVec.get(1)
+            blueThumbMat = srcMatVec.get(2)
+
+            // console.log('redThumbMat width: ' + redThumbMat.cols + '\n' +
+            //             'redThumbMat height: ' + redThumbMat.rows + '\n' +
+            //             'redThumbMat size: ' + redThumbMat.size().width + '*' + redThumbMat.size().height + '\n' +
+            //             'redThumbMat depth: ' + redThumbMat.depth() + '\n' +
+            //             'redThumbMat channels ' + redThumbMat.channels() + '\n' +
+            //             'redThumbMat type: ' + redThumbMat.type() + '\n'
+            //             );
+
+            var alphaReadImg = cv.imread(alphaThumbnail, cv.IMREAD_UNCHANGED)
+            alphaThumbMat = new cv.Mat()
+            cv.cvtColor(alphaReadImg, alphaThumbMat, cv.COLOR_BGR2GRAY)
+
+            // console.log('alphaThumbMat width: ' + alphaThumbMat.cols + '\n' +
+            //             'alphaThumbMat height: ' + alphaThumbMat.rows + '\n' +
+            //             'alphaThumbMat size: ' + alphaThumbMat.size().width + '*' + alphaThumbMat.size().height + '\n' +
+            //             'alphaThumbMat depth: ' + alphaThumbMat.depth() + '\n' +
+            //             'alphaThumbMat channels ' + alphaThumbMat.channels() + '\n' +
+            //             'alphaThumbMat type: ' + alphaThumbMat.type() + '\n'
+            //             );
+
+            var mergedMat = new cv.Mat()
+            var mergedMatVec = new cv.MatVector()
+            mergedMatVec.push_back(redThumbMat)
+            mergedMatVec.push_back(greenThumbMat)
+            mergedMatVec.push_back(blueThumbMat)
+            mergedMatVec.push_back(alphaThumbMat)
+
+            cv.merge(mergedMatVec, mergedMat)
+               
+            // console.log('mergedMat width: ' + mergedMat.cols + '\n' +
+            //             'mergedMat height: ' + mergedMat.rows + '\n' +
+            //             'mergedMat size: ' + mergedMat.size().width + '*' + mergedMat.size().height + '\n' +
+            //             'mergedMat depth: ' + mergedMat.depth() + '\n' +
+            //             'mergedMat channels ' + mergedMat.channels() + '\n' +
+            //             'mergedMat type: ' + mergedMat.type() + '\n'
+            //             );
+
+            cv.imshow('canvasOutput',mergedMat)
+            slider.enable()
+            $("#slider-input").prop('disabled', false);
+        }
+
+
+        // threshold값 조절
+        function thrCtrl(val) {
+            val = Number(val)
+
+            var mergedMat = new cv.Mat()
+            var mergedMatVec = new cv.MatVector()
+
+            mergedMatVec.push_back(redThumbMat)
+            mergedMatVec.push_back(greenThumbMat)
+            mergedMatVec.push_back(blueThumbMat)
+            
+            var newAlphaThumbMat = new cv.Mat()
+            cv.threshold(alphaThumbMat, newAlphaThumbMat, val,255,cv.THRESH_BINARY)
+            mergedMatVec.push_back(newAlphaThumbMat)
+
+            cv.merge(mergedMatVec, mergedMat)
+
+            cv.imshow('canvasOutput', mergedMat)
+        }
+        
+        function download() {
+
+            var srcReadImg = cv.imread(srcImg, cv.IMREAD_UNCHANGED)
+            var srcMatVec = new cv.MatVector()
+
+            cv.split(srcReadImg, srcMatVec)
+            var redMat = srcMatVec.get(0)
+            var greenMat = srcMatVec.get(1)
+            var blueMat = srcMatVec.get(2)
+
+            var alphaReadImg = cv.imread(alphaImg, cv.IMREAD_UNCHANGED)
+            var alphaMat = new cv.Mat()
+            cv.cvtColor(alphaReadImg, alphaMat, cv.COLOR_BGR2GRAY)
+
+            var thr = Number(slider.getValue())
+            var newAlphaMat = new cv.Mat()
+            cv.threshold(alphaMat, newAlphaMat, thr, 255, cv.THRESH_BINARY)
+
+            // console.log('alphaMat width: ' + alphaMat.cols + '\n' +
+            //             'alphaMat height: ' + alphaMat.rows + '\n' +
+            //             'alphaMat size: ' + alphaMat.size().width + '*' + alphaMat.size().height + '\n' +
+            //             'alphaMat depth: ' + alphaMat.depth() + '\n' +
+            //             'alphaMat channels ' + alphaMat.channels() + '\n' +
+            //             'alphaMat type: ' + alphaMat.type() + '\n'
+            //             );
+
+            var mergedMat = new cv.Mat()
+            var mergedMatVec = new cv.MatVector()
+            mergedMatVec.push_back(redMat)
+            mergedMatVec.push_back(greenMat)
+            mergedMatVec.push_back(blueMat)
+            mergedMatVec.push_back(newAlphaMat)
+
+            cv.merge(mergedMatVec, mergedMat)
+            cv.imshow('downloadOutput', mergedMat)
+
+            var cnvs = document.getElementById("downloadOutput");
+            var dataURL = cnvs.toDataURL('image/png');
+            dataURL = dataURL.replace(/^data:image\/[^;]*/, 'data:application/octet-stream');
+            dataURL = dataURL.replace(/^data:application\/octet-stream/, 'data:application/octet-stream;headers=Content-Disposition%3A%20attachment%3B%20filename=Canvas.png');
+
+            // 저장되는 파일 이름 형식: userName_yymmdd_hhmm.png
+            var userName = 'test'
+            var d = new Date()
+            var timeStamp = d.yymmdd()+'_'+d.hhmm()
+
+            var aTag = document.createElement('a');
+            aTag.download = userName+'_'+timeStamp+'.png';
+            aTag.href = dataURL;
+            aTag.click();
+        }
+
+
     </script>
 {% endblock %}
