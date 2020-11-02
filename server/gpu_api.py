@@ -2,7 +2,11 @@
 import requests
 
 gpuUrl = 'http://101.101.172.15:6789'
+<<<<<<< HEAD
 #gpuUrl = 'http://3.35.93.177:6789'
+=======
+# gpuUrl = 'http://3.35.93.177:6789'
+>>>>>>> 90c5bd12d810620431a1060bff0d68f4d40fc072
 
 
 def backRmvAPI(inputFileName):
