@@ -1,5 +1,5 @@
 Date.prototype.yymmdd = function() {
-    var yy = this.getFullYear() - 20;
+    var yy = this.getFullYear() - 2000;
     var mm = this.getMonth() + 1;
     var dd = this.getDate();
   
