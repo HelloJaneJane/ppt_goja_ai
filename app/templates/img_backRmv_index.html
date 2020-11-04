@@ -214,14 +214,6 @@
         alphaThumbnail.onload = function(){
             resize(alphaThumbnail)
             
-            // console.log('srcThumbnail width: ' + srcThumbnail.cols + '\n' +
-            //             'srcThumbnail height: ' + srcThumbnail.rows + '\n' +
-            //             'srcThumbnail size: ' + srcThumbnail.size().width + '*' + srcThumbnail.size().height + '\n' +
-            //             'srcThumbnail depth: ' + srcThumbnail.depth() + '\n' +
-            //             'srcThumbnail channels ' + srcThumbnail.channels() + '\n' +
-            //             'srcThumbnail type: ' + srcThumbnail.type() + '\n'
-            //             );
-
             var srcReadImg = cv.imread(srcThumbnail, cv.IMREAD_UNCHANGED)
             var srcMatVec = new cv.MatVector()
 
@@ -230,25 +222,9 @@
             greenThumbMat = srcMatVec.get(1)
             blueThumbMat = srcMatVec.get(2)
 
-            // console.log('redThumbMat width: ' + redThumbMat.cols + '\n' +
-            //             'redThumbMat height: ' + redThumbMat.rows + '\n' +
-            //             'redThumbMat size: ' + redThumbMat.size().width + '*' + redThumbMat.size().height + '\n' +
-            //             'redThumbMat depth: ' + redThumbMat.depth() + '\n' +
-            //             'redThumbMat channels ' + redThumbMat.channels() + '\n' +
-            //             'redThumbMat type: ' + redThumbMat.type() + '\n'
-            //             );
-
             var alphaReadImg = cv.imread(alphaThumbnail, cv.IMREAD_UNCHANGED)
             alphaThumbMat = new cv.Mat()
             cv.cvtColor(alphaReadImg, alphaThumbMat, cv.COLOR_BGR2GRAY)
-
-            // console.log('alphaThumbMat width: ' + alphaThumbMat.cols + '\n' +
-            //             'alphaThumbMat height: ' + alphaThumbMat.rows + '\n' +
-            //             'alphaThumbMat size: ' + alphaThumbMat.size().width + '*' + alphaThumbMat.size().height + '\n' +
-            //             'alphaThumbMat depth: ' + alphaThumbMat.depth() + '\n' +
-            //             'alphaThumbMat channels ' + alphaThumbMat.channels() + '\n' +
-            //             'alphaThumbMat type: ' + alphaThumbMat.type() + '\n'
-            //             );
 
             var mergedMat = new cv.Mat()
             var mergedMatVec = new cv.MatVector()
@@ -258,18 +234,14 @@
             mergedMatVec.push_back(alphaThumbMat)
 
             cv.merge(mergedMatVec, mergedMat)
-               
-            // console.log('mergedMat width: ' + mergedMat.cols + '\n' +
-            //             'mergedMat height: ' + mergedMat.rows + '\n' +
-            //             'mergedMat size: ' + mergedMat.size().width + '*' + mergedMat.size().height + '\n' +
-            //             'mergedMat depth: ' + mergedMat.depth() + '\n' +
-            //             'mergedMat channels ' + mergedMat.channels() + '\n' +
-            //             'mergedMat type: ' + mergedMat.type() + '\n'
-            //             );
 
             cv.imshow('canvasOutput',mergedMat)
             slider.enable()
             $("#slider-input").prop('disabled', false);
+
+            srcReadImg.delete()
+            alphaReadImg.delete()
+            mergedMat.delete()
         }
 
 
@@ -291,6 +263,9 @@
             cv.merge(mergedMatVec, mergedMat)
 
             cv.imshow('canvasOutput', mergedMat)
+
+            mergedMat.delete()
+            newAlphaThumbMat.delete()
         }
         
         function download() {
@@ -343,6 +318,19 @@
             aTag.download = userName+'_'+timeStamp+'.png';
             aTag.href = dataURL;
             aTag.click();
+
+            srcReadImg.delete()
+            alphaReadImg.delete()
+            redMat.delete()
+            greenMat.delete()
+            blueMat.delete()
+            alphaMat.delete()
+            newAlphaMat.delete()
+            mergedMat.delete()
+
+            redThumbMat.delete()
+            greenThumbMat.delete()
+            blueThumbMat.delete()
         }
 
 
