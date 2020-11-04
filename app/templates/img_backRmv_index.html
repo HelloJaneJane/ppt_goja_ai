@@ -194,9 +194,10 @@
                                 alphaImg.src = result
                                 alphaImg.setAttribute('crossOrigin','')
 
-                                alphaThumbnail.style.display = ""
                                 alphaThumbnail.src = result
                                 alphaThumbnail.setAttribute('crossOrigin','')
+
+                                document.getElementById('canvasOutput').style.display = ""
                             },
                             error: function (xtr, status, error) {
                                 alert(xtr + ":" + status + ":" + error);
