@@ -29,8 +29,8 @@
             padding: 3px;
             }
         .right {
-        transform: rotate(-45deg);
-        -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
         }
     </style>
 {% endblock %}
@@ -42,9 +42,9 @@
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
                 <div class="col-md-5 ftco-animate text-center">
+                    <img id="imageSrc" class='max-small' style="display:none"/>
                     <p>배경을 지우고 싶은 이미지 파일을 입력하세요.</p>
                     <input class="btn btn-primary" id="file-selector" type="file" accepting=".jpg, .jpeg, .png">
-                    <img id="imageSrc" class='max-small'/>
                 </div>
                 <div class="col-md-2 ftco-animate text-center">
                     <p>버튼을 누르면 발펴고자 AI가 딥러닝처리를 시작합니다.</p>
@@ -52,12 +52,12 @@
                     <!-- <a href="javascript:submit();" class="btn btn btn-arrow-right btn-primary">START</a> -->
                 </div>
                 <div class="col-md-5 ftco-animate text-center">
-                    <canvas id="canvasOutput" class='max-small'></canvas>
+                    <canvas id="canvasOutput" class='max-small' style="display:none"></canvas>
                     <div>
                         <input id="slider" data-slider-id='ex1Slider' type="number" data-slider-min="0" data-slider-max="254" data-slider-step="10" data-slider-value="120" data-slider-enabled="false"/>
                         <input id="slider-input" type="number" placeholder="120" min="0" max="254" onkeypress="onlyNumber();" disabled="true" />
                     </div>
-                    <p>토글바로어떻게어떻게조정하세여</p>
+                    <p>지워지는 정도를 조절한 후 다운로드 버튼을 눌러주세요.</p>
                     <a href="javascript:download()" class="btn btn-primary">DOWNLOAD</a>
                     <canvas id="downloadOutput" style="display:none"></canvas>
                 </div>
@@ -139,6 +139,7 @@
 
         // 파일 인풋이 들어오면 이미지 보여주기
         inputElement.addEventListener('change', (e) => {
+            srcThumbnail.style.display = ""
             srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
         },false)
 
@@ -193,10 +194,9 @@
                                 alphaImg.src = result
                                 alphaImg.setAttribute('crossOrigin','')
 
+                                alphaThumbnail.style.display = ""
                                 alphaThumbnail.src = result
                                 alphaThumbnail.setAttribute('crossOrigin','')
-                                
-                                // location.href = result
                             },
                             error: function (xtr, status, error) {
                                 alert(xtr + ":" + status + ":" + error);
