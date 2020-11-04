@@ -4,9 +4,112 @@
 {% extends 'layout.html' %}
 
 {% block head %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.754.0.min.js"></script>
     <script src="../static/js/aws-sdk.js"></script>
     <script src="../static/js/time-custom.js"></script>
+
+    <style>
+        .img-origin {
+            width: auto; height: auto;
+            max-width: 200px;
+            max-height: 200px;
+        }
+
+        .arrow {
+            border: solid #ee76ad;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+        }
+        .right {
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
+        }
+
+        .img-zoom-container {
+            position: relative;
+            text-align: left;
+            width: inherit;
+        }
+
+        .img-zoom-lens {
+            position: absolute;
+            border: 1px solid #f3f3f3;
+            /*set the size of the lens:*/
+            /* width: 100px;
+            height: 100px; */
+        }
+
+        .img-zoom-result {
+            /*set the size of the result div:*/
+            width: 350px;
+            height: 350px;
+        }
+    </style>
+
+    <script>
+        function imageZoom(imgID, resultID) {
+            var img, lens, result, cx, cy;
+            img = document.getElementById(imgID);
+            result = document.getElementById(resultID);
+            /*create lens:*/
+            lens = document.createElement("DIV");
+            lens.setAttribute("class", "img-zoom-lens");
+            lensSize = Math.min(img.width, img.height)/2
+            lens.style.width = lensSize + "px"
+            lens.style.height = lensSize + "px"
+
+            /*insert lens:*/
+            img.parentElement.insertBefore(lens, img);
+            /*calculate the ratio between result DIV and lens:*/
+            cx = result.offsetWidth / lens.offsetWidth;
+            cy = result.offsetHeight / lens.offsetHeight;
+            /*set background properties for the result DIV:*/
+            result.style.backgroundImage = "url('" + img.src + "')";
+            result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+            /*execute a function when someone moves the cursor over the image, or the lens:*/
+            lens.addEventListener("mousemove", moveLens);
+            img.addEventListener("mousemove", moveLens);
+            /*and also for touch screens:*/
+            lens.addEventListener("touchmove", moveLens);
+            img.addEventListener("touchmove", moveLens);
+            function moveLens(e) {
+                var pos, x, y;
+                /*prevent any other actions that may occur when moving over the image:*/
+                e.preventDefault();
+                /*get the cursor's x and y positions:*/
+                pos = getCursorPos(e);
+                /*calculate the position of the lens:*/
+                x = pos.x - (lens.offsetWidth / 2);
+                y = pos.y - (lens.offsetHeight / 2);
+                /*prevent the lens from being positioned outside the image:*/
+                if (x > img.width - lens.offsetWidth) {x = img.width - lens.offsetWidth;}
+                if (x < 0) {x = 0;}
+                if (y > img.height - lens.offsetHeight) {y = img.height - lens.offsetHeight;}
+                if (y < 0) {y = 0;}
+                /*set the position of the lens:*/
+                lens.style.left = x + "px";
+                lens.style.top = y + "px";
+                /*display what the lens "sees":*/
+                result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+            }
+            function getCursorPos(e) {
+                var a, x = 0, y = 0;
+                e = e || window.event;
+                /*get the x and y positions of the image:*/
+                a = img.getBoundingClientRect();
+                /*calculate the cursor's x and y coordinates, relative to the image:*/
+                x = e.pageX - a.left;
+                y = e.pageY - a.top;
+                /*consider any page scrolling:*/
+                x = x - window.pageXOffset;
+                y = y - window.pageYOffset;
+                return {x : x, y : y};
+            }
+        }
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -15,24 +118,62 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div class="col-md-12 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                    <p data-scrollax="properties: { translateY: '30%', opacity: 1.6 }">
-                        사용자가 입력한 이미지를 딥러닝 처리 (super resolution) 해서 다운 받을 수 있게 해줌
-                    </p>
+                <div class="col-md-5 ftco-animate text-center">
+                    <div class="img-zoom-container">
+                        <img id="srcImg" class="img-origin" style="display:none">
+                        <div id="srcImgZoom" class="img-zoom-result" style="display:none"></div>
+                    </div>
+                    <p>화질을 높이고 싶은 이미지 파일을 입력하세요.</p>
+                    <input class="btn btn-primary" id="file-selector" type="file" accepting=".jpg, .jpeg, .png">
                 </div>
-                <div class="col-md-8">
-                    <input id="file-selector" type="file" accept=".jpg, .jpeg, .png">
+                <div class="col-md-2 ftco-animate text-center">
+                    <p>버튼을 누르면 발펴고자 AI가 딥러닝처리를 시작합니다.</p>
+                    <button type="button" onclick="submit();" class="btn btn-primary">START <i class="arrow right"></i></button>
                 </div>
-                <a href="javascript:submit();" class="btn btn-primary">후처리하기</a>
+                <div class="col-md-5 ftco-animate text-center">
+                    <div class="img-zoom-container">
+                        <img id="outputImg" class="img-origin" style="display:none">
+                        <div id="outputImgZoom" class='img-zoom-result' style="display:none"></div>
+                    </div>
+                    <p>결과물을 확인한 후 다운로드 버튼을 눌러주세요.</p>
+                    <a href="javascript:download()" class="btn btn-primary">DOWNLOAD</a>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script type="text/javascript">
+
+        // 원본
+        let inputElement = document.getElementById('file-selector');
+
+        // 이미지 미리보기
+        let srcThumbnail = document.getElementById('srcImg');
+        let outThumbnail = document.getElementById('outputImg');
+
+        // 파일 인풋이 들어오면 이미지 보여주기
+        inputElement.addEventListener('change', (e) => {
+            srcThumbnail.style.display = ""
+            srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
+            // srcThumbnail.src = "{{ url_for('static',filename='images/src3.png') }}"
+
+        },false)
+
+        // 아웃풋 이미지 받아오면 줌 보여주기
+        outThumbnail.onload = function(){
+            document.getElementById('srcImgZoom').style.display = ""
+            document.getElementById('outputImgZoom').style.display = ""
+            imageZoom("srcImg","srcImgZoom")
+            imageZoom("outputImg","outputImgZoom")
+        }
+
         function submit(){
+            // outThumbnail.src = "{{ url_for('static',filename='images/out3.png') }}"
+            
             var fileSelector = document.getElementById('file-selector');
             if (fileSelector.files[0]==null){
-                alert("배경을 지우고 싶은 사진 파일을 먼저 선택해주세요.")
+                alert("화질을 높이고 싶은 사진 파일을 먼저 선택해주세요.")
             }
             else{
                 // 저장되는 파일 이름 형식: userName_yymmdd_hhmm.jpg
@@ -72,8 +213,9 @@
                             url: '/image2',
                             data: jsonData,
                             success: function (result) {
-                                // alert("result=" + result);
-                                location.href = result
+                                outThumbnail.style.display = ""
+                                outThumbnail.src = result
+                                outThumbnail.setAttribute('crossOrigin','')
                             },
                             error: function (xtr, status, error) {
                                 alert(xtr + ":" + status + ":" + error);
@@ -86,6 +228,12 @@
                 );
 
             }
+
         }
+
+        function download(){
+            location.href = outThumbnail.src
+        }
+
     </script>
 {% endblock %}

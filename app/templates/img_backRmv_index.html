@@ -29,8 +29,8 @@
             padding: 3px;
             }
         .right {
-        transform: rotate(-45deg);
-        -webkit-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+            -webkit-transform: rotate(-45deg);
         }
     </style>
 {% endblock %}
@@ -42,9 +42,9 @@
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
                 <div class="col-md-5 ftco-animate text-center">
+                    <img id="imageSrc" class='max-small' style="display:none"/>
                     <p>배경을 지우고 싶은 이미지 파일을 입력하세요.</p>
                     <input class="btn btn-primary" id="file-selector" type="file" accepting=".jpg, .jpeg, .png">
-                    <img id="imageSrc" class='max-small'/>
                 </div>
                 <div class="col-md-2 ftco-animate text-center">
                     <p>버튼을 누르면 발펴고자 AI가 딥러닝처리를 시작합니다.</p>
@@ -52,12 +52,12 @@
                     <!-- <a href="javascript:submit();" class="btn btn btn-arrow-right btn-primary">START</a> -->
                 </div>
                 <div class="col-md-5 ftco-animate text-center">
-                    <canvas id="canvasOutput" class='max-small'></canvas>
+                    <canvas id="canvasOutput" class='max-small' style="display:none"></canvas>
                     <div>
                         <input id="slider" data-slider-id='ex1Slider' type="number" data-slider-min="0" data-slider-max="254" data-slider-step="10" data-slider-value="120" data-slider-enabled="false"/>
                         <input id="slider-input" type="number" placeholder="120" min="0" max="254" onkeypress="onlyNumber();" disabled="true" />
                     </div>
-                    <p>토글바로어떻게어떻게조정하세여</p>
+                    <p>지워지는 정도를 조절한 후 다운로드 버튼을 눌러주세요.</p>
                     <a href="javascript:download()" class="btn btn-primary">DOWNLOAD</a>
                     <canvas id="downloadOutput" style="display:none"></canvas>
                 </div>
@@ -139,6 +139,7 @@
 
         // 파일 인풋이 들어오면 이미지 보여주기
         inputElement.addEventListener('change', (e) => {
+            srcThumbnail.style.display = ""
             srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
         },false)
 
@@ -193,10 +194,9 @@
                                 alphaImg.src = result
                                 alphaImg.setAttribute('crossOrigin','')
 
+                                alphaThumbnail.style.display = ""
                                 alphaThumbnail.src = result
                                 alphaThumbnail.setAttribute('crossOrigin','')
-                                
-                                // location.href = result
                             },
                             error: function (xtr, status, error) {
                                 alert(xtr + ":" + status + ":" + error);
@@ -214,14 +214,6 @@
         alphaThumbnail.onload = function(){
             resize(alphaThumbnail)
             
-            // console.log('srcThumbnail width: ' + srcThumbnail.cols + '\n' +
-            //             'srcThumbnail height: ' + srcThumbnail.rows + '\n' +
-            //             'srcThumbnail size: ' + srcThumbnail.size().width + '*' + srcThumbnail.size().height + '\n' +
-            //             'srcThumbnail depth: ' + srcThumbnail.depth() + '\n' +
-            //             'srcThumbnail channels ' + srcThumbnail.channels() + '\n' +
-            //             'srcThumbnail type: ' + srcThumbnail.type() + '\n'
-            //             );
-
             var srcReadImg = cv.imread(srcThumbnail, cv.IMREAD_UNCHANGED)
             var srcMatVec = new cv.MatVector()
 
@@ -230,25 +222,9 @@
             greenThumbMat = srcMatVec.get(1)
             blueThumbMat = srcMatVec.get(2)
 
-            // console.log('redThumbMat width: ' + redThumbMat.cols + '\n' +
-            //             'redThumbMat height: ' + redThumbMat.rows + '\n' +
-            //             'redThumbMat size: ' + redThumbMat.size().width + '*' + redThumbMat.size().height + '\n' +
-            //             'redThumbMat depth: ' + redThumbMat.depth() + '\n' +
-            //             'redThumbMat channels ' + redThumbMat.channels() + '\n' +
-            //             'redThumbMat type: ' + redThumbMat.type() + '\n'
-            //             );
-
             var alphaReadImg = cv.imread(alphaThumbnail, cv.IMREAD_UNCHANGED)
             alphaThumbMat = new cv.Mat()
             cv.cvtColor(alphaReadImg, alphaThumbMat, cv.COLOR_BGR2GRAY)
-
-            // console.log('alphaThumbMat width: ' + alphaThumbMat.cols + '\n' +
-            //             'alphaThumbMat height: ' + alphaThumbMat.rows + '\n' +
-            //             'alphaThumbMat size: ' + alphaThumbMat.size().width + '*' + alphaThumbMat.size().height + '\n' +
-            //             'alphaThumbMat depth: ' + alphaThumbMat.depth() + '\n' +
-            //             'alphaThumbMat channels ' + alphaThumbMat.channels() + '\n' +
-            //             'alphaThumbMat type: ' + alphaThumbMat.type() + '\n'
-            //             );
 
             var mergedMat = new cv.Mat()
             var mergedMatVec = new cv.MatVector()
@@ -258,18 +234,14 @@
             mergedMatVec.push_back(alphaThumbMat)
 
             cv.merge(mergedMatVec, mergedMat)
-               
-            // console.log('mergedMat width: ' + mergedMat.cols + '\n' +
-            //             'mergedMat height: ' + mergedMat.rows + '\n' +
-            //             'mergedMat size: ' + mergedMat.size().width + '*' + mergedMat.size().height + '\n' +
-            //             'mergedMat depth: ' + mergedMat.depth() + '\n' +
-            //             'mergedMat channels ' + mergedMat.channels() + '\n' +
-            //             'mergedMat type: ' + mergedMat.type() + '\n'
-            //             );
 
             cv.imshow('canvasOutput',mergedMat)
             slider.enable()
             $("#slider-input").prop('disabled', false);
+
+            srcReadImg.delete()
+            alphaReadImg.delete()
+            mergedMat.delete()
         }
 
 
@@ -291,6 +263,9 @@
             cv.merge(mergedMatVec, mergedMat)
 
             cv.imshow('canvasOutput', mergedMat)
+
+            mergedMat.delete()
+            newAlphaThumbMat.delete()
         }
         
         function download() {
@@ -343,6 +318,19 @@
             aTag.download = userName+'_'+timeStamp+'.png';
             aTag.href = dataURL;
             aTag.click();
+
+            srcReadImg.delete()
+            alphaReadImg.delete()
+            redMat.delete()
+            greenMat.delete()
+            blueMat.delete()
+            alphaMat.delete()
+            newAlphaMat.delete()
+            mergedMat.delete()
+
+            redThumbMat.delete()
+            greenThumbMat.delete()
+            blueThumbMat.delete()
         }
 
 
