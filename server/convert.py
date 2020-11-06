@@ -272,22 +272,22 @@ def getSlideType(slideDict):
             ## TODO: '입력이 짧다 == 글자수가 20이하다' 로 했는데 남지훈이 고쳐야 함
             if slideDict['liCnt']==0 and slideDict['pCnt']==1:
                 pText = slideDict['Contents'][0][1]
-                if len(pText)<=20: return SlideType_singleLine(pText, imageLinks) # 패러그랲 하나 문장
+                if len(pText)<=20: return SlideType_singleLine(slideTitle, pText, imageLinks) # 패러그랲 하나 문장
 
             # 불렛 1개, 패러그랲 0개
             elif slideDict['liCnt']==1 and slideDict['pCnt']==0:
                 liText = slideDict['Contents'][0][1]
-                return SlideType_singleLine(liText, imageLinks) # 불렛 하나 문장
+                return SlideType_singleLine(slideTitle, liText, imageLinks) # 불렛 하나 문장
 
             # 불렛 여러 개, 패러그랲 0개
-            elif slideDict['liCnt']>1 and slideDict['pCnt']==0:
+            elif slideDict['liCnt']>1 and slideDict['pCnt']==0 and slideDict['liCnt']<5:
                 liTextList = [contentsTuple[1] for contentsTuple in slideDict['Contents']]
                 if isTimeLine:
-                    return SlideType_timeLine(liTextList, imageLinks) # 불렛 문장들 리스트
+                    return SlideType_timeLine(slideTitle, liTextList, imageLinks) # 불렛 문장들 리스트
                 else:
-                    return SlideType_multiLine(liTextList, imageLinks) # 불렛 문장들 리스트
+                    return SlideType_multiLine(slideTitle, liTextList, imageLinks) # 불렛 문장들 리스트
 
-            return SlideType_default(slideDict['Contents'],imageLinks)
+            return SlideType_default(slideTitle, slideDict['Contents'],imageLinks)
 
         # (3.2) h4, Head(h5, Contents(p/li)), img - h5가 있는 경우
         else:
@@ -297,11 +297,11 @@ def getSlideType(slideDict):
 
             if 2<=headCnt and headCnt<=4:
                 if isTimeLine:
-                    return SlideType_head_timeLine(headTuples, imageLinks) # (h5(스트링),Contents(튜플리스트))들 리스트
+                    return SlideType_head_timeLine(slideTitle, headTuples, imageLinks) # (h5(스트링),Contents(튜플리스트))들 리스트
                 else:
-                    return SlideType_head_multiLine(headTuples, imageLinks)
+                    return SlideType_head_multiLine(slideTitle, headTuples, imageLinks)
             else: # headCnt==1 or headCnt>=5
-                return SlideType_head_default(headTuples, imageLinks)
+                return SlideType_head_default(slideTitle, headTuples, imageLinks)
 
 
 
