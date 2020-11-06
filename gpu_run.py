@@ -5,6 +5,14 @@ from server.awsModule import *
 
 import os
 
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirmame(__file__))))
+#os.path.dirnameerror
+
+from gpuEngine import *
+#from U2Net import u2net_test as u2test
+import image_super_resolution
+
 app=Flask(__name__)
 CORS(app)
 
@@ -21,7 +29,7 @@ def backrmv():
     downloadFileFromS3('inputImage/backgroundRemoval/'+inputName,outputName)
 
     # background removal 하기
-    ############
+    U2Net.u2net.main(outputName)
 
     # 후처리된 사진 파일 s3에 업로드 (+서버에선 파일 지움)
     uploadFileToS3(outputName, 'outputImage/backgroundRemoval/'+outputName)
@@ -42,7 +50,13 @@ def supresol():
     downloadFileFromS3('inputImage/superResolution/'+inputName,outputName)
 
     # super resolution 하기
-    ############
+    # chanel 4 ->3
+    img = outputName
+    lr_img = np.array(img)
+    #Image.fromarray(lr_img)
+    model = RRDN(weights = 'gans')
+    sr_img_gan = model.predict(lr_img)
+    outputName = sr_img_gan
 
     # 후처리된 사진 파일 s3에 업로드 (+서버에선 파일 지움)
     uploadFileToS3(outputName, 'outputImage/superResolution/'+outputName)
