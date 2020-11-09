@@ -354,7 +354,8 @@ hr {
   margin-top: 1rem;
   margin-bottom: 1rem;
   border: 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1); }
+  /* border-top: 1px solid rgba(0, 0, 0, 0.1);  */
+}
 
 small,
 .small {
@@ -7496,7 +7497,8 @@ h1, h2, h3, h4, h5,
     font-size: 55px;
     color: #fff;
     line-height: 1.2;
-    font-weight: 200; }
+    /* font-weight: 200;  */
+  }
     @media (max-width: 991.98px) {
       .slider-text h1 {
         font-size: 40px; } }

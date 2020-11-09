@@ -66,7 +66,7 @@
     editormd.classPrefix  = "editormd-";
     
     editormd.toolbarModes = {
-        custom : [ "help", "|", "h1", "h2", "h3", "h4", "h5", "list-ul", "|", "bold", "image", "|", "watch", "preview"]
+        custom : [ "help", "|", "h1", "h3", "h4", "h5", "list-ul", "|", "bold", "image", "|", "watch", "preview"]
     };
     
     editormd.defaults     = {
@@ -175,11 +175,11 @@
             italic           : "fa-italic",
             quote            : "fa-quote-left",
             uppercase        : "fa-font",
-            h1               : editormd.classPrefix + "bold",
+            // h1               : editormd.classPrefix + "bold",
             h2               : editormd.classPrefix + "bold",
-            h3               : editormd.classPrefix + "bold",
-            h4               : editormd.classPrefix + "bold",
-            h5               : editormd.classPrefix + "bold",
+            // h3               : editormd.classPrefix + "bold",
+            // h4               : editormd.classPrefix + "bold",
+            // h5               : editormd.classPrefix + "bold",
             h6               : editormd.classPrefix + "bold",
             "list-ul"        : "fa-list-ul",
             "list-ol"        : "fa-list-ol",
@@ -205,7 +205,12 @@
             help             : "fa-question-circle",
             info             : "fa-info-circle"
         },        
-        toolbarIconTexts     : {},
+        toolbarIconTexts     : {
+            h1               : "표지",
+            h3               : "간지",
+            h4               : "소제목",
+            h5               : "항목"
+        },
         
         lang : {
             name        : "ko",
@@ -221,7 +226,7 @@
                 ucwords          : "ucwords",
                 uppercase        : "uppercase",
                 lowercase        : "lowercase",
-                h1               : "제목 (h1)",
+                h1               : "표지 (제목+부제목)",
                 h2               : "부제목 (h2)",
                 h3               : "중제목 (h3)",
                 h4               : "슬라이드 소제목 (h4)",
@@ -1155,7 +1160,7 @@
                     else 
                     {
                         menuItem += "<a href=\"javascript:;\" title=\"" + title + "\" unselectable=\"on\">";
-                        menuItem += "<i class=\"fa " + iconClass + "\" name=\""+name+"\" unselectable=\"on\">"+((isHeader) ? name.toUpperCase() : ( (iconClass === "") ? iconTexts : "") ) + "</i>";
+                        menuItem += "<i class=\"fa " + iconClass + "\" name=\""+name+"\" unselectable=\"on\">"+( (iconClass === "") ? iconTexts : "")  + "</i>";
                         menuItem += "</a>";
                     }
 
@@ -2779,6 +2784,8 @@
         dialog.css({
             top  : ($(window).height() - dialog.height()) / 2 + "px",
             left : ($(window).width()  - dialog.width())  / 2 + "px"
+            // top : 0,
+            // left : 0
         });
 
         if (settings.dialogShowMask) {
@@ -2896,12 +2903,12 @@
             if (cursor.ch !== 0)
             {
                 cm.setCursor(cursor.line, 0);
-                cm.replaceSelection("# " + selection);
+                cm.replaceSelection("# \n## " + selection);
                 cm.setCursor(cursor.line, cursor.ch + 2);
             }
             else
             {
-                cm.replaceSelection("# " + selection);
+                cm.replaceSelection("# \n## " + selection);
             }
         },
 
@@ -2947,12 +2954,12 @@
             if (cursor.ch !== 0)
             {
                 cm.setCursor(cursor.line, 0);
-                cm.replaceSelection("#### " + selection);
+                cm.replaceSelection("---\n#### " + selection);
                 cm.setCursor(cursor.line, cursor.ch + 5);
             }
             else
             {
-                cm.replaceSelection("#### " + selection);
+                cm.replaceSelection("---\n#### " + selection);
             }
         },
 
