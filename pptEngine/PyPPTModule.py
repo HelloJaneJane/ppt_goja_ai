@@ -139,8 +139,9 @@ class PPTData:
         text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
         self.newLine(text_box, title, 'SangSangTitleM', 32)
 
-
-    def timeMultiLine(self,slide,title,headers,bodies):
+    def timeMultiLine(self,slide_,title,headers,bodies,Links):
+        print(slide_)
+        slide = self.newSlide(slide_)
         self.input_title(slide,title)
         line_cnt = 13
         for header in headers:
@@ -150,98 +151,155 @@ class PPTData:
         line_cnt = 14
         for body in bodies:
             text_box = self.setTextBox(slide, line_cnt, 'pptEngine/static/DOSSaemmul.ttf')
-            self.firstLine(text_box, body, 'Arial', 10)
+            print(body)
+            flipflop=0
+            for line in body:
+                if flipflop==0 :
+                    self.firstLine(text_box,line,'Arial',10)
+                    flipflop=1
+                else :
+                    self.newLine(text_box,line,'Arial',10)
             line_cnt = line_cnt + 2
-        return slide
+        if not Links:
+            return slide
+        image_start = 17+((slide_%6)/2)*2#7,9,11 now
+        num_list=[]
+        for i in Links:
+            num_list.append(image_start)
+            image_start=image_start+1
+        return self.input_image(slide,num_list,Links)
 
-    def defaultLine(self,title,contents):
+    def defaultLine(self, title, contents, Links):
         slide = self.newSlide(3)
         self.input_title(slide, title)
         text_box = self.setTextBox(slide, 1, 'pptEngine/static/a타이틀고딕3.ttf')
         for line in contents:
-            self. newLine(text_box,line,'a타이틀고딕3',20)
+            self.newLine(text_box, line[1], 'a타이틀고딕3', 20)
+        if not Links:
+            return slide
+        image_start = 10
+        num_list=[]
+        for i in Links:
+            num_list.append(image_start)
+            image_start=image_start+1
+        return self.input_image(slide,num_list,Links)
+
+    def input_image(self,slide,num_ls,Links):
+        n=0
+        for i in num_ls:
+            image_placeholder = slide.placeholders[i]
+            r = requests.get(Links[n])
+            n = n+1
+            file = open("tempoimage.jpg","wb")
+            file.write(r.content)
+            file.close()
+            image_placeholder.insert_picture('tempoimage.jpg')
         return slide
 
-    def singleLine(self,title,lines):
-        slide = self.newSlide(4)
+    def singleLine(self,title,lines,Links):
+        if not Links:
+            slide = self.newSlide(5)
+        else :
+            slide = self.newSlide(4)
         self.input_title(slide, title)
         text_box = self.setTextBox(slide, 13, 'pptEngine/static/a타이틀고딕3.ttf')
         line = lines[0]
         self.firstLine(text_box, line, 'a타이틀고딕3', 24)
-        return slide
+        if not Links:
+            return slide
+        image_start = 10
+        num_list=[]
+        for i in Links:
+            num_list.append(image_start)
+            image_start=image_start+1
+        return self.input_image(slide,num_list,Links)
 
-    def generate_slide(self, title, slideObj):
+    def generate_slide(self, slideObj):
         if (isinstance(slideObj,SlideType_head_default)):
             contents=[]
             for tuple in slideObj._headTuples:
                 contents.append(tuple[0])
                 contents.append(tuple[1])
-            if slideObj._imageLinks :
-                return self.defaultLine(title,contents)
-            # if slideObj._imageLinks : #TODO
+            return self.defaultLine(slideObj._title,contents,slideObj._imageLinks)
         elif (isinstance(slideObj, SlideType_head_timeLine)):
             headers=[]
             bodies=[]
             for tuple in slideObj._headTuples:
                 headers.append(tuple[0])
-                bodies.append(tuple[1])
-            if slideObj._imageLinks :
-                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
-                return self.timeMultiLine(slide,title,headers,bodies)
-            # if slideObj._imageLinks : #TODO
+                for body in tuple[1]:
+                    bodies.append(body[1])
+            print(len(bodies))
+            if not slideObj._imageLinks :
+                slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
+            else :
+                slide = 3+len(bodies)*2 #self.newSlide(3+len(bodies)*2) # 7,9,11
+            return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
         elif (isinstance(slideObj, SlideType_head_multiLine)):
             headers = []
             bodies = []
             for tuple in slideObj._headTuples:
+                print(tuple)
                 headers.append(tuple[0])
-                bodies.append(tuple[1])
+                tmp_body=[]
+                for body in tuple[1]:
+                    tmp_body.append(body[1])
+                bodies.append(tmp_body)
                 print(len(bodies))
-            if slideObj._imageLinks:
-                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
-                return self.timeMultiLine(slide, title, headers, bodies)
-            # if slideObj._imageLinks : #TODO
+            if not slideObj._imageLinks :
+                slide = 8+len(bodies)*2#self.newSlide(8 + len(bodies) * 2)  # 6,8,10
+            else :
+                slide = 9+len(bodies)*2#self.newSlide(9+len(bodies)*2) # 7,9,11
+            return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
         elif (isinstance(slideObj, SlideType_head_timeLine)):
             headers = []
             bodies = []
             for tuple in slideObj._headTuples:
                 headers.append(tuple[0])
-                bodies.append(tuple[1])
-            if slideObj._imageLinks:
-                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
-                return self.timeMultiLine(slide, title, headers, bodies)
-            # if slideObj._imageLinks : #TODO
+                tmp_body = []
+                for body in tuple[1]:
+                    tmp_body.append(body[1])
+                bodies.append(tmp_body)
+            if not slideObj._imageLinks :
+                slide = 2 + len(bodies) * 2 #self.newSlide(2 + len(bodies) * 2)  # 6,8,10
+            else :
+                slide = 3 + len(bodies) * 2 #self.newSlide(3+len(bodies)*2) # 7,9,11
+            return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
+
         elif (isinstance(slideObj,SlideType_default)):
-            if not slideObj._imageLinks :
-                return self.defaultLine(title,slideObj._contentsList)
-                # if slideObj._imageLinks : #TODO
+            return self.defaultLine(slideObj._title,slideObj._contentsList,slideObj._imageLinks)
+
         elif (isinstance(slideObj,SlideType_singleLine)):
-            if not slideObj._imageLinks :
-                return self.singleLine(title,slideObj._text)
-                # if slideObj._imageLinks : #TODO
+            return self.singleLine(slideObj._title,slideObj._text,slideObj._text,slideObj._imageLinks)
+
         elif (isinstance(slideObj, SlideType_multiLine)):
             headers = []
             bodies = []
             for line in slideObj._textList:
                 bodies.append(line)
+                print(line)
+                print(type(line))
+                print(len(bodies))
             if not slideObj._imageLinks :
-                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th NOT!! will be changed
-                return self.timeMultiLine(slide, title, headers, bodies)
-            #if slideObj._imageLinks : #TODO
+                slide = 8 + len(bodies) * 2 #self.newSlide(8 + len(bodies) * 2)  # 6,8,10
+            else :
+                slide = 9+len(bodies)*2 #self.newSlide(9+len(bodies)*2) # 7,9,11
+            return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
 
         elif (isinstance(slideObj, SlideType_timeLine)):
             headers = []
             bodies = []
             for line in slideObj._textList:
                 bodies.append(line)
-            if not slideObj._imageLinks:
-                slide = self.newSlide(2 + len(bodies) * 2)  # 6th~9th
-                return self.timeMultiLine(slide, title, headers, bodies)
-        # if slideObj._imageLinks : #TODO
+            if not slideObj._imageLinks :
+                slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
+            else :
+                slide = 3+len(bodies)*2#self.newSlide(3+len(bodies)*2) # 7,9,11
+            return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
 
         elif (isinstance(slideObj, SlideType_title)):
             slide = self.newSlide(0)
             title = slideObj._titleTuple[0]
-            subTitle = slideObj._titletuple[1]
+            subTitle = slideObj._titleTuple[1]
             text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
             self.newLine(text_box, title, 'SangSangTitleM', 32)
             text_box = self.setTextBox(slide, 1, 'pptEngine/static/SangSangTitleM.ttf')
@@ -255,19 +313,23 @@ class PPTData:
             self.newLine(text_box, midTitle, 'SangSangTitleM', 32)
             #if slideObj._imageLinks: TODO
 
+        elif (isinstance(slideObj,SlideType_title)):
+            slide = self.newSlide(0)  # 2에 제목 넣자
+            slide.shapes.placeholders[0].text = slideObj._titleTuple[0]
+            slide.shapes.placeholders[1].text = slideObj._titleTuple[1]
+
     def generate(self):
         self.basePrs()
-        self.titleSlide()
-        self.index()
+        #self.titleSlide()
+        #self.index()
         slide_idx = -1
         mid_slide = -1
         for slide_ in self._slideTypes:
             slide_idx = slide_idx + 1
-            if(self._textData._slideTitles[slide_idx][1]>mid_slide):
-                mid_slide = mid_slide + 1
-                self.transitionSlide(mid_slide)
-
-            self.generate_slide(self._textData._slideTitles[slide_idx][0],slide_)
+#            if(self._textData._slideTitles[slide_idx][1]>mid_slide):
+#                mid_slide = mid_slide + 1
+#                self.transitionSlide(mid_slide)
+            self.generate_slide(slide_)
 
     def idx_check(self,idx):
         slide = self.newSlide(idx)

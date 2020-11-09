@@ -33,10 +33,7 @@
             }
             else
             {
-                var dialogHTML = "<div class=\"" + classPrefix + "form\">" + 
-                                        "<label>" + imageLang.url + "</label>" + 
-                                        "<input type=\"text\" value=\"http://\" data-url />" +
-                                        "<br/>" + 
+                var dialogHTML = "<div class=\"" + classPrefix + "form\">" +
                                         "<input id=\"file-selector\" type=\"file\" accept=\".jpg, .jpeg, .png\" />" +
                                         "<br/>" + 
                                     "</div>";
@@ -102,18 +99,6 @@
                                 );
 
                             }
-
-                            // var url   = this.find("[data-url]").val();
-
-                            // if (url === "http://" || url === "")
-                            // {
-                            //     alert(imageLang.urlEmpty);
-                            //     return false;
-                            // }
-                            
-                            // var str = "![](" + url + ")";
-                            
-                            // cm.replaceSelection(str);
 
                             this.hide().lockScreen(false).hideMask();
 
