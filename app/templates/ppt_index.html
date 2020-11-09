@@ -36,8 +36,8 @@
 
         $(function() {
             testEditor = editormd("mdeditor", {
-                width   : "100%",
-                height  : 640,
+                width   : "95%",
+                height  : 720,
                 // syncScrolling : "single",
                 // saveHTMLToTextarea : true,
                 path    : "../static/custom_modules/editormd/lib/",
@@ -46,6 +46,7 @@
                 //     return editormd.toolbarModes[custom]
                 // }
             });
+            testEditor.setEditorTheme('neat')
         });
 
         function startConvert(){
