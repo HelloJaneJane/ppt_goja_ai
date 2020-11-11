@@ -19,8 +19,6 @@ from ISR.models import RRDN
 from gpuEngine.U2Net.model import U2NET 
 import torch
 
-from gpuEngine.iconify.pixel2style2pixel.script import inference as iconify 
-
 
 async def async_U2Net(outputName, net_model):
     u2test.main(outputName, net_model)
