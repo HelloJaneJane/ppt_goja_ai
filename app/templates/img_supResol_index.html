@@ -14,8 +14,8 @@
     <style>
         .img-origin {
             width: auto; height: auto;
-            max-width: 200px;
-            max-height: 200px;
+            /* max-width: 200px;
+            max-height: 200px; */
         }
 
         .arrow {
@@ -45,8 +45,8 @@
 
         .img-zoom-result {
             /*set the size of the result div:*/
-            width: 350px;
-            height: 350px;
+            width: 400px;
+            height: 400px;
         }
     </style>
 
@@ -119,22 +119,22 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div class="col-md-5 ftco-animate text-center">
+                <div class="col-md-4 ftco-animate text-center">
                     <div class="img-zoom-container">
-                        <img id="srcImg" class="img-origin" style="display:none">
-                        <div id="srcImgZoom" class="img-zoom-result" style="display:none"></div>
+                        <img id="srcImg" class="img-origin" style="display:none;">
+                        <div id="srcImgZoom" class="img-zoom-result" style="display:none; margin-top:10px; margin-bottom:10px;"></div>
                     </div>
                     <p>화질을 높이고 싶은 이미지 파일을 입력하세요.</p>
                     <input class="btn btn-primary" id="file-selector" type="file" accepting=".jpg, .jpeg, .png">
                 </div>
-                <div class="col-md-2 ftco-animate text-center">
+                <div class="col-md-3 ftco-animate text-center">
                     <p>버튼을 누르면 발펴고자 AI가 딥러닝처리를 시작합니다.</p>
                     <button type="button" onclick="submit();" class="btn btn-primary">START <i class="arrow right"></i></button>
                 </div>
-                <div class="col-md-5 ftco-animate text-center">
+                <div class="col-md-4 ftco-animate text-center">
                     <div class="img-zoom-container">
-                        <img id="outputImg" class="img-origin" style="display:none">
-                        <div id="outputImgZoom" class='img-zoom-result' style="display:none"></div>
+                        <img id="outputImg" class="img-origin" style="display:none;">
+                        <div id="outputImgZoom" class='img-zoom-result' style="display:none; margin-top:10px; margin-bottom:10px;"></div>
                     </div>
                     <p>결과물을 확인한 후 다운로드 버튼을 눌러주세요.</p>
                     <a href="javascript:downloadBtn()" class="btn btn-primary">DOWNLOAD</a>
@@ -158,10 +158,35 @@
 
         // 파일 인풋이 들어오면 이미지 보여주기
         inputElement.addEventListener('change', (e) => {
-            srcThumbnail.style.display = ""
-            srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
-            // srcThumbnail.src = "{{ url_for('static',filename='images/src3.png') }}"
 
+            let maxSize = 500 * 1024
+            let maxWidth = "400"
+            let maxHeight = "400"
+
+            let inputSize = e.target.files[0].size
+            if (inputSize>maxSize){
+                alert("500kb 이하의 이미지 파일만 입력해주세요.")
+                inputElement.focus()
+            }
+            else {
+                let inputImage = new Image()
+                inputImage.src = URL.createObjectURL(e.target.files[0])
+                inputImage.onload = function(){
+                    let inputWidth = this.width
+                    let inputHeight = this.height
+
+                    console.log("width: "+inputWidth+"/ height: "+inputHeight)
+                    console.log("maxWidth: "+maxWidth+"/ maxHeight: "+maxHeight)
+                    if (inputWidth>maxWidth || inputHeight>maxHeight){
+                        alert("가로 세로 길이가 400 이하인 이미지 파일만 입력해주세요.")
+                        inputElement.focus()
+                    }
+                    else {
+                        srcThumbnail.style.display = ""
+                        srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
+                    }
+                }
+            }
         },false)
 
         // 아웃풋 이미지 받아오면 줌 보여주기
@@ -215,10 +240,11 @@
                             url: '/image2',
                             data: jsonData,
                             success: function (result) {
-                                outThumbnail.style.display = ""
                                 outThumbnail.src = result
+                                outThumbnail.style.width = srcThumbnail.width + "px"
+                                outThumbnail.style.height = srcThumbnail.height + "px"
+                                outThumbnail.style.display = ""
                                 outThumbnail.setAttribute('crossOrigin','')
-                                // downloadURL = result
                             },
                             error: function (xtr, status, error) {
                                 alert(xtr + ":" + status + ":" + error);
