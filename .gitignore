@@ -283,3 +283,10 @@ $RECYCLE.BIN/
 
 # 제 모듈 폴더를 깃이 맘대로 지워버려요 왜죠
 !app/static/custom_modules/editormd/*
+
+# don't remove JONGHO's FOLDER!!!!! and ignore seight
+./gpuEngine/U2Net/saved_models/*
+./gpuEngine/SuperResolution/weights/*
+*.hdf5
+*.pth
+*.pt
