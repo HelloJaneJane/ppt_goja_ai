@@ -37,7 +37,10 @@ class PPTData:
         # initial value
         self._topic = pptTopic
         self._slideTypes = slideList
-        self._basePrs = Presentation(self._topic+"_2.pptx")
+        try :
+            self._basePrs = Presentation(self._topic+"_2.pptx")
+        except :
+            self._basePrs = Presentation("ISW_2.pptx")    
         self._toc = toc
 
     # 전체 주제 getter
