@@ -32,12 +32,13 @@ class TextData:
 
 class PPTData:
 
-    def __init__(self, textData, topic):
-        self._textData = textData
+    def __init__(self, slideList,pptTopic,toc):
+        self._slideList = slideList
         # initial value
-        self._topic = topic
-        self._slideTypes = textData._slideContents
-        self._basePrs = Presentation()
+        self._topic = pptTopic
+        self._slideTypes = slideList
+        self._basePrs = Presentation(self._topic+"_2.pptx")
+        self._toc = toc
 
     # 전체 주제 getter
     @property
@@ -62,13 +63,12 @@ class PPTData:
     def basePrs(self):
         #     # topic에 어울리는 테마의 피피티를 고른다
         if self._topic == "ISW":
-            downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
-            self._basePrs = Presentation("pptEngine/ISW.pptx")
+            downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
+            self._basePrs = Presentation("ISW_2.pptx")
         else:
-            downloadFileFromS3("basePPT/ISW.pptx","pptEngine/ISW.pptx")
-            self._basePrs = Presentation("pptEngine/ISW.pptx")
-
-
+            downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
+            self._basePrs = Presentation("pptEngine/ISW_2.pptx")
+            
     def newSlide(self, slideType):
         slide = self._basePrs.slides.add_slide(self._basePrs.slide_layouts[slideType])  # ppt 객체, 슬라이드마스터 번호, 제목
         #slide.shapes.title.text = self._textData._mainTitle
@@ -78,14 +78,18 @@ class PPTData:
     def titleSlide(self):  # NewSlide, 제목, 부제목
         slide = self.newSlide(0)#2에 제목 넣자
         slide.shapes.placeholders[0].text = self._textData._mainTitle
-        slide.shapes.placeholders[10].text = self._textData._subTitle
+        slide.shapes.placeholders[1].text = self._textData._subTitle
         return slide
 
 
     # 슬라이드 객체의 특정 텍스트박스에 대한 설정
     def setTextBox(self, slide, cnt, fontAdr):  # 슬라이드 객체, 텍스트박스 번호, 폰트주소
         text_box = slide.shapes.placeholders[cnt].text_frame
-        text_box.fit_text(font_file=fontAdr)
+        text_box.word_wrap = True
+        text_box.auto_size = MSO_AUTO_SIZE.TEXT_TO_FIT_SHAPE
+
+        #p = slide.shapes.add_textbox(1,1,1,1)
+        #text_box.fit_text(font_file=fontAdr)
         return text_box
 
     # 텍스트박스 객체에 새로운 텍스트를 추가한다. (줄단위)
@@ -94,14 +98,16 @@ class PPTData:
         #textbox.font.name = font
         #textbox.font.size = Pt(size)
         textbox.text = text
-        textbox.alignment = PP_ALIGN.LEFT
+        #textbox.alignment = PP_ALIGN.LEFT
+        return textbox
 
     def newLine(self, textbox, text, font, size):  # 텍스트박스 객체, 내용, 폰트, 크기
         line = textbox.add_paragraph()
-        line.font.name = font
-        line.font.size = Pt(size)
+        #line.font.name = font
+        #line.font.size = Pt(size)
         line.text = text
-        line.alignment = PP_ALIGN.LEFT
+        #line.alignment = PP_ALIGN.LEFT
+        return textbox
 
     def newLine_beauty(self,textbox,text,font,size,bold,rgb,center):
         line = textbox.add_paragraph()
@@ -116,13 +122,13 @@ class PPTData:
     def transitionSlide(self,idx):
         slide = self.newSlide(2)
         text_box = self.setTextBox(slide,0,'pptEngine/static/SangSangTitleM.ttf')
-        self.newLine(text_box,self._textData._midTitles[idx],'SangSangTitleM',44)
+        self.firstLine(text_box,self._textData._midTitles[idx],'SangSangTitleM',44)
 
     def index(self):
         slide = self.newSlide(1)
         text_box = self.setTextBox(slide,0,'pptEngine/static/SangSangTitleM.ttf')
         self.firstLine(text_box,'Contents','SangSangTitleM',32)
-        text_box = self.setTextBox(slide, 11, 'pptEngine/static/a타이틀고딕3.ttf')
+        text_box = self.setTextBox(slide, 13, 'pptEngine/static/a타이틀고딕3.ttf')
         pre_idx=0
         self.firstLine(text_box,self._textData._midTitles[0],'a타이틀고딕3',24)
         for sld_title in self._textData._slideTitles:
@@ -137,7 +143,7 @@ class PPTData:
 
     def input_title(self,slide, title):
         text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
-        self.newLine(text_box, title, 'SangSangTitleM', 32)
+        self.firstLine(text_box, title, 'SangSangTitleM', 32)
 
     def timeMultiLine(self,slide_,title,headers,bodies,Links):
         print(slide_)
@@ -149,32 +155,41 @@ class PPTData:
             self.firstLine(text_box,header,'Arial',10)
             line_cnt = line_cnt+2
         line_cnt = 14
+        flipflop=0
         for body in bodies:
             text_box = self.setTextBox(slide, line_cnt, 'pptEngine/static/DOSSaemmul.ttf')
             print(body)
-            flipflop=0
-            for line in body:
-                if flipflop==0 :
-                    self.firstLine(text_box,line,'Arial',10)
-                    flipflop=1
-                else :
-                    self.newLine(text_box,line,'Arial',10)
+            #if flipflop ==0 :
+            #    self.firstLine(text_box,body,'Arial',10)
+            #    flipflop=1
+            #else :
+            #    self.newLine(text_box,body,'Arial',10)
+            self.firstLine(text_box,body,'Airal',10)
             line_cnt = line_cnt + 2
         if not Links:
             return slide
-        image_start = 17+((slide_%6)/2)*2#7,9,11 now
+        print(str(slide_)+'번째 슬라이드')
+        image_start = int(17+(((slide_%6)-1)/2)*2)#7,9,11 now..?-> 17,19,21
+        print(image_start)
         num_list=[]
         for i in Links:
             num_list.append(image_start)
             image_start=image_start+1
+            print(image_start)
         return self.input_image(slide,num_list,Links)
 
     def defaultLine(self, title, contents, Links):
         slide = self.newSlide(3)
         self.input_title(slide, title)
         text_box = self.setTextBox(slide, 1, 'pptEngine/static/a타이틀고딕3.ttf')
+        flipflop=0
         for line in contents:
-            self.newLine(text_box, line[1], 'a타이틀고딕3', 20)
+            if flipflop == 0 :
+                self.firstLine(text_box, line[1], 'a타이틀고딕3', 20)
+                flipflop = 1
+            else :
+                self.newLine(text_box, line[1], 'a타이틀고딕3', 20)
+                
         if not Links:
             return slide
         image_start = 10
@@ -196,24 +211,33 @@ class PPTData:
             image_placeholder.insert_picture('tempoimage.jpg')
         return slide
 
+    def image_from_web(self,slide,blank_num,num_ls,keyword,Links):
+        Links.append(wrap_image(keyword))
+        num_ls.append(blank_num)
+        return self.input_image(slide,num_ls,Links)
+
     def singleLine(self,title,lines,Links):
+        print("--In SingleLine-- with"+title)
         if not Links:
-            slide = self.newSlide(5)
-        else :
             slide = self.newSlide(4)
+        else :
+            slide = self.newSlide(5)
         self.input_title(slide, title)
         text_box = self.setTextBox(slide, 13, 'pptEngine/static/a타이틀고딕3.ttf')
-        line = lines[0]
+        line = lines
         self.firstLine(text_box, line, 'a타이틀고딕3', 24)
+        num_list = []
         if not Links:
+            #print(line)
+            #keyword = get_NNG(line)
+            #print(keyword)
+            #return self.image_from_web(slide, 14, num_list, keyword, Links)
             return slide
-        image_start = 10
-        num_list=[]
+        image_start = 14
         for i in Links:
             num_list.append(image_start)
             image_start=image_start+1
         return self.input_image(slide,num_list,Links)
-
     def generate_slide(self, slideObj):
         if (isinstance(slideObj,SlideType_head_default)):
             contents=[]
@@ -228,7 +252,6 @@ class PPTData:
                 headers.append(tuple[0])
                 for body in tuple[1]:
                     bodies.append(body[1])
-            print(len(bodies))
             if not slideObj._imageLinks :
                 slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
             else :
@@ -269,16 +292,17 @@ class PPTData:
             return self.defaultLine(slideObj._title,slideObj._contentsList,slideObj._imageLinks)
 
         elif (isinstance(slideObj,SlideType_singleLine)):
-            return self.singleLine(slideObj._title,slideObj._text,slideObj._text,slideObj._imageLinks)
+            return self.singleLine(slideObj._title,slideObj._text,slideObj._imageLinks)
 
         elif (isinstance(slideObj, SlideType_multiLine)):
             headers = []
             bodies = []
             for line in slideObj._textList:
+                if not line:
+                    continue
                 bodies.append(line)
                 print(line)
-                print(type(line))
-                print(len(bodies))
+            print(str(len(bodies)) + '*2+8or9')
             if not slideObj._imageLinks :
                 slide = 8 + len(bodies) * 2 #self.newSlide(8 + len(bodies) * 2)  # 6,8,10
             else :
@@ -301,16 +325,16 @@ class PPTData:
             title = slideObj._titleTuple[0]
             subTitle = slideObj._titleTuple[1]
             text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
-            self.newLine(text_box, title, 'SangSangTitleM', 32)
+            self.firstLine(text_box, title, 'SangSangTitleM', 32)
             text_box = self.setTextBox(slide, 1, 'pptEngine/static/SangSangTitleM.ttf')
-            self.newLine(text_box, subTitle, 'SangSangTitleM', 32)
+            self.firstLine(text_box, subTitle, 'SangSangTitleM', 32)
             #if slideObj._imageLinks: TODO
 
         elif (isinstance(slideObj,SlideType_midTitle)):
-            slide = self.newSlide(1)#간지(?)
+            slide = self.newSlide(2)#간지(?)
             midTitle = slideObj._midTitle
             text_box = self.setTextBox(slide, 0, 'pptEngine/static/SangSangTitleM.ttf')
-            self.newLine(text_box, midTitle, 'SangSangTitleM', 32)
+            self.firstLine(text_box, midTitle, 'SangSangTitleM', 32)
             #if slideObj._imageLinks: TODO
 
         elif (isinstance(slideObj,SlideType_title)):
@@ -344,15 +368,20 @@ def wrap_image(keywords):
     #gmail_KEY
     image = Image(API_KEY)
     ims = image.search(q=keywords,
-                       lang='es',
+                       lang='en',
                        image_type='photo',
                        orientation='horizontal',
-                       category='animals',
+                       category='all',
                        safesearch='true',
-                       order='latest',
-                       page=2,
+                       order='popular',
+                       page=1,
                        per_page=3)
-    print(ims)
+    if(ims['total']<4):
+        return 'https://cdn.pixabay.com/photo/2020/06/30/23/21/cat-5357876_150.jpg'
+    tmp = ims['hits'][0]
+    url = tmp['previewURL']
+    return url
+
 
 # 디폴트 타입
 # [String] - 한줄내용
