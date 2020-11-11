@@ -154,10 +154,34 @@
 
         // 파일 인풋이 들어오면 이미지 보여주기
         inputElement.addEventListener('change', (e) => {
-            srcThumbnail.style.display = ""
-            srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
-            // srcThumbnail.src = "{{ url_for('static',filename='images/src3.png') }}"
 
+            let maxSize = 500 * 1024
+            let maxWidth = 500
+            let maxHeight = 500
+
+            let inputSize = e.target.files[0].size
+            if (inputSize>maxSize){
+                alert("500kb 이하의 이미지 파일만 입력해주세요.")
+                inputElement.focus()
+            }
+            else {
+                let inputImage = new Image()
+                inputImage.src = e.target.result
+                inputImage.onload = function(){
+                    let inputWidth = this.width
+                    let inputHeight = this.height
+
+                    console.log("width: "+inputWidth+"/ height: "+inputHeight)
+                    if (inputWidth>maxWidth || inputHeight>maxHeight){
+                        alert("가로 세로 길이가 500 이하인 이미지 파일만 입력해주세요.")
+                        inputElement.focus()
+                    }
+                    else {
+                        srcThumbnail.style.display = ""
+                        srcThumbnail.src = URL.createObjectURL(e.target.files[0]);
+                    }
+                }
+            }
         },false)
 
         // 아웃풋 이미지 받아오면 줌 보여주기
