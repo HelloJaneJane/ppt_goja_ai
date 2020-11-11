@@ -38,8 +38,10 @@ class PPTData:
         self._topic = pptTopic
         self._slideTypes = slideList
         try :
+            downloadFileFromS3("basePPT/"+self._topic+"_2.pptx","pptEngine/"+self._topic+"_2.pptx")
             self._basePrs = Presentation("basePPT/"+self._topic+"_2.pptx")
         except :
+            downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
             self._basePrs = Presentation("basePPT/ISW_2.pptx")    
         self._toc = toc
 
@@ -67,7 +69,7 @@ class PPTData:
         #     # topic에 어울리는 테마의 피피티를 고른다
         if self._topic == "ISW":
             downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
-            self._basePrs = Presentation("ISW_2.pptx")
+            self._basePrs = Presentation("pptEngine/ISW_2.pptx")
         else:
             downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
             self._basePrs = Presentation("pptEngine/ISW_2.pptx")
