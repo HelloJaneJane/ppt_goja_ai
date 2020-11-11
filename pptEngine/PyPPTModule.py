@@ -4,7 +4,8 @@ from pptx.util import Pt
 import json
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
-
+from pptx.enum.text import MSO_AUTO_SIZE
+import requests
 from server.awsModule import *
 from gpuEngine.ner_api import *
 
@@ -40,10 +41,10 @@ class PPTData:
         self._slideTypes = slideList
         try :
             downloadFileFromS3("basePPT/"+self._topic+"_2.pptx","pptEngine/"+self._topic+"_2.pptx")
-            self._basePrs = Presentation("basePPT/"+self._topic+"_2.pptx")
+            self._basePrs = Presentation("pptEngine/"+self._topic+"_2.pptx")
         except :
             downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
-            self._basePrs = Presentation("basePPT/ISW_2.pptx")    
+            self._basePrs = Presentation("pptEngine/ISW_2.pptx")    
         self._toc = toc
 
     # 전체 주제 getter
