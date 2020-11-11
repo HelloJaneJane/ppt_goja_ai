@@ -38,9 +38,9 @@ class PPTData:
         self._topic = pptTopic
         self._slideTypes = slideList
         try :
-            self._basePrs = Presentation(self._topic+"_2.pptx")
+            self._basePrs = Presentation("basePPT/"+self._topic+"_2.pptx")
         except :
-            self._basePrs = Presentation("ISW_2.pptx")    
+            self._basePrs = Presentation("basePPT/ISW_2.pptx")    
         self._toc = toc
 
     # 전체 주제 getter
