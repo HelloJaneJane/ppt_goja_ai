@@ -447,9 +447,6 @@ class SlideType:
 # class slideType_multiLine(SlideType):
 #     def __init__(self, lines):
 #         self._lines = lines
-
-
-
 class SlideType_title (SlideType):
     def __init__(self, titleTuple, imageLinks):
         self._titleTuple = titleTuple
@@ -461,36 +458,43 @@ class SlideType_midTitle (SlideType):
         self._imageLinks = imageLinks
 
 class SlideType_singleLine (SlideType):
-    def __init__(self, text, imageLinks):
+    def __init__(self, title, text, imageLinks):
+        self._title = title
         self._text = text
         self._imageLinks = imageLinks
 
 class SlideType_multiLine (SlideType):
-    def __init__(self, textList, imageLinks):
+    def __init__(self, title, textList, imageLinks):
+        self._title = title
         self._textList = textList
         self._imageLinks = imageLinks
 
 class SlideType_timeLine (SlideType):
-    def __init__(self, textList, imageLinks):
+    def __init__(self, title, textList, imageLinks):
+        self._title = title
         self._textList = textList
         self._imageLinks = imageLinks
 
 class SlideType_default (SlideType):
-    def __init__(self, contentsList, imageLinks):
+    def __init__(self, title, contentsList, imageLinks):
+        self._title = title
         self._contentsList = contentsList
         self._imageLinks = imageLinks
 
 class SlideType_head_timeLine (SlideType):
-    def __init__(self, headTuples, imageLinks):
+    def __init__(self, title, headTuples, imageLinks):
+        self._title = title
         self._headTuples = headTuples
         self._imageLinks = imageLinks
 
 class SlideType_head_multiLine (SlideType):
-    def __init__(self, headTuples, imageLinks):
+    def __init__(self, title, headTuples, imageLinks):
+        self._title = title
         self._headTuples = headTuples
         self._imageLinks = imageLinks
 
 class SlideType_head_default (SlideType):
-    def __init__(self, headTuples, imageLinks):
+    def __init__(self, title, headTuples, imageLinks):
+        self._title = title
         self._headTuples = headTuples
         self._imageLinks = imageLinks
