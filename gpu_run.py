@@ -76,29 +76,22 @@ def backrmv():
 @app.route("/supresol",methods=['POST'])
 def supresol():
     inputName = request.form.to_dict()['fileName']
-    outputName = 'backRmv_'+inputName.split('.')[0] + '.png'
+    outputName = 'SR_'+inputName.split('.')[0] + '.jpg'
 
     # 원래 사진 파일 s3에서 다운로드
     downloadFileFromS3('inputImage/superResolution/'+inputName,outputName)
-    """
+
     # super resolution 하기
     # chanel 4 ->3
-    img = outputName
-#    lr_img = Image.open(img)
-#    TypeError: unsupported operand type(s) for /: 'PngImageFile' and 'float'
-
-    lr_img = Image.open(img).convert("RGB")
-#    TypeError: unsupported operand type(s) for /: 'Image' and 'float'
-
+    lr_img = Image.open(outputName).convert("RGB")
     lr_img_np = np.array(lr_img)
-    lr_img_f = lr_img_np.astype(float)
-    print(lr_img_f.shape)
-    print(lr_img_f[0])
 
     model = RRDN(weights = 'gans')
-    sr_img_gan = model.predict(lr_img_f)
-    outputName = sr_img_gan
-    """
+    sr_img_gan = model.predict(lr_img_np)
+    sr_img_gan = Image.fromarray(sr_img_gan)
+    sr_img_gan.save(outputName)    
+
+
     # 후처리된 사진 파일 s3에 업로드 (+서버에선 파일 지움)
     uploadFileToS3(outputName, 'outputImage/superResolution/'+outputName)
     #os.remove(outputName)
