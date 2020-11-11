@@ -161,16 +161,16 @@ class PPTData:
             self.firstLine(text_box,header,'Arial',10)
             line_cnt = line_cnt+2
         line_cnt = 14
-        flipflop=0
         for body in bodies:
             text_box = self.setTextBox(slide, line_cnt, 'pptEngine/static/DOSSaemmul.ttf')
             print(body)
-            #if flipflop ==0 :
-            #    self.firstLine(text_box,body,'Arial',10)
-            #    flipflop=1
-            #else :
-            #    self.newLine(text_box,body,'Arial',10)
-            self.firstLine(text_box,body,'Airal',10)
+            flipflop=0
+            for line in body:
+                if flipflop ==0 :
+                    self.firstLine(text_box,line,'Arial',10)
+                    flipflop=1
+                else :
+                    self.newLine(text_box,line,'Arial',10)
             line_cnt = line_cnt + 2
         if not Links:
             return slide
@@ -306,7 +306,7 @@ class PPTData:
             for line in slideObj._textList:
                 if not line:
                     continue
-                bodies.append(line)
+                bodies.append([line])
                 print(line)
             print(str(len(bodies)) + '*2+8or9')
             if not slideObj._imageLinks :
@@ -319,7 +319,7 @@ class PPTData:
             headers = []
             bodies = []
             for line in slideObj._textList:
-                bodies.append(line)
+                bodies.append([line])
             if not slideObj._imageLinks :
                 slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
             else :
