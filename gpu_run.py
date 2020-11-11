@@ -19,17 +19,19 @@ from ISR.models import RRDN
 from gpuEngine.U2Net.model import U2NET 
 import torch
 
+from gpuEngine.iconify.pixel2style2pixel.script import inference as iconify 
 
 
 async def async_U2Net(outputName, net_model):
     u2test.main(outputName, net_model)
 
+async def async_iconify(outputName):
+    iconify.run(outputName)
+
 app=Flask(__name__)
 CORS(app)
 
-
-
-#~~
+#u2net model
 model_name='u2net'
 model_dir = os.path.join(os.getcwd(),'gpuEngine/U2Net/saved_models', model_name, model_name + '.pth')
 print("...load U2NET---173.6 MB")
@@ -95,13 +97,11 @@ def supresol():
     sr_img_gan = Image.fromarray(sr_img_gan)
     sr_img_gan.save(outputName)    
 
-
     # 후처리된 사진 파일 s3에 업로드 (+서버에선 파일 지움)
     uploadFileToS3(outputName, 'outputImage/superResolution/'+outputName)
     os.remove(outputName)
     # 파일 다운로드 s3 링크 받아오기
     url = getUrlFromS3('outputImage/superResolution/'+outputName)
-
 
     # 클라이언트로 링크 전송
     return url
@@ -115,7 +115,15 @@ def iconify():
     downloadFileFromS3('inputImage/iconify/'+inputName,outputName)
 
     # iconify 하기
-    ############
+    #loop = asyncio.get_event_loop()
+    loop = asyncio.new_event_loop()
+    print('new_event_loop()')
+    asyncio.set_event_loop(loop)
+    print('set_event_loop()')
+    loop.run_until_complete(async_iconify(outputName))
+    print('run_until_complete(iconify)')
+    loop.close()  
+    print(loop.is_closed())
 
     # 후처리된 사진 파일 s3에 업로드 (+서버에선 파일 지움)
     uploadFileToS3(outputName, 'outputImage/iconify/'+outputName)
