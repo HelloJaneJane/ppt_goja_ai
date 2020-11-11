@@ -7,6 +7,8 @@ from pptx.enum.text import PP_ALIGN
 
 from server.awsModule import *
 from gpuEngine.ner_api import *
+import requests
+from pptx.enum.text import MSO_AUTO_SIZE
 
 class TextData:
     def __init__(self, mainTitle, subTitle, midTitles, slideTitles, slideContents):
