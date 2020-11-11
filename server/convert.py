@@ -123,13 +123,15 @@ def convert(htmlStr):
                 # h5이 있으면
                 if headDict!={}:
                     # 기존 헤드에 추가하기
-                    headDict['Contents'].append(('p',text))
-                    headDict['pCnt'] += 1
+                    if text :#changed
+                        headDict['Contents'].append(('p',text))
+                        headDict['pCnt'] += 1
                 # h5이 없으면
                 else:
                     # 기존 슬라이드에 추가하기
-                    slideDict['Contents'].append(('p',text))
-                    slideDict['pCnt'] += 1
+                    if text:#changed
+                        slideDict['Contents'].append(('p',text))
+                        slideDict['pCnt'] += 1
 
         elif tag=='li':
             # h4이 없으면
@@ -143,13 +145,15 @@ def convert(htmlStr):
                 # h5이 있으면
                 if headDict!={}:
                     # 기존 헤드에 추가하기
-                    headDict['Contents'].append(('li',text))
-                    headDict['liCnt'] += 1
+                    if text :#changed
+                        headDict['Contents'].append(('li',text))
+                        headDict['liCnt'] += 1
                 # h5이 없으면
                 else:
+                    if text :#changed
                     # 기존 슬라이드에 추가하기
-                    slideDict['Contents'].append(('li',text))
-                    slideDict['liCnt'] += 1
+                        slideDict['Contents'].append(('li',text))
+                        slideDict['liCnt'] += 1
 
         elif tag=='img':
             # 맨 처음이면
@@ -198,23 +202,23 @@ def convert(htmlStr):
 
 
     # [3.2] 피피티 엔진 작업
-    # myPPTData = PPTData(slideList, pptTopic, toc)
-    # myPPTData.generate()
-    # myPPTData.write(outputName)
+    myPPTData = PPTData(slideList, pptTopic, toc)
+    myPPTData.generate()
+    myPPTData.write(outputName)
 
     # [3.3] 유저 다운로드
     # 만든 피피티 파일을 s3로 업로드 (+서버 안에선 파일 지우기)
-    # uploadFileToS3(outputName, 'outputPPT/'+outputName)
-    # os.remove(outputName)
+    uploadFileToS3(outputName, 'outputPPT/'+outputName)
+    os.remove(outputName)
 
     # 파일 다운로드할 수 있는 s3 링크 받아오기
-    # url = getUrlFromS3('outputPPT/'+outputName)
-    # print(url)
+    url = getUrlFromS3('outputPPT/'+outputName)
+    print(url)
 
     # 링크를 클라이언트로 전송 -> 피피티 다운로드 버튼에 연결
 
-    # return { 'status': 'success', 'url': url }
-    return { 'status': 'success', 'url': "/ppt"}
+    return { 'status': 'success', 'url': url }
+    # return { 'status': 'success', 'url': "/ppt"}
 
 
 def getAllValues(d):
@@ -306,10 +310,11 @@ def getSlideType(slideDict):
 
 
 def getNouns(str):
-    ## TODO: 이종호가 api 만들어주면
-    # 문자열 api한테 전송
-    # 명사구 담겨있는 리스트 리턴
-    return []
+    try:
+        list = get_NNG(str)
+    except:
+        list = []
+    return list
 
 def checkTimeLine(nounList):
     timeNounList = ['일정','스케쥴','단계','레시피','순서']
