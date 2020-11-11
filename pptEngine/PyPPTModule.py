@@ -42,10 +42,10 @@ class PPTData:
         self._slideTypes = slideList
         try :
             downloadFileFromS3("basePPT/"+self._topic+"_2.pptx","pptEngine/"+self._topic+"_2.pptx")
-            self._basePrs = Presentation("basePPT/"+self._topic+"_2.pptx")
+            self._basePrs = Presentation("pptEngine/"+self._topic+"_2.pptx")
         except :
             downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
-            self._basePrs = Presentation("basePPT/ISW_2.pptx")    
+            self._basePrs = Presentation("pptEngine/ISW_2.pptx")    
         self._toc = toc
 
     # 전체 주제 getter
