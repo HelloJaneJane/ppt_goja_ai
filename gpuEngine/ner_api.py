@@ -64,10 +64,11 @@ def get_NNG(text):
     temp_json = json.loads(response.data.decode('utf-8'))  # data를 json형식으로 read
 
     NNG_list = []
-    for j in range(len(temp_json['return_object']['sentence'])):  
-        for i in range(len(temp_json['return_object']['sentence'][j])):
-            if temp_json['return_object']['sentence'][j]['morp'][i]['type'] == 'NNG':
-                NNG_list.append(temp_json['return_object']['sentence'][j]['morp'][i]['lemma'])
+    for j in temp_json['return_object']['sentence']:  # 문장별로 topic 추출
+        for i in j['morp']:
+            if i['type'] == 'NNG':
+                print(i['lemma'])
+                NNG_list.append(i['lemma'])
 
     return NNG_list
 
@@ -95,10 +96,10 @@ def get_MAJ(text):
     temp_json = json.loads(response.data.decode('utf-8'))  # data를 json형식으로 read
 
     MAJ_list = []
-    for j in range(len(temp_json['return_object']['sentence'])): 
-        for i in range(len(temp_json['return_object']['sentence'][j])):
-            if temp_json['return_object']['sentence'][j]['morp'][i]['type'] == 'MAJ':
-                MAJ_list.append(temp_json['return_object']['sentence'][j]['morp'][i]['lemma'])
+    for j in temp_json['return_object']['sentence']:  # 문장별로 topic 추출
+        for i in j['morp']:
+            if i['type'] == 'MAJ':
+                MAJ_list.append(i['lemma'])
 
     return MAJ_list
 
