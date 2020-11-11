@@ -6,6 +6,7 @@ from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
 
 from server.awsModule import *
+from gpuEngine.ner_api import *
 
 class TextData:
     def __init__(self, mainTitle, subTitle, midTitles, slideTitles, slideContents):
