@@ -12,18 +12,31 @@ import sys
 from gpuEngine import *
 from gpuEngine.U2Net import u2net_test as u2test
 from gpuEngine import U2Net
-from gpuEngine import image_super_resolution
+from gpuEngine import SuperResolution
 import numpy as np
 import asyncio
 from PIL import Image
 from ISR.models import RDN
 from ISR.models import RRDN
 
-async def async_U2Net(outputName):
-    u2test.main(outputName)
+async def async_U2Net(outputName, net_model):
+    u2test.main(outputName, net_model)
 
 app=Flask(__name__)
 CORS(app)
+
+from gpuEngine.U2Net.model import U2NET 
+import torch
+
+model_name='u2net'#u2netp
+model_dir = os.path.join(os.getcwd(),'gpuEngine/U2Net/saved_models', model_name, model_name + '.pth')
+print("...load U2NET---173.6 MB")
+net = U2NET(3,1)
+net.load_state_dict(torch.load(model_dir))
+if torch.cuda.is_available():
+    net.cuda()
+net.eval()
+
 
 @app.route("/hello",methods=['GET'])
 def hello():
@@ -43,7 +56,7 @@ def backrmv():
     print('new_event_loop()')
     asyncio.set_event_loop(loop)
     print('set_event_loop()')
-    loop.run_until_complete(async_U2Net(outputName))
+    loop.run_until_complete(async_U2Net(outputName, net))
     print('run_until_complete(u2net)')
     loop.close()  
     print('loop.close()')
