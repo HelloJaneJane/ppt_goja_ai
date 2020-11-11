@@ -14,8 +14,8 @@
     <style>
         .img-origin {
             width: auto; height: auto;
-            max-width: 200px;
-            max-height: 200px;
+            /* max-width: 200px;
+            max-height: 200px; */
         }
 
         .arrow {
@@ -45,8 +45,8 @@
 
         .img-zoom-result {
             /*set the size of the result div:*/
-            width: 350px;
-            height: 350px;
+            width: 400px;
+            height: 400px;
         }
     </style>
 
@@ -160,8 +160,8 @@
         inputElement.addEventListener('change', (e) => {
 
             let maxSize = 500 * 1024
-            let maxWidth = 500
-            let maxHeight = 500
+            let maxWidth = 400
+            let maxHeight = 400
 
             let inputSize = e.target.files[0].size
             if (inputSize>maxSize){
@@ -177,7 +177,7 @@
 
                     console.log("width: "+inputWidth+"/ height: "+inputHeight)
                     if (inputWidth>maxWidth || inputHeight>maxHeight){
-                        alert("가로 세로 길이가 500 이하인 이미지 파일만 입력해주세요.")
+                        alert("가로 세로 길이가 400 이하인 이미지 파일만 입력해주세요.")
                         inputElement.focus()
                     }
                     else {
