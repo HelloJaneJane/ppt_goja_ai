@@ -8,6 +8,8 @@ from pptx.enum.text import MSO_AUTO_SIZE
 import requests
 from server.awsModule import *
 from gpuEngine.ner_api import *
+import requests
+from pptx.enum.text import MSO_AUTO_SIZE
 
 class TextData:
     def __init__(self, mainTitle, subTitle, midTitles, slideTitles, slideContents):
@@ -162,16 +164,16 @@ class PPTData:
             self.firstLine(text_box,header,'Arial',10)
             line_cnt = line_cnt+2
         line_cnt = 14
-        flipflop=0
         for body in bodies:
             text_box = self.setTextBox(slide, line_cnt, 'pptEngine/static/DOSSaemmul.ttf')
             print(body)
-            #if flipflop ==0 :
-            #    self.firstLine(text_box,body,'Arial',10)
-            #    flipflop=1
-            #else :
-            #    self.newLine(text_box,body,'Arial',10)
-            self.firstLine(text_box,body,'Airal',10)
+            flipflop=0
+            for line in body:
+                if flipflop ==0 :
+                    self.firstLine(text_box,line,'Arial',10)
+                    flipflop=1
+                else :
+                    self.newLine(text_box,line,'Arial',10)
             line_cnt = line_cnt + 2
         if not Links:
             return slide
@@ -257,12 +259,15 @@ class PPTData:
             bodies=[]
             for tuple in slideObj._headTuples:
                 headers.append(tuple[0])
-                for body in tuple[1]:
-                    bodies.append(body[1])
+                body = []
+                for line in tuple[1]:
+                    body.append(line[1])
+                bodies.append(body)
             if not slideObj._imageLinks :
-                slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
+                slide = 2 + len(headers) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
             else :
-                slide = 3+len(bodies)*2 #self.newSlide(3+len(bodies)*2) # 7,9,11
+                slide = 3+len(headers)*2 #self.newSlide(3+len(bodies)*2) # 7,9,11
+            print('슬라이드 번호 : '+str(slide))
             return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
         elif (isinstance(slideObj, SlideType_head_multiLine)):
             headers = []
@@ -296,6 +301,14 @@ class PPTData:
             return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
 
         elif (isinstance(slideObj,SlideType_default)):
+            if not slideObj._contentsList :
+                slide = self.newSlide(30)
+                self.input_title(slide, slideObj._title)
+                image_start = 10
+                num_list = []
+                num_list.append(image_start)
+                return self.input_image(slide,num_list,slideObj._imageLinks)
+
             return self.defaultLine(slideObj._title,slideObj._contentsList,slideObj._imageLinks)
 
         elif (isinstance(slideObj,SlideType_singleLine)):
@@ -307,7 +320,7 @@ class PPTData:
             for line in slideObj._textList:
                 if not line:
                     continue
-                bodies.append(line)
+                bodies.append([line])
                 print(line)
             print(str(len(bodies)) + '*2+8or9')
             if not slideObj._imageLinks :
@@ -320,7 +333,7 @@ class PPTData:
             headers = []
             bodies = []
             for line in slideObj._textList:
-                bodies.append(line)
+                bodies.append([line])
             if not slideObj._imageLinks :
                 slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
             else :

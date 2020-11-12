@@ -317,7 +317,7 @@ def getNouns(str):
     return list
 
 def checkTimeLine(nounList):
-    timeNounList = ['일정','스케쥴','단계','레시피','순서']
+    timeNounList = ['일정','스케쥴','단계','레시피','순서','시나리오','과정','프로세스']
     for n in nounList:
         if n in timeNounList:
             return True
