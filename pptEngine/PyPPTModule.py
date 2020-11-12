@@ -258,12 +258,15 @@ class PPTData:
             bodies=[]
             for tuple in slideObj._headTuples:
                 headers.append(tuple[0])
-                for body in tuple[1]:
-                    bodies.append(body[1])
+                body = []
+                for line in tuple[1]:
+                    body.append(line[1])
+                bodies.append(body)
             if not slideObj._imageLinks :
-                slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
+                slide = 2 + len(headers) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
             else :
-                slide = 3+len(bodies)*2 #self.newSlide(3+len(bodies)*2) # 7,9,11
+                slide = 3+len(headers)*2 #self.newSlide(3+len(bodies)*2) # 7,9,11
+            print('슬라이드 번호 : '+str(slide))
             return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
         elif (isinstance(slideObj, SlideType_head_multiLine)):
             headers = []
@@ -297,6 +300,14 @@ class PPTData:
             return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
 
         elif (isinstance(slideObj,SlideType_default)):
+            if not slideObj._contentsList :
+                slide = self.newSlide(30)
+                self.input_title(slide, slideObj._title)
+                image_start = 10
+                num_list = []
+                num_list.append(image_start)
+                return self.input_image(slide,num_list,slideObj._imageLinks)
+
             return self.defaultLine(slideObj._title,slideObj._contentsList,slideObj._imageLinks)
 
         elif (isinstance(slideObj,SlideType_singleLine)):
