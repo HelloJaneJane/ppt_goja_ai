@@ -56,10 +56,8 @@ def main(outputName, net):
     # --------- 1. get image path and name ---------
     #model_name='u2net'#u2netp
 
-
     image_dir = os.path.join('./', outputName)
     prediction_dir = os.path.join('./')
-#    model_dir = os.path.join(os.getcwd(), 'saved_models', model_name, model_name + '.pth')
 
     img_name_list = [image_dir]
     print(img_name_list)
@@ -76,7 +74,7 @@ def main(outputName, net):
                                         shuffle=False,
                                         num_workers=1)
 
-    # --------- 4. inference for each image ---------
+    # --------- 3. inference for each image ---------
     for i_test, data_test in enumerate(test_salobj_dataloader):
 
         inputs_test = data_test['image']
@@ -100,33 +98,7 @@ def main(outputName, net):
 
         del d1,d2,d3,d4,d5,d6,d7
 
-    # --------- 3. model define ---------
-'''
-    if(model_name=='u2net'):
-        print("...load U2NET---173.6 MB")
-        net = U2NET(3,1)
-    elif(model_name=='u2netp'):
-        print("...load U2NEP---4.7 MB")
-        net = U2NETP(3,1)
-    net.load_state_dict(torch.load(model_dir))
-    if torch.cuda.is_available():
-        net.cuda()
-    net.eval()
-'''
-
 
 
 if __name__ == "__main__":
-    '''
-    outputName = 'test1.png' 
-    model_name='u2net'#u2netp
-    model_dir = os.path.join(os.getcwd(), 'saved_models', model_name, model_name + '.pth')
-    print("...load U2NET---173.6 MB")
-    net = U2NET(3,1)
-    net.load_state_dict(torch.load(model_dir))
-    if torch.cuda.is_available():
-        net.cuda()
-    net.eval()
-    '''
-
     main(outputName, net)
