@@ -7,7 +7,8 @@
 
         <title> 발표? 발펴고자! </title>
 
-        <link href="https://fonts.googleapis.com/css?family=Work+Sans:100,200,300,400,700,800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans:100,200,300,400,700,800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:100,200,300,400,700,800" rel="stylesheet">
 
         <link rel="stylesheet" href="{{ url_for('static',filename='css/open-iconic-bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static',filename='css/animate.css') }}">
@@ -36,7 +37,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
             <div class="container">
                 <a class="navbar-brand" href="{{ url_for('default') }}">
-                    <img src="{{ url_for('static',filename='images/home_logo.png') }}">
+                    <img class="home-logo" src="{{ url_for('static',filename='images/home_logo_outline.svg') }}" width="228" height="71">
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="oi oi-menu"></span> Menu
@@ -44,19 +45,23 @@
             
                 <div class="collapse navbar-collapse" id="ftco-nav">
                     <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active"><a href="{{ url_for('default') }}" class="nav-link">서비스 소개</a></li>
-                    <li class="nav-item"><a href="{{ url_for('ppt') }}" class="nav-link">PPT 만들기</a></li>
-                    <li class="nav-item"><a href="{{ url_for('image') }}" class="nav-link">사진 편집하기</a></li>
+                    <li class="nav-item"><a href="{{ url_for('default') }}" class="nav-link">서비스 소개</a></li>
+                    <li class="nav-item"><a href="{{ url_for('ppt') }}" class="nav-link">PPT</a></li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Help</a>
+                        <a class="nav-link dropdown-toggle" href="" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Image</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown04">
-                            <a class="dropdown-item" href="{{ url_for('contact') }}">문의하기</a>
+                            <a class="dropdown-item" href="{{ url_for('image1') }}">배경 지우기</a>
+                            <a class="dropdown-item" href="{{ url_for('image2') }}">해상도 높이기</a>
+                            <a class="dropdown-item" href="{{ url_for('image3') }}">아이콘 만들기</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Info</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown04">
                             <a class="dropdown-item" href="{{ url_for('devinfo') }}">개발자 정보</a>
                             <a class="dropdown-item" href="{{ url_for('licinfo') }}">라이센스 정보</a>
                         </div>
                     </li>
-                    <li class="nav-item"><a href="{{ url_for('login') }}" class="nav-link">Login</a></li>
-                    <li class="nav-item"><a href="{{ url_for('register') }}" class="nav-link">Register</a></li>
                     <!-- <li class="nav-item cta"><a href="contact.html" class="nav-link"><span>Get in touch</span></a></li> -->
                     </ul>
                 </div>
@@ -71,43 +76,42 @@
         <!-- Footer -->
         <footer class="ftco-footer ftco-bg-dark ftco-section">
             <div class="container">
-            <div class="row mb-5">
-                <div class="col-md">
-                <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Developers</h2>
-                    <p><strong>SoftwareMaestro 11기 연수생</strong></p>
-                    <p>발표합니까, 휴먼?<br>이종호(L), 남지훈, 이제인</p>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Developers</h2>
+                        <p><strong>SW마에스트로 11기 연수생</strong></p>
+                        <p>발표합니까 휴먼?<br>이종호(L), 남지훈, 이제인</p>
+                    </div>
                 </div>
+                <div class="col-md-3">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Contacts</h2>
+                        <ul class="list-unstyled">
+                        <li><a href="mailto:jhlees17@naver.com" class="py-1 d-block">jhlees17</a></li>
+                        <li><a href="mailto:skawlgns98@naver.com" class="py-1 d-block">skawlgns98</a></li>
+                        <li><a href="mailto:janeyi@naver.com" class="py-1 d-block">janeyi</a></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-md">
-                <div class="ftco-footer-widget mb-4 ml-5">
-                    <h2 class="ftco-heading-2">Quick Links</h2>
-                    <ul class="list-unstyled">
-                    <li><a href="{{ url_for('default') }}" class="py-2 d-block">서비스 소개</a></li>
-                    <li><a href="{{ url_for('ppt') }}" class="py-2 d-block">PPT 만들기</a></li>
-                    <li><a href="{{ url_for('image') }}" class="py-2 d-block">이미지 편집하기</a></li>
-                    <li><a href="{{ url_for('contact') }}" class="py-2 d-block">문의하기</a></li>
-                    <li><a href="{{ url_for('login') }}" class="py-2 d-block">로그인</a></li>
-                    <li><a href="{{ url_for('register') }}" class="py-2 d-block">회원가입</a></li>
-                    </ul>
+                <div class="col-md-4">
+                    <div class="ftco-footer-widget mb-4">
+                        <h2 class="ftco-heading-2">Quick Links</h2>
+                        <ul class="list-unstyled">
+                        <li><a href="{{ url_for('default') }}" class="py-1 d-block">Home</a></li>
+                        <li><a href="{{ url_for('ppt') }}" class="py-1 d-block">[PPT] Maker</a></li>
+                        <li><a href="{{ url_for('image1') }}" class="py-1 d-block">[Image] Background Removal</a></li>
+                        <li><a href="{{ url_for('image2') }}" class="py-1 d-block">[Image] Super Resolution</a></li>
+                        <li><a href="{{ url_for('image3') }}" class="py-1 d-block">[Image] Iconify</a></li>
+                        </ul>
+                    </div>
                 </div>
-                </div>
-                <div class="col-md">
-                <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Contacts</h2>
-                    <ul class="list-unstyled">
-                    <li><a href="mailto:jhlees17@naver.com" class="py-2 d-block">jhlees17@naver.com</a></li>
-                    <li><a href="mailto:skawlgns98@naver.com" class="py-2 d-block">skawlgns98@naver.com</a></li>
-                    <li><a href="mailto:janeyi@naver.com" class="py-2 d-block">janeyi@naver.com</a></li>
-                    </ul>
-                </div>
-                </div>
-                <div class="col-md">
-                <div class="ftco-footer-widget mb-12">
-                    <ul class="ftco-footer-social list-unstyled float-md-left float-lft">
-                    <li class="ftco-animate"><a href="https://www.youtube.com/channel/UCwK-h3ruoEbCzgr92Ebq0pA"><span class="icon-youtube-play"></span></a></li>
-                    </ul>
-                </div>
+                <div class="col-md-2">
+                    <div class="ftco-footer-widget mb-12">
+                        <ul class="ftco-footer-social list-unstyled float-md-left float-lft">
+                        <li class="ftco-animate"><a href="https://www.youtube.com/channel/UCwK-h3ruoEbCzgr92Ebq0pA"><span class="icon-youtube-play"></span></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="row">
