@@ -28,7 +28,7 @@
 
 			if (editor.find("." + dialogName).length < 1)
 			{			
-				var dialogContent = "<div class=\"markdown-body\" style=\"font-family:Noto Sans, Noto Sans KR,Arial;height:390px;overflow:auto;font-size:14px;border-bottom:1px solid #ddd;padding:0 20px 20px 0;\"></div>";
+				var dialogContent = "<div class=\"md-body\" style=\"font-family:Noto Sans, Noto Sans KR,Arial;height:390px;overflow:auto;font-size:14px;border-bottom:1px solid #ddd;padding:0 20px 20px 0;\"></div>";
 
 				dialog = this.createDialog({
 					name       : dialogName,
@@ -59,7 +59,7 @@
 			this.dialogLockScreen();
 			dialog.show();
 
-			var helpContent = dialog.find(".markdown-body");
+			var helpContent = dialog.find(".md-body");
 
 			if (helpContent.html() === "") 
 			{
