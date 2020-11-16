@@ -42,7 +42,7 @@ def get_topic(text):
             topic_list.extend(topicTagDict[nerTag])
 
     if len(topic_list)==0:
-        return None
+        return 'DEFAULT'
 
     topicCounter = Counter(topic_list)
     topicKeys = topicCounter.keys()
