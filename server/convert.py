@@ -185,40 +185,40 @@ def convert(htmlStr):
 
     # 목차
     toc = [midTitle.get_text() for midTitle in bs.find_all('h3')]
-    print("목차",end='')
-    print(toc)
+    # print("목차",end='')
+    # print(toc)
 
     # [3.1] topic 추출
     slideDictValueList = list(getAllValues(slideDictList))
-    print(slideDictValueList)
+    # print(slideDictValueList)
     textDataStr = ''
     for s in slideDictValueList:
         if s!=None: textDataStr += s + ' '
     
-    print(textDataStr)
+    # print(textDataStr)
     pptTopic = get_topic(textDataStr)
     print("토픽",end='')
     print(pptTopic)
 
 
     # [3.2] 피피티 엔진 작업
-    myPPTData = PPTData(slideList, pptTopic, toc)
-    myPPTData.generate()
-    myPPTData.write(outputName)
+    # myPPTData = PPTData(slideList, pptTopic, toc)
+    # myPPTData.generate()
+    # myPPTData.write(outputName)
 
     # [3.3] 유저 다운로드
     # 만든 피피티 파일을 s3로 업로드 (+서버 안에선 파일 지우기)
-    uploadFileToS3(outputName, 'outputPPT/'+outputName)
-    os.remove(outputName)
+    # uploadFileToS3(outputName, 'outputPPT/'+outputName)
+    # os.remove(outputName)
 
     # 파일 다운로드할 수 있는 s3 링크 받아오기
-    url = getUrlFromS3('outputPPT/'+outputName)
-    print(url)
+    # url = getUrlFromS3('outputPPT/'+outputName)
+    # print(url)
 
     # 링크를 클라이언트로 전송 -> 피피티 다운로드 버튼에 연결
+    # return { 'status': 'success', 'url': url }
 
-    return { 'status': 'success', 'url': url }
-    # return { 'status': 'success', 'url': "/ppt"}
+    return { 'status': 'success', 'url': "/ppt" }
 
 
 def getAllValues(d):

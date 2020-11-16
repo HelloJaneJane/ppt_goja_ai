@@ -4,6 +4,7 @@ import json
 from collections import Counter
 import itertools
 from collections.abc import Iterable
+from gpuEngine.topic_data import *
 
 def get_topic(text):
 
@@ -34,10 +35,25 @@ def get_topic(text):
     topic_list = []
     for j in range(len(temp_json['return_object']['sentence'])):  # 문장별로 topic 추출
         for i in range(len(temp_json['return_object']['sentence'][j]['NE'])):
-            topic_list.append(temp_json['return_object']['sentence'][j]['NE'][i]['type'].replace('_', '')[2:])
+            nerTag = temp_json['return_object']['sentence'][j]['NE'][i]['type']
+            # print(temp_json['return_object']['sentence'][j]['NE'][i]['text'],end='->')
+            # print(nerTag,end='->')
+            # print(topicTagDict[nerTag])
+            topic_list.extend(topicTagDict[nerTag])
 
-    print(topic_list)                                                        #topic 최빈값 출력
-    topic = Counter(topic_list).most_common(n=1)[0][0] if len(topic_list)>0 else None
+    if len(topic_list)==0:
+        return None
+
+    topicCounter = Counter(topic_list)
+    topicKeys = topicCounter.keys()
+    for t in topicKeys:
+        # print(t,end='->')
+        # print(topicCounter[t],end='*')
+        # print(topicWeightDict[t])
+        topicCounter[t] = topicCounter[t]*topicWeightDict[t]
+    topic = topicCounter.most_common(n=1)[0][0]
+    # print(topic)
+
     return topic
 
 
@@ -67,7 +83,7 @@ def get_NNG(text):
     for j in temp_json['return_object']['sentence']:  # 문장별로 topic 추출
         for i in j['morp']:
             if i['type'] == 'NNG':
-                print(i['lemma'])
+                # print(i['lemma'])
                 NNG_list.append(i['lemma'])
 
     return NNG_list
