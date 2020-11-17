@@ -7,4 +7,10 @@
 {% endblock %}
 
 {% block content %}
+
+
+    <script type="text/javascript">
+        $('a[href="' + this.location.pathname + '"]').parent().parent().addClass('active');
+    </script>
+
 {% endblock %}
