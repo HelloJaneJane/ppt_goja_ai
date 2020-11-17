@@ -279,7 +279,7 @@ class PPTData:
 
         elif (isinstance(slideObj,SlideType_default)):
             if not slideObj._contentsList :
-                slide = self.newSlide(30)
+                slide = self.newSlide(40)
                 self.input_title(slide, slideObj._title)
                 image_start = 10
                 num_list = []
@@ -297,24 +297,24 @@ class PPTData:
             for line in slideObj._textList:
                 if not line:
                     continue
-                bodies.append(line)
-                # print(line)
-            # print(str(len(bodies)) + '*2+8or9')
+                bodies.append([line])
+                print(line)
+            print(str(len(bodies)) + '*2+8or9')
             if not slideObj._imageLinks :
-                slide = 8 + len(bodies) * 2 #self.newSlide(8 + len(bodies) * 2)  # 6,8,10
+                slide = 28 + len(bodies) * 2 #self.newSlide(8 + len(bodies) * 2)  # 6,8,10
             else :
-                slide = 9+len(bodies)*2 #self.newSlide(9+len(bodies)*2) # 7,9,11
+                slide = 29+len(bodies)*2 #self.newSlide(9+len(bodies)*2) # 7,9,11
             return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
 
         elif (isinstance(slideObj, SlideType_timeLine)):
-            headers = []
+           headers = []
             bodies = []
             for line in slideObj._textList:
                 bodies.append([line])
             if not slideObj._imageLinks :
-                slide = 2 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
+                slide = 22 + len(bodies) * 2#self.newSlide(2 + len(bodies) * 2)  # 6,8,10
             else :
-                slide = 3+len(bodies)*2#self.newSlide(3+len(bodies)*2) # 7,9,11
+                slide = 23+len(bodies)*2#self.newSlide(3+len(bodies)*2) # 7,9,11
             return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
 
         elif (isinstance(slideObj, SlideType_title)):
