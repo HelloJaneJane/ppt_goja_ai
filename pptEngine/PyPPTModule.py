@@ -8,44 +8,33 @@ from pptx.enum.text import MSO_AUTO_SIZE
 import requests
 from server.awsModule import *
 from gpuEngine.ner_api import *
-
-class TextData:
-    def __init__(self, mainTitle, subTitle, midTitles, slideTitles, slideContents):
-        self._mainTitle = mainTitle
-        self._subTitle = subTitle
-        self._midTitles = midTitles
-        self._slideTitles = slideTitles
-        self._slideContents = slideContents
-
-    def __print__(self):
-        print("---TextData Print---")
-        print("제목: " + self._mainTitle)
-        print("부제목: " + self._subTitle)
-        print("중제목들 : ", end='')
-        print(self._midTitles)
-        print("슬라이드소제목들: ",end='')
-        print(self._slideTitles)
-        print("슬라이드내용들: ",end='')
-        print(self._slideContents)
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, ensure_ascii = False, sort_keys=True, indent=4)
-
+import random
+import os
 
 class PPTData:
-
     def __init__(self, slideList,pptTopic,toc):
         self._slideList = slideList
         # initial value
         self._topic = pptTopic
         self._slideTypes = slideList
-        try :
-            downloadFileFromS3("basePPT/"+self._topic+"_2.pptx","pptEngine/"+self._topic+"_2.pptx")
-            self._basePrs = Presentation("pptEngine/"+self._topic+"_2.pptx")
-        except :
-            downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
-            self._basePrs = Presentation("pptEngine/ISW_2.pptx")    
         self._toc = toc
+
+        # 토픽에 맞는 피피티 템플릿 다운로드
+        try :
+            # baseFilePath = "basePPT/"+ self._topic + "_"+str(random.randint(1,2))+".pptx"
+            baseFilePath = "basePPT/"+ self._topic + "_1.pptx"
+            # self._resFilePath = "pptEngine/"+ self._topic + "_"+str(random.randint(1,2))+".pptx"
+            self._resFilePath = "pptEngine/"+ self._topic + "_1.pptx"
+            downloadFileFromS3(baseFilePath, self._resFilePath)
+            self._basePrs = Presentation(self._resFilePath)
+        except :
+            baseFilePath = "basePPT/DEFAULT_1.pptx"
+            self._resFilePath = "pptEngine/DEFAULT_1.pptx"
+            downloadFileFromS3(baseFilePath, self._resFilePath)
+            self._basePrs = Presentation(self._resFilePath)
+
+        # downloadFileFromS3(baseFilePath, self._resFilePath)
+        # self._basePrs = Presentation(self._resFilePath)
 
     # 전체 주제 getter
     @property
@@ -59,22 +48,6 @@ class PPTData:
         result = None
         # 결과를 토대로 topic을 선정한다
         self._topic = result
-
-    # # 베이스 테마 파일 getter
-    # @property
-    def basePrs_(self):
-        return self._basePrs
-
-    # # 베이스 테마 파일 setter
-    # @basePrs.setter
-    def basePrs(self):
-        #     # topic에 어울리는 테마의 피피티를 고른다
-        if self._topic == "ISW":
-            downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
-            self._basePrs = Presentation("pptEngine/ISW_2.pptx")
-        else:
-            downloadFileFromS3("basePPT/ISW_2.pptx","pptEngine/ISW_2.pptx")
-            self._basePrs = Presentation("pptEngine/ISW_2.pptx")
             
     def newSlide(self, slideType):
         slide = self._basePrs.slides.add_slide(self._basePrs.slide_layouts[slideType])  # ppt 객체, 슬라이드마스터 번호, 제목
@@ -104,7 +77,12 @@ class PPTData:
     def firstLine(self, textbox, text, font, size):
         #textbox.font.name = font
         #textbox.font.size = Pt(size)
-        textbox.text = text
+        if isinstance(text, list):
+            for t in text:
+                textbox.text += '\n' if t!=text[0] else ''
+                textbox.text = textbox.text + t
+        else:
+            textbox.text = text
         #textbox.alignment = PP_ALIGN.LEFT
         return textbox
 
@@ -153,7 +131,7 @@ class PPTData:
         self.firstLine(text_box, title, 'SangSangTitleM', 32)
 
     def timeMultiLine(self,slide_,title,headers,bodies,Links):
-        print(slide_)
+        # print(slide_)
         slide = self.newSlide(slide_)
         self.input_title(slide,title)
         line_cnt = 13
@@ -165,24 +143,24 @@ class PPTData:
         flipflop=0
         for body in bodies:
             text_box = self.setTextBox(slide, line_cnt, 'pptEngine/static/DOSSaemmul.ttf')
-            print(body)
+            # print(body)
             #if flipflop ==0 :
             #    self.firstLine(text_box,body,'Arial',10)
             #    flipflop=1
             #else :
             #    self.newLine(text_box,body,'Arial',10)
-            self.firstLine(text_box,body,'Airal',10)
+            self.firstLine(text_box,body,'Arial',10)
             line_cnt = line_cnt + 2
         if not Links:
             return slide
-        print(str(slide_)+'번째 슬라이드')
+        # print(str(slide_)+'번째 슬라이드')
         image_start = int(17+(((slide_%6)-1)/2)*2)#7,9,11 now..?-> 17,19,21
-        print(image_start)
+        # print(image_start)
         num_list=[]
         for i in Links:
             num_list.append(image_start)
             image_start=image_start+1
-            print(image_start)
+            # print(image_start)
         return self.input_image(slide,num_list,Links)
 
     def defaultLine(self, title, contents, Links):
@@ -224,7 +202,7 @@ class PPTData:
         return self.input_image(slide,num_ls,Links)
 
     def singleLine(self,title,lines,Links):
-        print("--In SingleLine-- with"+title)
+        # print("--In SingleLine-- with"+title)
         if not Links:
             slide = self.newSlide(4)
         else :
@@ -245,7 +223,9 @@ class PPTData:
             num_list.append(image_start)
             image_start=image_start+1
         return self.input_image(slide,num_list,Links)
+
     def generate_slide(self, slideObj):
+        print(slideObj)
         if (isinstance(slideObj,SlideType_head_default)):
             contents=[]
             for tuple in slideObj._headTuples:
@@ -267,14 +247,14 @@ class PPTData:
         elif (isinstance(slideObj, SlideType_head_multiLine)):
             headers = []
             bodies = []
-            for tuple in slideObj._headTuples:
-                print(tuple)
-                headers.append(tuple[0])
+            for headTuple in slideObj._headTuples:
+                # print(headTuple)
+                headers.append(headTuple[0])
                 tmp_body=[]
-                for body in tuple[1]:
+                for body in headTuple[1]:
                     tmp_body.append(body[1])
                 bodies.append(tmp_body)
-                print(len(bodies))
+                # print(bodies)
             if not slideObj._imageLinks :
                 slide = 8+len(bodies)*2#self.newSlide(8 + len(bodies) * 2)  # 6,8,10
             else :
@@ -308,8 +288,8 @@ class PPTData:
                 if not line:
                     continue
                 bodies.append(line)
-                print(line)
-            print(str(len(bodies)) + '*2+8or9')
+                # print(line)
+            # print(str(len(bodies)) + '*2+8or9')
             if not slideObj._imageLinks :
                 slide = 8 + len(bodies) * 2 #self.newSlide(8 + len(bodies) * 2)  # 6,8,10
             else :
@@ -350,7 +330,7 @@ class PPTData:
             slide.shapes.placeholders[1].text = slideObj._titleTuple[1]
 
     def generate(self):
-        self.basePrs()
+        # self.basePrs()
         #self.titleSlide()
         #self.index()
         slide_idx = -1
@@ -361,13 +341,14 @@ class PPTData:
 #                mid_slide = mid_slide + 1
 #                self.transitionSlide(mid_slide)
             self.generate_slide(slide_)
+        os.remove(self._resFilePath)
 
     def idx_check(self,idx):
         slide = self.newSlide(idx)
         for shape in slide.shapes:
             if shape.is_placeholder:
                 phf = shape.placeholder_format
-                print('%d,%s'%(phf.idx,phf.type))
+                # print('%d,%s'%(phf.idx,phf.type))
 
 
 def wrap_image(keywords):
@@ -396,7 +377,6 @@ class SlideType:
     def __init__(self, lines):
         self._lines = lines
     def generate(self):
-
         print('generated')
 
 # # 타임라인 타입 (일정, 과정, 단계)
