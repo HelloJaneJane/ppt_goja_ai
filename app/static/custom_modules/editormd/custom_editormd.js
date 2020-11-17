@@ -66,7 +66,7 @@
     editormd.classPrefix  = "editormd-";
     
     editormd.toolbarModes = {
-        custom : [ "help", "|", "h1", "h3", "h4", "h5", "list-ul", "|", "bold", "image", "|", "watch", "preview"]
+        custom : [ "help", "|", "h1", "h3", "h4", "h5", "list-ul", "|", "bold", "image", "|", "watch", "preview","||","info"]
     };
     
     editormd.defaults     = {
@@ -1294,9 +1294,7 @@
             var infoDialogHTML = [
                 "<div class=\"" + classPrefix + "dialog " + classPrefix + "dialog-info\" style=\"\">",
                 "<div class=\"" + classPrefix + "dialog-container\">",
-                "<h1><i class=\"editormd-logo editormd-logo-lg editormd-logo-color\"></i> " + editormd.title + "<small>v" + editormd.version + "</small></h1>",
-                "<p>" + this.lang.description + "</p>",
-                "<p style=\"margin: 10px 0 20px 0;\"><a href=\"" + editormd.homePage + "\" target=\"_blank\">" + editormd.homePage + " <i class=\"fa fa-external-link\"></i></a></p>",
+                "<p style=\"font-size: 15px;\">" + this.lang.description + "</p>",
                 "<p style=\"font-size: 0.85em;\">Copyright &copy; 2015 <a href=\"https://github.com/pandao\" target=\"_blank\" class=\"hover-link\">Pandao</a>, The <a href=\"https://github.com/pandao/editor.md/blob/master/LICENSE\" target=\"_blank\" class=\"hover-link\">MIT</a> License.</p>",
                 "</div>",
                 "<a href=\"javascript:;\" class=\"fa fa-close " + classPrefix + "dialog-close\"></a>",

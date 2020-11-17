@@ -173,29 +173,27 @@ def convert(htmlStr):
 
     # [2] 슬라이드 별 딕셔너리로 슬라이드 타입 분류
     slideList = [getSlideType(slideDict) for slideDict in slideDictList]
-
     print(slideList)
     
     
     # [3] 피피티 생성
-
     userName = 'test'
     timeStamp = time.strftime('%y%m%d_%H%M')
     outputName = userName+'_'+timeStamp+'.pptx'
 
     # 목차
     toc = [midTitle.get_text() for midTitle in bs.find_all('h3')]
-    print("목차",end='')
-    print(toc)
+    # print("목차",end='')
+    # print(toc)
 
     # [3.1] topic 추출
     slideDictValueList = list(getAllValues(slideDictList))
-    print(slideDictValueList)
+    # print(slideDictValueList)
     textDataStr = ''
     for s in slideDictValueList:
         if s!=None: textDataStr += s + ' '
     
-    print(textDataStr)
+    # print(textDataStr)
     pptTopic = get_topic(textDataStr)
     print("토픽",end='')
     print(pptTopic)
@@ -216,9 +214,9 @@ def convert(htmlStr):
     print(url)
 
     # 링크를 클라이언트로 전송 -> 피피티 다운로드 버튼에 연결
-
     return { 'status': 'success', 'url': url }
-    # return { 'status': 'success', 'url': "/ppt"}
+
+    # return { 'status': 'success', 'url': "/ppt" }
 
 
 def getAllValues(d):
@@ -243,8 +241,6 @@ def getAllValues(d):
 
 
 def getSlideType(slideDict):
-
-
     # 인풋 이미지 링크들의 리스트를 슬라이드 타입의 2nd 인자로
     imageLinks = slideDict['img']
 
@@ -266,7 +262,7 @@ def getSlideType(slideDict):
 
         headCnt = len(slideDict['Head']) if slideDict.get('Head',None)!=None else 0
 
-        titleNouns = getNouns(slideTitle)
+        titleNouns = get_NNG(slideTitle)
         isTimeLine = checkTimeLine(titleNouns)
 
         # (3.1) h4, Contents(p/li), img - h5가 없는 경우
@@ -308,16 +304,8 @@ def getSlideType(slideDict):
                 return SlideType_head_default(slideTitle, headTuples, imageLinks)
 
 
-
-def getNouns(str):
-    try:
-        list = get_NNG(str)
-    except:
-        list = []
-    return list
-
 def checkTimeLine(nounList):
-    timeNounList = ['일정','스케쥴','단계','레시피','순서']
+    timeNounList = ['일정','스케쥴','단계','레시피','순서','과정']
     for n in nounList:
         if n in timeNounList:
             return True
