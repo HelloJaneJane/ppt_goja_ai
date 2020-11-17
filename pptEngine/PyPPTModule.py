@@ -298,8 +298,8 @@ class PPTData:
                 if not line:
                     continue
                 bodies.append([line])
-                print(line)
-            print(str(len(bodies)) + '*2+8or9')
+                #print(line)
+            #print(str(len(bodies)) + '*2+8or9')
             if not slideObj._imageLinks :
                 slide = 28 + len(bodies) * 2 #self.newSlide(8 + len(bodies) * 2)  # 6,8,10
             else :
