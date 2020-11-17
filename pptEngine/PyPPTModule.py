@@ -307,7 +307,7 @@ class PPTData:
             return self.timeMultiLine(slide,slideObj._title,headers,bodies,slideObj._imageLinks)
 
         elif (isinstance(slideObj, SlideType_timeLine)):
-           headers = []
+            headers = []
             bodies = []
             for line in slideObj._textList:
                 bodies.append([line])
