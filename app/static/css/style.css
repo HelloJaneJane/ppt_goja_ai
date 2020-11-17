@@ -7756,23 +7756,23 @@ h1, h2, h3, h4, h5,
     right: 0;
     content: ''; }
   .services .icon.color-1 {
-    background: #fce7f1; }
+    background: #ebfdf4; }
     .services .icon.color-1 span {
-      color: #ee76ad; }
+      color: #79efb4; }
     .services .icon.color-1:before {
       top: -20px;
       width: 0;
       height: 0;
       border-style: solid;
       border-width: 0 45px 20px 45px;
-      border-color: transparent transparent #fce7f1 transparent; }
+      border-color: transparent transparent #ebfdf4 transparent; }
     .services .icon.color-1:after {
       bottom: -20px;
       width: 0;
       height: 0;
       border-style: solid;
       border-width: 20px 45px 0 45px;
-      border-color: #fce7f1 transparent transparent transparent; }
+      border-color: #ebfdf4 transparent transparent transparent; }
   .services .icon.color-2 {
     background: #fdf2ea; }
     .services .icon.color-2 span {
@@ -7810,23 +7810,23 @@ h1, h2, h3, h4, h5,
       border-width: 20px 45px 0 45px;
       border-color: #def4fb transparent transparent transparent; }
   .services .icon.color-4 {
-    background: #ebfdf4; }
+    background: #f1d0c7; }
     .services .icon.color-4 span {
-      color: #79efb4; }
+      color: #bb4d2f; }
     .services .icon.color-4:before {
       top: -20px;
       width: 0;
       height: 0;
       border-style: solid;
       border-width: 0 45px 20px 45px;
-      border-color: transparent transparent #ebfdf4 transparent; }
+      border-color: transparent transparent #f1d0c7 transparent; }
     .services .icon.color-4:after {
       bottom: -20px;
       width: 0;
       height: 0;
       border-style: solid;
       border-width: 20px 45px 0 45px;
-      border-color: #ebfdf4 transparent transparent transparent; }
+      border-color: #f1d0c7 transparent transparent transparent; }
 
 .services .media-body h3 {
   font-size: 20px; }
@@ -8265,11 +8265,11 @@ textarea.form-control {
 
 .heading-section.heading-section-white h2 {
   font-size: 40px;
-  color: #fff;
+  color: #404044;
   font-weight: 700; }
 
 .heading-section.heading-section-white p {
-  color: rgba(255, 255, 255, 0.7); }
+  color: #8b8b92; }
 
 .img,
 .work-img,
@@ -8349,15 +8349,15 @@ textarea.form-control {
   opacity: 0; }
 
 .ftco-counter {
-  background: #29bae4;
+  background: #f2d04d;
   padding: 10em 0; }
   .ftco-counter .text strong.number {
     font-weight: 400;
     font-size: 40px;
-    color: #fff; }
+    color: #404044; }
   .ftco-counter .text span {
     font-size: 20px;
-    color: rgba(255, 255, 255, 0.7); }
+    color: #8b8b92; }
   @media (max-width: 767.98px) {
     .ftco-counter .counter-wrap {
       margin-bottom: 20px; } }
