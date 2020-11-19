@@ -153,7 +153,7 @@ class PPTData:
         if not Links:
             return slide
         # print(str(slide_)+'번째 슬라이드')
-        image_start = int(17+(((slide_%6)-1)/2)*2)#7,9,11 now..?-> 17,19,21
+        image_start = int(17+((((slide_%20)%6)-1)/2)*2)#7,9,11 now..?-> 17,19,21
         # print(image_start)
         num_list=[]
         for i in Links:
