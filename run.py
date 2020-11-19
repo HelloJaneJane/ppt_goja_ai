@@ -16,15 +16,11 @@ def default():
 def ppt():
     if request.method == 'POST':
         mdeditorHtmlStr = request.form.to_dict()['html']
-        result = convert(mdeditorHtmlStr) # 다른쓰레드로 처리?
+        result = convert(mdeditorHtmlStr)
         return jsonify(result)
-        # return render_template('ppt_download_index.html') # 근데 컨버트 주석처리해도 이거 안되는데 왜죠...
         
     return render_template('ppt_index.html')
 
-# @app.route('/ppt/download')
-# def pptdownload():
-#     return render_template('ppt_download_index.html')
 
 @app.route('/image1', methods=['POST', 'GET'])
 def image1():
@@ -56,24 +52,12 @@ def image3():
 
     return render_template('img_iconify_index.html')
 
-@app.route('/contact')
-def contact():
-    return render_template('contact_index.html')
 @app.route('/devinfo')
 def devinfo():
     return render_template('devinfo_index.html')
 @app.route('/licinfo')
 def licinfo():
     return render_template('licinfo_index.html')
-
-
-@app.route('/login')
-def login():
-    return render_template('login_index.html')
-@app.route('/register')
-def register():
-    return render_template('register_index.html')
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
