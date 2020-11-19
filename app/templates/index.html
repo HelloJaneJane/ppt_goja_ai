@@ -2,6 +2,9 @@
 {% extends 'layout.html' %}
  
 {% block head %}
+
+    <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
+
 {% endblock %}
 
 {% block content %}
@@ -10,89 +13,287 @@
         <div id="particles-js"></div>
         <div class="container">
             <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
-                <div class="col-md-3 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
-                    <img class="mb-7" src="{{ url_for('static',filename='images/robot_logo_outline.svg') }}" width="192" height="248">
-                </div>
+
                 <div class="col-md-5 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
                     <h2 class="mb-4">
                         딥러닝 기반의 PPT 자동제작 서비스: <strong>발펴고자</strong>
                     </h2>
+                    <a href="https://youtu.be/nQNyKm5Y0Y8" class="btn btn-primary btn-outline-white px-4 py-2" target="_blank">
+                        <span style="font-size: 15px;">DEMO<div style="font-size: 24px;"><i class="fab fa-youtube fa-2x"></i></div></span>
+                    </a>
+                </div>
+                <div class="col-md-3 ftco-animate text-center" data-scrollax=" properties: { translateY: '70%' }">
+                    <img class="mb-7" src="{{ url_for('static',filename='images/robot_logo_outline.svg') }}" width="192" height="248">
                 </div>
             </div>
         </div>
     </div>
 
-    <section class="ftco-section testimony-section bg-light">
-        <div class="container">
-            <div class="row justify-content-center mb-5 pb-5">
-            <div class="col-md-7 text-center heading-section ftco-animate">
-                <span class="subheading">저희 서비스는요..</span>
-                <h2 class="mb-4">이러이러한 서비스입니다</h2>
-                <p> 사용자 후기들?</p>
+
+    <div class="bg-light">
+    <section class="ftco-section-featured ftco-animate">
+        <div class="container-fluid" data-scrollax-parent="true">
+            <div class="row no-gutters d-flex align-items-center" data-scrollax=" properties: { translateY: '-30%'}">
+    
+                <div class="col-md-3 mb-3">
+                    <a class="featured-img">
+                    <img src="{{ url_for('static',filename='images/demo_fruit_2.png') }}" class="img-fluid" alt="">
+                    </a>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="row no-gutters">
+                        <div class="col-md-12">
+                            <div class="row no-gutters d-flex align-items-end">
+                            <div class="col-md-8">
+                                <a class="featured-img">
+                                <img src="{{ url_for('static',filename='images/demo_it_1.png') }}" class="img-fluid" alt="">
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="featured-img">
+                                <img src="{{ url_for('static',filename='images/demo_medical_1.png') }}" class="img-fluid" alt="">
+                                </a>
+                            </div>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-12">
+                            <div class="row no-gutters d-flex align-items-start">
+                            <div class="col-md-8">
+                                <a class="featured-img">
+                                <img src="{{ url_for('static',filename='images/demo_medical_2.png') }}" class="img-fluid" alt="">
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="featured-img">
+                                <img src="{{ url_for('static',filename='images/demo_fruit_1.png') }}" class="img-fluid" alt="">
+                                </a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="col-md-3">
+                    <a class="featured-img">
+                    <img src="{{ url_for('static',filename='images/demo_it_2.png') }}" class="img-fluid" alt="">
+                    </a>
+                </div>
+    
             </div>
-            </div>
-            <div class="row ftco-animate">
-            <div class="col-md-12">
-                <div class="carousel-testimony owl-carousel ftco-owl">
-                <div class="item text-center">
-                    <div class="testimony-wrap p-4 pb-5">
-                    <div class="user-img mb-4" style="background-image: url(../static/images/person_2.jpg)">
-                        <span class="quote d-flex align-items-center justify-content-center">
-                        <i class="icon-quote-left"></i>
-                        </span>
-                    </div>
-                    <div class="text">
-                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                        <p class="name">Dennis Green</p>
-                        <span class="position">Marketing Manager</span>
-                    </div>
-                    </div>
+            <div class="row mt-5 d-flex justify-content-center">
+                <div class="col-md-8 text-center heading-section ftco-animate">
+                    <h2 class="h3" style="font-size: 1.75rem;">
+                        <strong style="color: inherit; background: inherit;">발펴고자</strong>는 사용자가 입력한 콘텐츠에<br>
+                        <strong class="px-3">딥러닝 기술 (자연어처리&컴퓨터비전)</strong>을 입혀<br>
+                        완성된 PPT 파일을 제공합니다.
+                    </h2>
                 </div>
-                <div class="item text-center">
-                    <div class="testimony-wrap p-4 pb-5">
-                    <div class="user-img mb-4" style="background-image: url(../static/images/person_2.jpg)">
-                        <span class="quote d-flex align-items-center justify-content-center">
-                        <i class="icon-quote-left"></i>
-                        </span>
-                    </div>
-                    <div class="text">
-                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                        <p class="name">Dennis Green</p>
-                        <span class="position">Interface Designer</span>
-                    </div>
-                    </div>
-                </div>
-                <div class="item text-center">
-                    <div class="testimony-wrap p-4 pb-5">
-                    <div class="user-img mb-4" style="background-image: url(../static/images/person_3.jpg)">
-                        <span class="quote d-flex align-items-center justify-content-center">
-                        <i class="icon-quote-left"></i>
-                        </span>
-                    </div>
-                    <div class="text">
-                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                        <p class="name">Dennis Green</p>
-                        <span class="position">UI Designer</span>
-                    </div>
-                    </div>
-                </div>
-                <div class="item text-center">
-                    <div class="testimony-wrap p-4 pb-5">
-                    <div class="user-img mb-4" style="background-image: url(../static/images/person_4.jpg)">
-                        <span class="quote d-flex align-items-center justify-content-center">
-                        <i class="icon-quote-left"></i>
-                        </span>
-                    </div>
-                    <div class="text">
-                        <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                        <p class="name">Dennis Green</p>
-                        <span class="position">Web Developer</span>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
             </div>
         </div>
     </section>
+    </div>
+
+      
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-5">
+                <div class="col-md-6 text-center heading-section ftco-animate">
+                    <span class="subheading" style="font-size: 16px;"><strong>발펴고자</strong>의 주요 기능</span>
+                    <h2 class="mb-4" style="font-size: 37px;">발표 고자인 당신, 이젠 <strong style="color: #ee76ad;">발 펴고 자!</strong></h2>
+                    <p>발펴고자 AI가 단순반복 작업을 대신 수행하여 당신의 시간과 노력을 줄여드려요.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services d-block text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="icon color-4 d-flex justify-content-center mb-3">
+                                <span class="align-self-center"><i class="fas fa-file-powerpoint fa-3x"></i></span>
+                            </div>
+                        </div>
+                        <div class="media-body p-2 mt-3">
+                            <h3 class="heading">PPT 파일 생성</h3>
+                            <p>입력한 콘텐츠의 맥락을 파악하여 그와 어울리도록 PPT 파일을 만들어주고, 이를 다운로드할 수 있습니다.</p>
+                        </div>
+                    </div>      
+                </div>
+                <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services d-block text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="icon color-3 d-flex justify-content-center mb-3">
+                                <span class="align-self-center"><i class="fas fa-eraser fa-3x"></i></span>
+                            </div>
+                        </div>
+                        <div class="media-body p-2 mt-3">
+                            <h3 class="heading">이미지 배경 제거</h3>
+                            <p>컴퓨터 비전 기법을 통해 입력한 이미지의 배경을 제거해주고, 제거되는 정도는 직접 조절할 수 있습니다.</p>
+                        </div>
+                    </div>      
+                </div>
+                <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services d-block text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="icon color-2 d-flex justify-content-center mb-3">
+                                <span class="align-self-center"><i class="fas fa-search-plus fa-3x"></i></span>
+                            </div>
+                        </div>
+                        <div class="media-body p-2 mt-3">
+                            <h3 class="heading">이미지 해상도 향상</h3>
+                            <p>저해상도 이미지를 딥러닝 모델을 통해 고해상도 이미지로 변환해주고, 돋보기 기능을 통해 변환 전후를 비교할 수 있습니다.</p>
+                        </div>
+                    </div>      
+                </div>
+                <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services d-block text-center">
+                        <div class="d-flex justify-content-center">
+                            <div class="icon color-1 d-flex justify-content-center mb-3">
+                                <span class="align-self-center"><i class="far fa-file-image fa-3x"></i></span>
+                            </div>
+                        </div>
+                        <div class="media-body p-2 mt-3">
+                            <h3 class="heading">이미지의 픽토그램화</h3>
+                            <p>사전 학습된 알고리즘을 통해 실사 이미지를 픽토그램으로 변환해줍니다.</p>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            <div class="row">
+                <div class="block-3 d-md-flex ftco-animate" data-scrollax-parent="true">
+                    <div class="col-md-7 image" style="background-image: url('static/images/backrmv.gif'); " data-scrollax=" properties: { translateY: '-20%'}"></div>
+                    <div class="text col-md-5">
+                        <h4 class="subheading">Computer Vision 기술 기반의</h4>
+                        <h2 class="heading">이미지 Background Removal 기능</h2>
+                        <p> 1. 배경을 제거하려는 이미지를 업로드합니다.
+                            2. START 버튼을 누르면 발펴고자 AI가 이미지를 딥러닝 처리합니다.
+                            3. 처리가 끝난 이미지는 슬라이드바를 통해 배경이 제거되는 정도를 조절할 수 있습니다.
+                            4. DOWNLOAD 버튼을 누르면 완성된 이미지를 다운로드할 수 있습니다.
+                        </p>
+                        <p><a href="{{ url_for('image1') }}" class="btn btn-primary px-4">배경 제거 기능 체험</a></p>
+                    </div>
+                </div>
+                <div class="block-3 d-md-flex ftco-animate" data-scrollax-parent="true">
+                    <div class="col-md-7 image image-2 order-2" style="background-image: url('static/images/supres.gif');" data-scrollax=" properties: { translateY: '-20%'}"></div>
+                    <div class="text order-1 col-md-5">
+                        <h4 class="subheading">Computer Vision 기술 기반의</h4>
+                        <h2 class="heading">이미지 Super Resolution 기능</h2>
+                        <p> 1. 해상도를 높이려는 이미지를 업로드합니다.
+                            2. START 버튼을 누르면 발펴고자 AI가 이미지를 딥러닝 처리합니다.
+                            3. 돋보기를 통해 처리 전후 두 이미지의 해상도 차이를 확인힐 수 있습니다.
+                            4. DOWNLOAD 버튼을 누르면 완성된 이미지를 다운로드할 수 있습니다.
+                        </p>
+                        <p><a href="{{ url_for('image2') }}" class="btn btn-primary px-4">해상도 향상 기능 체험</a></p>
+                    </div>
+                </div>
+                <div class="block-3 d-md-flex ftco-animate" data-scrollax-parent="true">
+                    <div class="col-md-7 image" style="background-image: url('images/work-3.jpg'); " data-scrollax=" properties: { translateY: '-20%'}"></div>
+                    <div class="col-md-5 text">
+                        <h4 class="subheading">NLP 기술 기반의</h4>
+                        <h2 class="heading">PPT 자동 생성 기능</h2>
+                        <p> 1. PPT로 만들고자하는 콘텐츠를 입력합니다. 필요하다면 이미지도 입력할 수 있습니다.
+                            2. 변환하기 버튼을 누르면 발펴고자 AI가 맥락을 분석합니다.
+                            3. 주제와 어울리는 템플릿, 슬라이드 별 어울리는 레이아웃으로 PPT를 완성합니다.
+                            4. PPT 파일이 자동으로 다운로드됩니다.
+                        </p>
+                        <p><a href="{{ url_for('ppt') }}" class="btn btn-primary px-4">PPT 생성 기능 체험</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section ftco-counter" id="section-counter">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-5">
+                <div class="col-md-7 text-center heading-section heading-section-white ftco-animate">
+
+                    <h2 style="font-size: 37px;"><strong style="color: #ee76ad; ">발펴고자</strong>의 업적 (in 2021)</h2>
+                    <p>발펴고자는 2021년 1월 런칭 예정이며 2021년 연간 달성 업적입니다.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-4 d-flex justify-content-center counter-wrap ftco-animate">
+                    <div class="block-18 text-center">
+                        <div class="text">
+                            <strong class="number" data-number="42898">0</strong>
+                            <span>일일 방문자 수</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 d-flex justify-content-center counter-wrap ftco-animate">
+                    <div class="block-18 text-center">
+                        <div class="text">
+                            <strong class="number" data-number="9714">0</strong>
+                            <span>프리미엄 회원 수</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4 d-flex justify-content-center counter-wrap ftco-animate">
+                    <div class="block-18 text-center">
+                        <div class="text">
+                            <strong class="number" data-number="219702">0</strong>
+                            <span>발펴고자를 통해 단축한 시간</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-5">
+                <div class="col-md-7 text-center heading-section ftco-animate">
+                    <span class="subheading" style="font-size: 16px;">고생한 우리 팀원들</span>
+                    <h2 class="mb-4" style="font-size: 37px;"><strong style="color: #ee76ad; ">발펴고자</strong>의 개발자</h2>
+                    <p>SW마에스트로 11기 연수생 <strong style="color: #404044;">발표합니까 휴먼?</strong> 팀에서 개발한 프로젝트입니다.<br>
+                        삽입된 사진들은 <strong style="color: #404044;">발펴고자</strong>의 이미지 배경 제거 처리를 거쳤습니다.</p>
+                    <p><a href="{{ url_for('devinfo') }}" class="btn btn-primary mt-1 py-2 px-3">세부 역할 및 활동</a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-5 ftco-animate">
+                    <div class="block-10">
+                        <div class="person-info mb-2" style="text-align: center;">
+                            <span class="name">이종호  
+                                <a target="_blank" href="https://github.com/JHLEE17"><i class="fab fa-github"></i></a>
+                                <a target="_blank" href="https://www.instagram.com/hojay1769/"><i class="fab fa-instagram"></i></a>
+                            </span>
+                            <span class="position">팀장,  딥러닝 모델 학습 및 개발</span>
+                        </div>
+                        <img src="{{ url_for('static',filename='images/dev_jongho.png') }}" class="img-fluid mb-3">
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5 ftco-animate">
+                    <div class="block-10">
+                        <div class="person-info mb-2" style="text-align: center;">
+                            <span class="name">남지훈  
+                                <a target="_blank" href="https://github.com/NamJiii"><i class="fab fa-github"></i></a>
+                                <a target="_blank" href="https://www.instagram.com/h_nam_g/"><i class="fab fa-instagram"></i></a>
+                            <span class="position">딥러닝 및 PPT 알고리즘 개발</span>
+                        </div>
+                        <img src="{{ url_for('static',filename='images/dev_jihoon.png') }}" class="img-fluid mb-3">
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5 ftco-animate">
+                    <div class="block-10">
+                        <div class="person-info mb-2" style="text-align: center;">
+                            <span class="name">이제인  
+                                <a target="_blank" href="https://github.com/HelloJaneJane"><i class="fab fa-github"></i></a>
+                                <a target="_blank" href="https://www.instagram.com/jane_.__._/"><i class="fab fa-instagram"></i></a>
+                            <span class="position">프론트엔드 및 백엔드</span>
+                        </div>
+                        <img src="{{ url_for('static',filename='images/dev_jane.png') }}" class="img-fluid mb-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+        $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
+    </script>
 {% endblock %}

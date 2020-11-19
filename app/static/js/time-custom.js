@@ -9,8 +9,9 @@ Date.prototype.yymmdd = function() {
 Date.prototype.hhmm = function() {
     var hh = this.getHours();
     var mm = this.getMinutes();
+    var ss = this.getSeconds();
   
-    return [(hh>9 ? '' : '0') + hh, (mm>9 ? '' : '0') + mm,].join('');
+    return [(hh>9 ? '' : '0') + hh, (mm>9 ? '' : '0') + mm, (ss>9 ? '' : '0') + ss].join('');
 };
 
 
