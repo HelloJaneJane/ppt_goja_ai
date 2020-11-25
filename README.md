@@ -4,9 +4,9 @@
 
 <br>
 
-<img src="./mdImage/home_logo_light.png" href="http://goja.ai" width="200"> 
+<img src="./mdImage/home_logo_light.png" width="200"> 
 
-> 로고 이미지 클릭 시 웹사이트로 이동합니다.
+[🔗 서비스 이용해보기](http://goja.ai)
 
 [🔗 데모 영상 보러가기](https://www.youtube.com/watch?v=nQNyKm5Y0Y8&feature=youtu.be)
 
