@@ -2,13 +2,9 @@
 
 ### SW마에스트로 11기 연수생 <br> **발표합니까 휴먼?** 팀 - **이종호**(팀장)**, 남지훈, 이제인**
 
-<img src="./mdImage/home_logo_light.png" width="300"> 
+[![Demo Video](http://img.youtube.com/vi/nQNyKm5Y0Y8/0.jpg)](https://youtu.be/nQNyKm5Y0Y8) 데모 영상
 
-[🔗 서비스 이용해보기](http://goja.ai)
-
-[![Demo Video](http://img.youtube.com/vi/nQNyKm5Y0Y8/0.jpg)](https://youtu.be/nQNyKm5Y0Y8)
-
-[![Official Video](http://img.youtube.com/vi/1vJ_AirUnjE/0.jpg)](https://youtu.be/1vJ_AirUnjE)
+[![Official Video](http://img.youtube.com/vi/1vJ_AirUnjE/0.jpg)](https://youtu.be/1vJ_AirUnjE) 11기 공식 소개 영상
 
 
 ---
@@ -16,6 +12,8 @@
 ### 프로젝트 요약
 
 - 사용자가 입력한 텍스트와 이미지에 적합하게 AI가 완성된 PPT를 생성한 후 제공하는 서비스
+
+  [🔗 서비스 이용해보기](http://goja.ai) <img src="./mdImage/home_logo_light.png" width="200"> 
 
 - 웹사이트에서 사용자가 텍스트와 이미지를 입력하면, **딥러닝 기술 (자연어처리와 컴퓨터비전)** 을 통해 내용을 분석하여 **맥락과 어울리도록** PPT 자료를 구성, 사용자가 **완성된 파일을 다운로드** 받을 수 있도록 한다.
 
