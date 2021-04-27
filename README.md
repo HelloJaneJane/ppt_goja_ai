@@ -60,7 +60,7 @@ Microsoft-Developer API
   - 이미지 속 주요한 객체를 제외한 배경 제거
   - 사용자가 배경이 제거되는 정도를 조절하여 결과 출력
 
-  <img src="./mdImage/feature_bgrmv.gif" width="500">
+  <img src="./mdImage/feature_bgrmv.gif" height="400">
 
   > Segmentation, Salient Object Detection, Alpha matting 등의 딥러닝 알고리즘과 컴퓨터 비전 기법을 이용
 
@@ -68,14 +68,14 @@ Microsoft-Developer API
   - 저해상도 이미지를 고해상도 이미지로 변환
   - 웹에서 돋보기 기능을 통해 변환된 이미지 비교
 
-  <img src="./mdImage/feature_supres.gif" width="500">
+  <img src="./mdImage/feature_supres.gif" height="450">
 
   > Residual Dense Network, Generative Adversarial Network 활용
 
 #### 다. 이미지의 픽토그램화 (Image to Pictogram)
   - 학습된 딥러닝 알고리즘을 통해 실사 이미지를 픽토그램으로 변환
 
-  <img src="./mdImage/feature_iconify.png" width="500">
+  <img src="./mdImage/feature_iconify.png" height="400">
 
   > 직접 정제한 데이터셋을 CycleGAN, Pix2Style2Pix 알고리즘에 학습함
 
@@ -84,9 +84,9 @@ Microsoft-Developer API
   - 사용자가 PPT로 만들려는 텍스트와 이미지를 입력함
   - 실시간 미리보기를 통해 슬라이드 구조를 파악할 수 있음
 
-  <img src="./mdImage/feature_inputtitle.gif" width="500">
-  <img src="./mdImage/feature_inputtext.gif" width="500">
-  <img src="./mdImage/feature_inputimg.gif" width="500">
+  <img src="./mdImage/feature_inputtitle.gif" height="400">
+  <img src="./mdImage/feature_inputtext.gif" height="400">
+  <img src="./mdImage/feature_inputimg.gif" height="400">
 
   > 마크다운 에디팅 기술을 활용하여 사용자 의도 반영 
 
@@ -94,7 +94,7 @@ Microsoft-Developer API
   - 키워드를 추출하여 이에 해당하는 이미지/아이콘 검색
   - 주제와 매칭되는 디자인 템플릿 선정
 
-  <img src="./mdImage/feature_topictag.png" width="500">
+  <img src="./mdImage/feature_topictag.png" height="200">
 
   > 주제 별 여러 템플릿을 사전 정의하여 매칭되는 디자인을 베이스 템플릿으로 선정
 
@@ -103,7 +103,7 @@ Microsoft-Developer API
 #### 다. MS-developer API를 통해 .pptx 파일 작성
   - 선정된 템플릿의 레이아웃에 맞춰 텍스트와 이미지를 배치
 
-  <img src="./mdImage/struct_pptapi.png" width="400">
+  <img src="./mdImage/struct_pptapi.png" height="250">
 
   > 글꼴, 크기, 배치 및 구성 등을 Python 코드로 지정하여 MS-developer API를 통해 변환
 #### 라. 완성된 결과물 제공
@@ -112,4 +112,4 @@ Microsoft-Developer API
   > AWS S3와 연동하여 다운로드 링크로 이동
 
 
-<img src="./mdImage/beta_result.png" width="500">
+<img src="./mdImage/beta_result.png" height="400">
