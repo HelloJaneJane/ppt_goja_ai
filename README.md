@@ -2,9 +2,9 @@
 
 ### SW마에스트로 11기 연수생 <br> **발표합니까 휴먼?** 팀 - **이종호**(팀장)**, 남지훈, 이제인**
 
-> 데모영상 [![Demo Video](http://img.youtube.com/vi/nQNyKm5Y0Y8/0.jpg)](https://youtu.be/nQNyKm5Y0Y8)
+> 데모영상 <br> [![Demo Video](http://img.youtube.com/vi/nQNyKm5Y0Y8/0.jpg)](https://youtu.be/nQNyKm5Y0Y8)
 
-> 11기 공식 소개 영상 [![Official Video](http://img.youtube.com/vi/1vJ_AirUnjE/0.jpg)](https://youtu.be/1vJ_AirUnjE) 
+> 11기 공식 소개 영상 <br> [![Official Video](http://img.youtube.com/vi/1vJ_AirUnjE/0.jpg)](https://youtu.be/1vJ_AirUnjE) 
 
 
 ---
