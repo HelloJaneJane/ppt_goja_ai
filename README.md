@@ -2,9 +2,9 @@
 
 ### SW마에스트로 11기 연수생 <br> **발표합니까 휴먼?** 팀 - **이종호**(팀장)**, 남지훈, 이제인**
 
-[![Demo Video](http://img.youtube.com/vi/nQNyKm5Y0Y8/0.jpg)](https://youtu.be/nQNyKm5Y0Y8) 데모 영상
+> 데모영상 [![Demo Video](http://img.youtube.com/vi/nQNyKm5Y0Y8/0.jpg)](https://youtu.be/nQNyKm5Y0Y8)
 
-[![Official Video](http://img.youtube.com/vi/1vJ_AirUnjE/0.jpg)](https://youtu.be/1vJ_AirUnjE) 11기 공식 소개 영상
+> 11기 공식 소개 영상 [![Official Video](http://img.youtube.com/vi/1vJ_AirUnjE/0.jpg)](https://youtu.be/1vJ_AirUnjE) 
 
 
 ---
@@ -75,7 +75,7 @@ Microsoft-Developer API
 #### 다. 이미지의 픽토그램화 (Image to Pictogram)
   - 학습된 딥러닝 알고리즘을 통해 실사 이미지를 픽토그램으로 변환
 
-  <img src="./mdImage/feature_iconify.png" width="500">
+  <img src="./mdImage/feature_iconify.png" width="500">
 
   > 직접 정제한 데이터셋을 CycleGAN, Pix2Style2Pix 알고리즘에 학습함
 
@@ -94,7 +94,7 @@ Microsoft-Developer API
   - 키워드를 추출하여 이에 해당하는 이미지/아이콘 검색
   - 주제와 매칭되는 디자인 템플릿 선정
 
-  <img src="./mdImage/feature_topictag.png" width="500">
+  <img src="./mdImage/feature_topictag.png" width="500">
 
   > 주제 별 여러 템플릿을 사전 정의하여 매칭되는 디자인을 베이스 템플릿으로 선정
 
@@ -112,4 +112,4 @@ Microsoft-Developer API
   > AWS S3와 연동하여 다운로드 링크로 이동
 
 
-<img src="./mdImage/beta_result.png" width="500">
+<img src="./mdImage/beta_result.png" width="500">
